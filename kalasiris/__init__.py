@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Top-level package for isis3.py."""
+"""Top-level package for kalasiris."""
 
 __author__ = """Ross A. Beyer"""
 __email__ = 'rbeyer@seti.org'
