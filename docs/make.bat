@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=isis3py
+set SPHINXPROJ=kalasiris
 
 if "%1" == "" goto help
 

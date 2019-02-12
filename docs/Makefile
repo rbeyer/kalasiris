@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
-SPHINXPROJ    = isis3py
+SPHINXPROJ    = kalasiris
 SOURCEDIR     = .
 BUILDDIR      = _build
 

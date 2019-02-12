@@ -1,4 +1,4 @@
-* isis3py version:
+* kalasiris version:
 * Python version:
 * Operating System:
 

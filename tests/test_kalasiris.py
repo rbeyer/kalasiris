@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Tests for `isis3py` package."""
+"""Tests for `kalasiris` package."""
 
 
 import unittest
 
-from isis3 import isis3
+from kalasiris import kalasiris
 
 
-class TestIsis3py(unittest.TestCase):
-    """Tests for `isis3py` package."""
+class TestKalasiris(unittest.TestCase):
+    """Tests for `kalasiris` package."""
 
     def setUp(self):
         """Set up test fixtures, if any."""

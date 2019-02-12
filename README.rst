@@ -1,26 +1,26 @@
-========
-isis3py
-========
+=========
+kalasiris
+=========
 
 
-.. image:: https://img.shields.io/pypi/v/isis3py.svg
-        :target: https://pypi.python.org/pypi/isis3py
+.. image:: https://img.shields.io/pypi/v/kalasiris.svg
+        :target: https://pypi.python.org/pypi/kalasiris
 
-.. image:: https://img.shields.io/travis/rbeyer/isis3py.svg
-        :target: https://travis-ci.org/rbeyer/isis3py
+.. image:: https://img.shields.io/travis/rbeyer/kalasiris.svg
+        :target: https://travis-ci.org/rbeyer/kalasiris
 
-.. image:: https://readthedocs.org/projects/isis3py/badge/?version=latest
-        :target: https://isis3py.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/kalasiris/badge/?version=latest
+        :target: https://kalasiris.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
 
 
-A Python library to wrap ISIS3 functions and functionality.
+A Python library to wrap ISIS functions and functionality.
 
 
 * Free software: Apache Software License 2.0
-* Documentation: https://isis3py.readthedocs.io.
+* Documentation: https://kalasiris.readthedocs.io.
 
 
 Features

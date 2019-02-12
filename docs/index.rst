@@ -1,4 +1,4 @@
-Welcome to isis3py's documentation!
+Welcome to kalasiris's documentation!
 ======================================
 
 .. toctree::

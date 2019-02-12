@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use isis3py in a project::
+To use kalasiris in a project::
 
-    import isis3
+    import kalasiris
