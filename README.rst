@@ -1,16 +1,16 @@
 ========
-isis3.py
+isis3py
 ========
 
 
-.. image:: https://img.shields.io/pypi/v/isis3.svg
-        :target: https://pypi.python.org/pypi/isis3
+.. image:: https://img.shields.io/pypi/v/isis3py.svg
+        :target: https://pypi.python.org/pypi/isis3py
 
-.. image:: https://img.shields.io/travis/rbeyer/isis3.svg
-        :target: https://travis-ci.org/rbeyer/isis3
+.. image:: https://img.shields.io/travis/rbeyer/isis3py.svg
+        :target: https://travis-ci.org/rbeyer/isis3py
 
-.. image:: https://readthedocs.org/projects/isis3/badge/?version=latest
-        :target: https://isis3.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/isis3py/badge/?version=latest
+        :target: https://isis3py.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
@@ -20,7 +20,7 @@ A Python library to wrap ISIS3 functions and functionality.
 
 
 * Free software: Apache Software License 2.0
-* Documentation: https://isis3.readthedocs.io.
+* Documentation: https://isis3py.readthedocs.io.
 
 
 Features
