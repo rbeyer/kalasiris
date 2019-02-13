@@ -41,7 +41,8 @@ def addparams( cmd, params ):
     '''Builds a list of strings from dictionary keys and values where the elements are "key=value".'''
     if params:
         for name in params:
-            cmd.append( f'{name}={params[name]}' )
+            # The rstrip is to support the old Pysis syntax
+            cmd.append( '{}={}'.format(name.rstrip('_'), params[name]) )
     return cmd
 
 def _run_isis_program( cmd ):
@@ -54,15 +55,17 @@ def _run_isis_program( cmd ):
 def _build_isis_fn( fn_name ):
     '''This automatically builds a simple function to call an ISIS program, based on the name given.'''
     # Define the structure of the generic function, fn:
-    def isis_fn( fromcube, **keywords ):
-        cmd = [fn_name, 'from='+fromcube]
+    def isis_fn( *args, **keywords ):
+        if len(args) > 1: raise IndexError('only accepts 1 non-keyword argument to be from= ')
+        cmd = [fn_name]
+        if len(args) == 1: cmd.append('from='+args[0])
         return( _run_isis_program( addparams(cmd, keywords) ) )
     isis_fn.__name__ = fn_name
     isis_fn.__doc__ = f'Runs ISIS3 {fn_name}'
 
     # Then add it, by name to the enclosing module.
     setattr( sys.modules[__name__], fn_name, isis_fn)
-    # Could have also used sys.modules['isis'] if I wanted to be explicit.
+    # Could have also used sys.modules['kalasiris'] if I wanted to be explicit.
 
 # Now use the builder function to automatically create functions with these names:
 _isis_programs = ['crop','cubenorm','handmos','hist','histat','mask','stats']
