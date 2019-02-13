@@ -22,7 +22,7 @@ import unittest
 
 import os, sys, unittest
 import shutil, urllib.request
-sys.path.append('../')
+#sys.path.append('../')
 from kalasiris import *
 #from kalasiris import kalasiris
 
@@ -38,56 +38,6 @@ class TestParams(unittest.TestCase):
 
         c = addparams( c, p )
         self.assertEqual( truth, c )
-
-class TestHistogram(unittest.TestCase):
-    def setUp(self):
-        self.cube = 'test_Histogram.cub'
-        self.histfile = 'test_Histogram.hist'
-        hi2isis(img, self.cube)
-        hist(self.cube, to=self.histfile)
-
-    def tearDown(self):
-        os.remove('print.prt')
-        os.remove(self.cube)
-        os.remove(self.histfile)
-
-    def test_init(self):
-        h = Histogram( self.histfile )
-
-    def test_dictlike(self):
-        h = Histogram( self.histfile )
-        self.assertEqual( self.cube, h['Cube'] )
-
-    def test_listlike(self):
-        h = Histogram( self.histfile )
-        self.assertEqual( 5, len(h[0]) )
-
-    def test_contains(self):
-        h = Histogram( self.histfile )
-        self.assertTrue( 'Std Deviation' in h )
-
-    def test_len(self):
-        h = Histogram( self.histfile )
-        self.assertEqual( 107, len(h) )
-
-class TestCubenormDialect(unittest.TestCase):
-    def setUp(self):
-        self.cube = 'test_cubenorm.cub'
-        self.statsfile = 'test_cubenorm.stats'
-        hi2isis(img, self.cube)
-        cubenorm( self.cube, stats=self.statsfile )
-
-    def tearDown(self):
-        os.remove('print.prt')
-        os.remove(self.cube)
-        os.remove(self.statsfile)
-
-    def test_cubenorm_reader(self):
-        with open( self.statsfile ) as csvfile:
-            reader = csv.reader( csvfile, dialect=cubenormDialect )
-            for row in reader:
-                self.assertEqual( 8, len(row) )
-                break
 
 
 # @unittest.skip('Takes a while to run hi2isis.')

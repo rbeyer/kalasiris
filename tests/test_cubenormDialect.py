@@ -22,7 +22,7 @@ import unittest
 
 import os, sys, unittest
 import shutil, urllib.request
-sys.path.append('../')
+#sys.path.append('../')
 from kalasiris import *
 #from kalasiris import kalasiris
 
