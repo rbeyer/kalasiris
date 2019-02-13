@@ -15,8 +15,7 @@ kalasiris
 
 
 
-
-A Python library to wrap ISIS functions and functionality.
+A Python library to wrap functions and functionality for the Integrated Software for Imagers and Spectrometers (ISIS).
 
 
 * Free software: Apache Software License 2.0
