@@ -27,15 +27,15 @@ import kalasiris as isis
 img = 'tests/resources/HiRISE_test.img'
 
 class TestParams(unittest.TestCase):
-    def test_addparams(self):
+    def test_param_fmt(self):
         t = ( 'isisprogram','from=foo.cub' )
         p = { 'to': 'to.cub', 'check': False, 'value': 3.0 }
-        c = list(t)
+        cmd = list(t)
         truth = list(t)
         truth.extend( ['to=to.cub', 'check=False', 'value=3.0'] )
 
-        c = isis.addparams( c, p )
-        self.assertEqual( truth, c )
+        cmd.extend( map(isis.param_fmt, p.keys(), p.values()) )
+        self.assertEqual( truth, cmd )
 
 
 # @unittest.skip('Takes a while to run hi2isis.')
