@@ -17,16 +17,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os, subprocess, unittest
+import kalasiris as isis
 
-import unittest
-
-import os, sys, unittest
-import shutil, urllib.request
-#sys.path.append('../')
-from kalasiris import *
-#from kalasiris import kalasiris
-
-img = 'HiRISE_test.img'
+# Hardcoding this, but I sure would like a better solution.
+# One could download the .img file from the PDS at each setUp,
+# but that seems like a lot of network traffic, when you could just
+# do it once.
+img = 'tests/resources/HiRISE_test.img'
 
 class TestParams(unittest.TestCase):
     def test_addparams(self):
@@ -36,7 +34,7 @@ class TestParams(unittest.TestCase):
         truth = list(t)
         truth.extend( ['to=to.cub', 'check=False', 'value=3.0'] )
 
-        c = addparams( c, p )
+        c = isis.addparams( c, p )
         self.assertEqual( truth, c )
 
 
@@ -50,13 +48,13 @@ class Test_hi2isis(unittest.TestCase):
 
     def test_hi2isis_with_to(self):
         tocube = 'test_hi2isis.cub'
-        hi2isis( self.img, tocube )
+        isis.hi2isis( self.img, tocube )
         self.assertTrue( os.path.isfile(tocube) )
         os.remove( tocube )
 
     def test_hi2isis_without_to(self):
         tocube = os.path.splitext( self.img )[0] + '.cub'
-        hi2isis( self.img )
+        isis.hi2isis( self.img )
         self.assertTrue( os.path.isfile(tocube) )
         os.remove( tocube )
 
@@ -64,7 +62,7 @@ class Test_hi2isis(unittest.TestCase):
 class Test_getkey(unittest.TestCase):
     def setUp(self):
         self.cub = 'test_getkey.cub'
-        hi2isis( img, self.cub )
+        isis.hi2isis( img, self.cub )
 
     def tearDown(self):
         os.remove( self.cub )
@@ -72,18 +70,18 @@ class Test_getkey(unittest.TestCase):
 
     def test_getkey(self):
         truth = 'HIRISE'
-        key = getkey( self.cub, 'Instrument', 'InstrumentId' )
+        key = isis.getkey( self.cub, 'Instrument', 'InstrumentId' )
         self.assertEqual( truth, key )
 
     def test_getkey_fail(self):
         # Pixels doesn't have InstrumentId, should fail
-        self.assertRaises( subprocess.CalledProcessError, getkey, self.cub, 'Pixels', 'InstrumentId' )
+        self.assertRaises( subprocess.CalledProcessError, isis.getkey, self.cub, 'Pixels', 'InstrumentId' )
 
 #@unittest.skip('Takes a while to run hi2isis.')
 class Test_histat(unittest.TestCase):
     def setUp(self):
         self.cub = 'test_histat.cub'
-        hi2isis( img, self.cub )
+        isis.hi2isis( img, self.cub )
 
     def tearDown(self):
         os.remove( self.cub )
@@ -91,18 +89,10 @@ class Test_histat(unittest.TestCase):
 
     def test_histat_with_to(self):
         tofile = self.cub+'.histat'
-        histat( self.cub, to=tofile )
+        isis.histat( self.cub, to=tofile )
         self.assertTrue( os.path.isfile(tofile) )
         os.remove( tofile )
 
     def test_histat_without_to(self):
-        s = histat( self.cub ).stdout
+        s = isis.histat( self.cub ).stdout
         self.assertTrue( s.startswith('Group = IMAGE_POSTRAMP') )
-
-
-if __name__ == '__main__':
-    if not os.path.isfile( img ):
-        print( 'Downloading test HiRISE EDR image.' )
-        urllib.request.urlretrieve( 'https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG', img )
-
-    unittest.main()

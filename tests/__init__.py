@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-"""Unit test package for isis3py."""
+"""Unit test package for kalasiris."""
