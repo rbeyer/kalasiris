@@ -21,16 +21,17 @@ import os, subprocess, sys
 # These definitions and the use of env= in the subprocess.run calls allow us to
 # run ISIS in a very lean environment.
 #
-# If you uncomment the four double-hash (##) lines, and comment out the two
-# lines that pull from os.environ, you can run ISIS programs even though the
-# shell that called this Python program may not be an ISIS-enabled shell.
-## isisroot = '/Users/rbeyer/anaconda3/envs/isis3'
-## isis3data = '/Users/rbeyer/anaconda3/envs/isis3/data'
-## isis_env = {'ISISROOT': isisroot,
-##             'ISIS3DATA': isis3data,
-isis_env = {'ISISROOT': os.environ['ISISROOT'],
-            'ISIS3DATA': os.environ['ISIS3DATA'],
-            'PATH': isisroot+'/bin/',
+# If you uncomment the two double-hash (##) lines, and comment out the two
+# lines that get those values directly os.environ, you can run ISIS programs
+# even though the shell that called this Python program may not be an
+# ISIS-enabled shell.
+## isisroot =  os.path.join( os.environ['HOME'], 'anaconda3', 'envs', 'isis3' )
+## isis3data = os.path.join( os.environ['HOME'], 'anaconda3', 'envs', 'data' )
+isisroot =  os.environ['ISISROOT']
+isis3data = os.environ['ISIS3DATA']
+isis_env = {'ISISROOT':  isisroot,
+            'ISIS3DATA': isis3data,
+            'PATH':      os.path.join(isisroot, 'bin'),
             'HOME': os.environ['HOME']} # Otherwise ISIS tries to make a ./\$HOME dir
 
 #########################################################################
@@ -45,7 +46,9 @@ def addparams( cmd, params ):
 
 def _run_isis_program( cmd ):
     '''Wrapper for subprocess.run()'''
-    return subprocess.run(cmd, env=isis_env, check=True, capture_output=True, text=True)
+    #return subprocess.run(cmd, env=isis_env, check=True, capture_output=True, text=True)
+    return subprocess.run(cmd, env=isis_env, check=True, universal_newlines=True,
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
 def _build_isis_fn( fn_name ):
