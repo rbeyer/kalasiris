@@ -18,7 +18,7 @@
 import collections, csv
 
 class Histogram:
-    """A class to read and wrap the contents of the output of hist()"""
+    """A class to read and wrap the contents of the output of the ISIS hist program, kalasiris.hist()"""
 
     def __init__(self, histfile):
         self.histfile = histfile

@@ -18,7 +18,7 @@
 import csv
 
 class cubenormDialect( csv.Dialect ):
-    '''A csv.Dialect for the output of the ISIS3 cubenorm program.'''
+    '''A csv.Dialect for the output of the ISIS cubenorm program.'''
     delimiter = ' '
     skipinitialspace = True
     quoting = csv.QUOTE_NONE

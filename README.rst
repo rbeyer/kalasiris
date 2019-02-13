@@ -26,12 +26,13 @@ A Python library to wrap ISIS functions and functionality.
 Features
 --------
 
-* TODO
+* Primarily a very lightweight wrapper around Python's subprocess module
+* Calling compatibility with Pysis (but not return types)
 
 Credits
 -------
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+This repository layout was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""This module contains calls to ISIS3 functions."""
+"""This module contains calls to ISIS functions."""
 
 # Copyright 2019, Ross A. Beyer (rbeyer@seti.org)
 #
@@ -19,7 +19,8 @@
 import os, subprocess, sys
 
 # These definitions and the use of env= in the subprocess.run calls allow us to
-# run ISIS in a very limited environment.
+# run ISIS in a very lean environment.
+#
 # If you uncomment the four double-hash (##) lines, and comment out the two
 # lines that pull from os.environ, you can run ISIS programs even though the
 # shell that called this Python program may not be an ISIS-enabled shell.
