@@ -24,7 +24,17 @@ for line in sys.stdin:
 endef
 export PRINT_HELP_PYSCRIPT
 
+define DOWNLOAD_PYSCRIPT
+import urllib.request, sys
+
+urllib.request.urlretrieve(sys.argv[1],sys.argv[2])
+endef
+export DOWNLOAD_PYSCRIPT
+
+
+
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
+DOWNLOAD := python -c "$$DOWNLOAD_PYSCRIPT"
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
@@ -49,7 +59,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -f .coverage
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
-	rm -fr tests/resources
+	rm -fr test-resources
 
 lint: ## check style with flake8
 	flake8 kalasiris tests
@@ -59,6 +69,10 @@ test: ## run tests quickly with the default Python
 
 test-all: ## run tests on every Python version with tox
 	tox
+
+test-resources: ## Download what we need for testing
+	mkdir test-resources
+	$(DOWNLOAD) https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG test-resources/HiRISE_test.img
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source kalasiris setup.py test
