@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""This module contains calls to ISIS functions."""
+"""Provides the ability to call ISIS functions."""
 
 # Copyright 2019, Ross A. Beyer (rbeyer@seti.org)
 #
@@ -136,11 +136,13 @@ def getkey_k(cube, group, key):
 
     No default parameters are needed, and it directly returns a string.
     '''
-    return(getkey(cube, grpname=group, keyword=key).stdout.strip())  # noqa
+    return(getkey(cube,  # noqa: F821
+                  grpname=group,
+                  keyword=key).stdout.strip())
 
 
 def hi2isis_k(img, **kwargs):
     '''Creates a default name for the to= cube.'''
     if 'to' not in kwargs:
         kwargs['to'] = os.path.splitext(img)[0] + '.cub'
-    return(hi2isis(img, **kwargs))  # noqa
+    return(hi2isis(img, **kwargs))  # noqa: F821
