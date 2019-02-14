@@ -26,13 +26,6 @@ import sys
 # run ISIS in a very lean environment.  Of course, users can override with
 # their complete environment by making kalasiris.environ = os.environ
 # before any calls to ISIS programs.
-#
-# If you uncomment the two double-hash (##) lines, and comment out the two
-# lines that get those values directly os.environ, you can run ISIS programs
-# even though the shell that called this Python program may not be an
-# ISIS-enabled shell.
-## _isisroot =  os.path.join(os.environ['HOME'], 'anaconda3', 'envs', 'isis3')
-## _isis3data = os.path.join(os.environ['HOME'], 'anaconda3', 'envs', 'data')
 _isisroot = os.environ['ISISROOT']
 _isis3data = os.environ['ISIS3DATA']
 environ = {'ISISROOT':  _isisroot,
