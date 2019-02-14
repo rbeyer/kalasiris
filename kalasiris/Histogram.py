@@ -15,17 +15,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import collections, csv
+import collections
+import csv
+
 
 class Histogram:
-    """A class to read and wrap the contents of the output of the ISIS hist program, kalasiris.hist()"""
+    """Reads and wraps the contents of the output of the ISIS hist program."""
 
     def __init__(self, histfile):
         self.histfile = histfile
         (self.dictionary,
          self.headers,
          self.hist_list) = self.parsehist(histfile)
-         # self.hist_list is a list of collections.namedtuple( 'HistRow', self.headers )
+        # self.hist_list is a list of
+        # collections.namedtuple( 'HistRow', self.headers )
 
     def __str__(self):
         pass
@@ -36,8 +39,8 @@ class Histogram:
     def __len__(self):
         return len(self.hist_list)
 
-    def __getitem__(self,key):
-        #if key is integer or slice object, look in self.hist_vals
+    def __getitem__(self, key):
+        # if key is integer or slice object, look in self.hist_vals
         if isinstance(key, int):
             return self.hist_list[key]
 
@@ -51,8 +54,10 @@ class Histogram:
         return self.hist_list.__iter__()
 
     def __contains__(self, item):
-        if item in self.dictionary: return True
-        else: return False
+        if item in self.dictionary:
+            return True
+        else:
+            return False
 
     def keys(self):
         return self.dictionary.keys()
@@ -63,18 +68,22 @@ class Histogram:
     def parsehist(self, histfile):
         d = dict()
         headers = []
-        hist_vals= []
-        with open( histfile ) as f:
+        hist_vals = []
+        with open(histfile) as f:
             for line in f:
                 if ':' in line:
-                    (k,v) = line.split(':')
-                    if 'Cube' in k: d[k.strip()] = v.strip()
-                    else:           d[k.strip()] = float(v.strip())
+                    (k, v) = line.split(':')
+                    if 'Cube' in k:
+                        d[k.strip()] = v.strip()
+                    else:
+                        d[k.strip()] = float(v.strip())
 
                 if line.startswith('DN,'):
                     headers = line.strip().split(',')
-                    HistRow = collections.namedtuple( 'HistRow', headers )
-                    for row in map( HistRow._make, csv.reader(f, quoting=csv.QUOTE_NONNUMERIC) ):
-                        hist_vals.append( row )
+                    HistRow = collections.namedtuple('HistRow', headers)
+                    for row in map(HistRow._make,
+                                   csv.reader(f,
+                                              quoting=csv.QUOTE_NONNUMERIC)):
+                        hist_vals.append(row)
 
         return d, headers, hist_vals
