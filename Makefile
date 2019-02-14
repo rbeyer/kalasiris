@@ -64,7 +64,7 @@ clean-test: ## remove test and coverage artifacts
 lint: ## check style with flake8
 	flake8 kalasiris tests
 
-test: ## run tests quickly with the default Python
+test: test-resources ## run tests quickly with the default Python
 	python setup.py test
 
 test-all: ## run tests on every Python version with tox
