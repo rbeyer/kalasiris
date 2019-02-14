@@ -22,11 +22,16 @@ import subprocess
 import unittest
 import kalasiris.kalasiris as isis
 
+
 # Hardcoding this, but I sure would like a better solution.
-# One could download the .img file from the PDS at each setUp,
-# but that seems like a lot of network traffic, when you could just
-# do it once.
-img = 'tests/resources/HiRISE_test.img'
+img = os.path.join('test-resources', 'HiRISE_test.img')
+
+
+class TestResources(unittest.TestCase):
+    '''Establishes that the test image exists.'''
+
+    def test_resources(self):
+        self.assertTrue(os.path.isfile(img))
 
 
 class TestParams(unittest.TestCase):
@@ -50,8 +55,8 @@ class Test_get_isis_program_names(unittest.TestCase):
         self.assertIn('cam2map', isis._get_isis_program_names())
 
 
-# @unittest.skip('Takes a while to run hi2isis.')
-class Test_hi2isis(unittest.TestCase):
+# @unittest.skip('Can take a while to run hi2isis.')
+class Test_hi2isis_k(unittest.TestCase):
 
     def setUp(self):
         self.img = img
@@ -59,47 +64,46 @@ class Test_hi2isis(unittest.TestCase):
     def tearDown(self):
         os.remove('print.prt')
 
-    def test_hi2isis_with_to(self):
+    def test_hi2isis_k_with_to(self):
         tocube = 'test_hi2isis.cub'
-        isis.hi2isis(self.img, tocube)
+        isis.hi2isis_k(self.img, to=tocube)
         self.assertTrue(os.path.isfile(tocube))
         os.remove(tocube)
 
-    def test_hi2isis_without_to(self):
+    def test_hi2isis_k_without_to(self):
         tocube = os.path.splitext(self.img)[0] + '.cub'
-        isis.hi2isis(self.img)
+        isis.hi2isis_k(self.img)
         self.assertTrue(os.path.isfile(tocube))
         os.remove(tocube)
 
 
-# @unittest.skip('Takes a while to run hi2isis.')
-class Test_getkey(unittest.TestCase):
+# @unittest.skip('Can take a while to run hi2isis.')
+class Test_getkey_k(unittest.TestCase):
 
     def setUp(self):
         self.cub = 'test_getkey.cub'
-        isis.hi2isis(img, self.cub)
+        isis.hi2isis(img, to=self.cub)
 
     def tearDown(self):
         os.remove(self.cub)
         os.remove('print.prt')
 
-    def test_getkey(self):
+    def test_getkey_k(self):
         truth = 'HIRISE'
-        key = isis.getkey(self.cub, 'Instrument', 'InstrumentId')
+        key = isis.getkey_k(self.cub, 'Instrument', 'InstrumentId')
         self.assertEqual(truth, key)
 
-    def test_getkey_fail(self):
+    def test_getkey_k_fail(self):
         # Pixels doesn't have InstrumentId, should fail
         self.assertRaises(subprocess.CalledProcessError,
-                          isis.getkey, self.cub, 'Pixels', 'InstrumentId')
+                          isis.getkey_k, self.cub, 'Pixels', 'InstrumentId')
 
 
-# @unittest.skip('Takes a while to run hi2isis.')
 class Test_histat(unittest.TestCase):
 
     def setUp(self):
         self.cub = 'test_histat.cub'
-        isis.hi2isis(img, self.cub)
+        isis.hi2isis(img, to=self.cub)
 
     def tearDown(self):
         os.remove(self.cub)
