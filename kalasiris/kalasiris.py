@@ -143,5 +143,4 @@ def hi2isis_k(img, **kwargs):
     '''Creates a default name for the to= cube.'''
     if 'to' not in kwargs:
         kwargs['to'] = os.path.splitext(img)[0] + '.cub'
-    print(kwargs)
     return(hi2isis(img, **kwargs))  # noqa
