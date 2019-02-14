@@ -18,7 +18,7 @@
 # limitations under the License.
 
 import os, subprocess, unittest
-import kalasiris as isis
+import kalasiris.kalasiris as isis
 
 # Hardcoding this, but I sure would like a better solution.
 # One could download the .img file from the PDS at each setUp,
@@ -36,6 +36,12 @@ class TestParams(unittest.TestCase):
 
         cmd.extend( map(isis.param_fmt, p.keys(), p.values()) )
         self.assertEqual( truth, cmd )
+
+class Test_get_isis_program_names(unittest.TestCase):
+    def test_get_names(self):
+        #for n in isis._get_isis_program_names():
+        #    print(n)
+        self.assertIn( 'cam2map', isis._get_isis_program_names() )
 
 
 # @unittest.skip('Takes a while to run hi2isis.')
