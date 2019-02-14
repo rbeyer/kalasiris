@@ -17,25 +17,35 @@ Differences
 What is returned from calls to ISIS programs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The pysis_ library wrapped the call to subprocess tightly and
-just returned ``stdout`` from the process.  Whereas kalasiris
-returns a ``subprocess.CompletedProcess`` object that you can do
-more with.
+The pysis_ library wrapped the call to subprocess tightly and just
+returned ``stdout`` from the process as a byte string.  Whereas
+kalasiris returns a ``subprocess.CompletedProcess`` object that you
+can do more with.
 
-So while you could do this::
+So while you could do this in pysis::
 
-  value = pysis.getkey( from_='W1467351325_4.map.cal.cub',
-                        keyword='minimumringradius',
-                        grp='mapping')
+  p_value = pysis.getkey( from_='W1467351325_4.map.cal.cub',
+                          keyword='minimumringradius',
+                          grp='mapping')
 
-You now have to do this::
+You now have to do this with kalasiris::
 
-  value = kalasiris.getkey( from_='W1467351325_4.map.cal.cub',
-                            keyword='minimumringradius',
-                            grp='mapping').stdout
+  k_value = kalasiris.getkey( from_='W1467351325_4.map.cal.cub',
+                              keyword='minimumringradius',
+                              grp='mapping').stdout
 
 Note the ``.stdout`` at the end there to access the returned
 ``subprocess.CompletedProcess``'s ``.stdout`` attribute.
+
+Actually, the ``p_value`` is a byte string, while ``k_value``
+is a string.  Odds are good you want a regular string anyway, but
+if you really wanted complete parity, such that ``k_value`` would
+be the same type as ``p_value`` was, you can do this::
+
+    k_value = kalasiris.getkey( from_='W1467351325_4.map.cal.cub',
+                                keyword='minimumringradius',
+                                grp='mapping').stdout.encode()
+
 
 
 No IsisPool
