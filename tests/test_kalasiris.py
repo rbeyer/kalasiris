@@ -17,7 +17,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os, subprocess, unittest
+import os
+import subprocess
+import unittest
 import kalasiris.kalasiris as isis
 
 # Hardcoding this, but I sure would like a better solution.
@@ -26,79 +28,89 @@ import kalasiris.kalasiris as isis
 # do it once.
 img = 'tests/resources/HiRISE_test.img'
 
+
 class TestParams(unittest.TestCase):
+
     def test_param_fmt(self):
-        t = ( 'isisprogram','from=foo.cub' )
-        p = { 'to': 'to.cub', 'check': False, 'value': 3.0 }
+        t = ('isisprogram', 'from=foo.cub')
+        p = {'to': 'to.cub', 'check': False, 'value': 3.0}
         cmd = list(t)
         truth = list(t)
-        truth.extend( ['to=to.cub', 'check=False', 'value=3.0'] )
+        truth.extend(['to=to.cub', 'check=False', 'value=3.0'])
 
-        cmd.extend( map(isis.param_fmt, p.keys(), p.values()) )
-        self.assertEqual( truth, cmd )
+        cmd.extend(map(isis.param_fmt, p.keys(), p.values()))
+        self.assertEqual(truth, cmd)
+
 
 class Test_get_isis_program_names(unittest.TestCase):
+
     def test_get_names(self):
-        #for n in isis._get_isis_program_names():
+        # for n in isis._get_isis_program_names():
         #    print(n)
-        self.assertIn( 'cam2map', isis._get_isis_program_names() )
+        self.assertIn('cam2map', isis._get_isis_program_names())
 
 
 # @unittest.skip('Takes a while to run hi2isis.')
 class Test_hi2isis(unittest.TestCase):
+
     def setUp(self):
         self.img = img
 
     def tearDown(self):
-        os.remove( 'print.prt' )
+        os.remove('print.prt')
 
     def test_hi2isis_with_to(self):
         tocube = 'test_hi2isis.cub'
-        isis.hi2isis( self.img, tocube )
-        self.assertTrue( os.path.isfile(tocube) )
-        os.remove( tocube )
+        isis.hi2isis(self.img, tocube)
+        self.assertTrue(os.path.isfile(tocube))
+        os.remove(tocube)
 
     def test_hi2isis_without_to(self):
-        tocube = os.path.splitext( self.img )[0] + '.cub'
-        isis.hi2isis( self.img )
-        self.assertTrue( os.path.isfile(tocube) )
-        os.remove( tocube )
+        tocube = os.path.splitext(self.img)[0] + '.cub'
+        isis.hi2isis(self.img)
+        self.assertTrue(os.path.isfile(tocube))
+        os.remove(tocube)
 
-#@unittest.skip('Takes a while to run hi2isis.')
+
+# @unittest.skip('Takes a while to run hi2isis.')
 class Test_getkey(unittest.TestCase):
+
     def setUp(self):
         self.cub = 'test_getkey.cub'
-        isis.hi2isis( img, self.cub )
+        isis.hi2isis(img, self.cub)
 
     def tearDown(self):
-        os.remove( self.cub )
-        os.remove( 'print.prt' )
+        os.remove(self.cub)
+        os.remove('print.prt')
 
     def test_getkey(self):
         truth = 'HIRISE'
-        key = isis.getkey( self.cub, 'Instrument', 'InstrumentId' )
-        self.assertEqual( truth, key )
+        key = isis.getkey(self.cub, 'Instrument', 'InstrumentId')
+        self.assertEqual(truth, key)
 
     def test_getkey_fail(self):
         # Pixels doesn't have InstrumentId, should fail
-        self.assertRaises( subprocess.CalledProcessError, isis.getkey, self.cub, 'Pixels', 'InstrumentId' )
+        self.assertRaises(subprocess.CalledProcessError,
+                          isis.getkey, self.cub, 'Pixels', 'InstrumentId')
 
-#@unittest.skip('Takes a while to run hi2isis.')
+
+# @unittest.skip('Takes a while to run hi2isis.')
 class Test_histat(unittest.TestCase):
+
     def setUp(self):
         self.cub = 'test_histat.cub'
-        isis.hi2isis( img, self.cub )
+        isis.hi2isis(img, self.cub)
 
     def tearDown(self):
-        os.remove( self.cub )
-        os.remove( 'print.prt' )
+        os.remove(self.cub)
+        os.remove('print.prt')
 
     def test_histat_with_to(self):
-        tofile = self.cub+'.histat'
-        isis.histat( self.cub, to=tofile )
-        self.assertTrue( os.path.isfile(tofile) )
-        os.remove( tofile )
+        tofile = self.cub + '.histat'
+        isis.histat(self.cub, to=tofile)
+        self.assertTrue(os.path.isfile(tofile))
+        os.remove(tofile)
 
     def test_histat_without_to(self):
-        s = isis.histat( self.cub ).stdout
-        self.assertTrue( s.startswith('Group = IMAGE_POSTRAMP') )
+        s = isis.histat(self.cub).stdout
+        self.assertTrue(s.startswith('Group = IMAGE_POSTRAMP'))

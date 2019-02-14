@@ -17,7 +17,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import csv, os, unittest
+import csv
+import os
+import unittest
 import kalasiris as isis
 
 # Hardcoding this, but I sure would like a better solution.
@@ -26,12 +28,14 @@ import kalasiris as isis
 # do it once.
 img = 'tests/resources/HiRISE_test.img'
 
+
 class TestCubenormDialect(unittest.TestCase):
+
     def setUp(self):
         self.cube = 'test_cubenorm.cub'
         self.statsfile = 'test_cubenorm.stats'
         isis.hi2isis(img, self.cube)
-        isis.cubenorm( self.cube, stats=self.statsfile )
+        isis.cubenorm(self.cube, stats=self.statsfile)
 
     def tearDown(self):
         os.remove('print.prt')
@@ -39,8 +43,8 @@ class TestCubenormDialect(unittest.TestCase):
         os.remove(self.statsfile)
 
     def test_cubenorm_reader(self):
-        with open( self.statsfile ) as csvfile:
-            reader = csv.reader( csvfile, dialect=isis.cubenormDialect )
+        with open(self.statsfile) as csvfile:
+            reader = csv.reader(csvfile, dialect=isis.cubenormDialect)
             for row in reader:
-                self.assertEqual( 8, len(row) )
+                self.assertEqual(8, len(row))
                 break

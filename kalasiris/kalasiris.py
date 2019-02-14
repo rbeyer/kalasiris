@@ -31,14 +31,15 @@ import sys
 # lines that get those values directly os.environ, you can run ISIS programs
 # even though the shell that called this Python program may not be an
 # ISIS-enabled shell.
-## _isisroot =  os.path.join( os.environ['HOME'], 'anaconda3', 'envs', 'isis3' )
-## _isis3data = os.path.join( os.environ['HOME'], 'anaconda3', 'envs', 'data' )
+## _isisroot =  os.path.join(os.environ['HOME'], 'anaconda3', 'envs', 'isis3')
+## _isis3data = os.path.join(os.environ['HOME'], 'anaconda3', 'envs', 'data')
 _isisroot = os.environ['ISISROOT']
 _isis3data = os.environ['ISIS3DATA']
 environ = {'ISISROOT':  _isisroot,
            'ISIS3DATA': _isis3data,
            'PATH':      os.path.join(_isisroot, 'bin'),
-           'HOME':      os.environ['HOME']}  # Otherwise ISIS tries to make a ./\$HOME dir
+           'HOME':      os.environ['HOME']}
+# If we don't also set $HOME, ISIS tries to make a local ./\$HOME dir
 
 #########################################################################
 # Helper and wrapper functions for the ISIS commands.
@@ -72,7 +73,8 @@ def _build_isis_fn(fn_name: str):
     # Define the structure of the generic function, isis_fn:
     def isis_fn(*args, **kwargs) -> subprocess.CompletedProcess:
         if len(args) > 1:
-            raise IndexError('only accepts 1 non-keyword argument to be from= ')
+            e = 'only accepts 1 non-keyword argument to be from= '
+            raise IndexError(e)
         cmd = [fn_name]
         if len(args) == 1:
             cmd.append(param_fmt('from', args[0]))
@@ -118,7 +120,8 @@ def _get_isis_program_names():
                 yield entry.name
 
 
-# Now use the builder function to automatically create functions with these names:
+# Now use the builder function to automatically create functions
+# with these names:
 for p in _get_isis_program_names():
     _build_isis_fn(p)
 
@@ -126,6 +129,7 @@ for p in _get_isis_program_names():
 # kalasiris-wrapped versions, alphabetically arranged.
 # These we want to be able to call or return differently than
 # _build_isis_fn() provides.  They all end in '_k'.
+# Maybe move them out to another file?
 
 def getkey_k(cube, group, key):
     '''Simplified calling for getkey.
