@@ -136,11 +136,12 @@ def getkey_k(cube, group, key):
 
     No default parameters are needed, and it directly returns a string.
     '''
-    return(getkey(cube, group=group, key=key).stdout.strip())  # noqa
+    return(getkey(cube, grpname=group, keyword=key).stdout.strip())  # noqa
 
 
 def hi2isis_k(img, **kwargs):
     '''Creates a default name for the to= cube.'''
     if 'to' not in kwargs:
         kwargs['to'] = os.path.splitext(img)[0] + '.cub'
-    return(hi2isis(img, kwargs))  # noqa
+    print(kwargs)
+    return(hi2isis(img, **kwargs))  # noqa
