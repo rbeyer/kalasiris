@@ -6,11 +6,13 @@ Welcome to kalasiris's documentation!
    :caption: Contents:
 
    readme
+   pysis
    installation
    usage
    modules
    contributing
    authors
+   naming
    history
 
 Indices and tables
