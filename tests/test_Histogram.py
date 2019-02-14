@@ -22,10 +22,14 @@ import unittest
 import kalasiris as isis
 
 # Hardcoding this, but I sure would like a better solution.
-# One could download the .img file from the PDS at each setUp,
-# but that seems like a lot of network traffic, when you could just
-# do it once.
-img = 'tests/resources/HiRISE_test.img'
+img = os.path.join('test-resources', 'HiRISE_test.img')
+
+
+class TestResources(unittest.TestCase):
+    '''Establishes that the test image exists.'''
+
+    def test_resources(self):
+        self.assertTrue(os.path.isfile(img))
 
 
 class TestHistogram(unittest.TestCase):
@@ -33,7 +37,7 @@ class TestHistogram(unittest.TestCase):
     def setUp(self):
         self.cube = 'test_Histogram.cub'
         self.histfile = 'test_Histogram.hist'
-        isis.hi2isis(img, self.cube)
+        isis.hi2isis(img, to=self.cube)
         isis.hist(self.cube, to=self.histfile)
 
     def tearDown(self):
@@ -43,7 +47,7 @@ class TestHistogram(unittest.TestCase):
 
     def test_init(self):
         h = isis.Histogram(self.histfile)
-        self.assertIsInstance(isis.Histogram, h)
+        self.assertIsInstance(h, isis.Histogram)
 
     def test_dictlike(self):
         h = isis.Histogram(self.histfile)

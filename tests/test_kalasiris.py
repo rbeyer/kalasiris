@@ -56,6 +56,21 @@ class Test_get_isis_program_names(unittest.TestCase):
 
 
 # @unittest.skip('Can take a while to run hi2isis.')
+class Test_hi2isis(unittest.TestCase):
+
+    def setUp(self):
+        self.img = img
+
+    def tearDown(self):
+        os.remove('print.prt')
+
+    def test_hi2isis(self):
+        tocube = 'test_hi2isis.cub'
+        isis.hi2isis_k(self.img, to=tocube)
+        self.assertTrue(os.path.isfile(tocube))
+        os.remove(tocube)
+
+
 class Test_hi2isis_k(unittest.TestCase):
 
     def setUp(self):
@@ -77,11 +92,33 @@ class Test_hi2isis_k(unittest.TestCase):
         os.remove(tocube)
 
 
-# @unittest.skip('Can take a while to run hi2isis.')
-class Test_getkey_k(unittest.TestCase):
+class Test_getkey(unittest.TestCase):
 
     def setUp(self):
         self.cub = 'test_getkey.cub'
+        isis.hi2isis(img, to=self.cub)
+
+    def tearDown(self):
+        os.remove(self.cub)
+        os.remove('print.prt')
+
+    def test_getkey(self):
+        truth = 'HIRISE'
+        key = isis.getkey(self.cub, grpname='Instrument',
+                          keyword='InstrumentId').stdout.strip()
+        self.assertEqual(truth, key)
+
+    def test_getkey_fail(self):
+        # Pixels doesn't have InstrumentId, should fail
+        self.assertRaises(subprocess.CalledProcessError,
+                          isis.getkey, self.cub,
+                          grpname='Pixels', keyword='InstrumentId')
+
+
+class Test_getkey_k(unittest.TestCase):
+
+    def setUp(self):
+        self.cub = 'test_getkey_k.cub'
         isis.hi2isis(img, to=self.cub)
 
     def tearDown(self):
@@ -92,11 +129,6 @@ class Test_getkey_k(unittest.TestCase):
         truth = 'HIRISE'
         key = isis.getkey_k(self.cub, 'Instrument', 'InstrumentId')
         self.assertEqual(truth, key)
-
-    def test_getkey_k_fail(self):
-        # Pixels doesn't have InstrumentId, should fail
-        self.assertRaises(subprocess.CalledProcessError,
-                          isis.getkey_k, self.cub, 'Pixels', 'InstrumentId')
 
 
 class Test_histat(unittest.TestCase):
