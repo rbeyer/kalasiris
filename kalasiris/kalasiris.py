@@ -38,15 +38,12 @@ environ = {'ISISROOT':  _isisroot,
 # Helper and wrapper functions for the ISIS commands.
 
 
-# def param_fmt(key: str, value: str) -> str:
-
-
 def param_fmt(key: str, value: str) -> str:
     '''Returns a "key=value" string from the inputs.
 
     This is the pattern that ISIS uses for arguments.  If there are
     any trailing underbars (_) on the key, they will be stripped
-    off.  This supports the old Pysis syntax to protect Python
+    off.  This supports the old pysis syntax to protect Python
     reserved words like from and min, while still allowing the user
     to provide 'natural' function calls like isis.stats(from_=cubefile)
     '''
@@ -109,7 +106,9 @@ def _get_isis_program_names():
     bindir = os.path.join(environ['ISISROOT'], 'bin')
     with os.scandir(bindir) as it:
         for entry in it:
-            if entry.is_file() and os.access(entry, os.X_OK):
+            if(entry.is_file()
+               and os.access(entry, os.X_OK)
+               and not entry.name.startswith('.')):
                 yield entry.name
 
 
