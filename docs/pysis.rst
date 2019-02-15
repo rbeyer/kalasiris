@@ -1,15 +1,10 @@
 =====
-How is this different from pysis?
+kalasiris and pysis
 =====
 
-Folks got a lot of use out of pysis_, but it hasn't had a release
-or commits in some time, and due to its implementation and strict
-checking, it is not compatible with post 3.6.0 versions of ISIS.
-The main kalasiris implementation can fit in one file and is very
-lightweight.
-
-Naturally, this means that working with kalasiris is perhaps less
-forgiving, but we think it is more nimble.
+The kalasiris module mostly provides the same functionality as
+pysis_, namely the easy ability to call ISIS programs from Python.
+Of course, there are some differences, and some similarities.
 
 Differences
 -----------
@@ -28,14 +23,14 @@ So while you could do this in pysis::
                           keyword='minimumringradius',
                           grp='mapping')
 
-You now have to do this with kalasiris::
+To get the same thing, you would do this with kalasiris::
 
   k_value = kalasiris.getkey( from_='W1467351325_4.map.cal.cub',
                               keyword='minimumringradius',
                               grp='mapping').stdout
 
 Note the ``.stdout`` at the end there to access the returned
-``subprocess.CompletedProcess``'s ``.stdout`` attribute.
+subprocess.CompletedProcess's stdout attribute.
 
 Actually, the ``p_value`` is a byte string, while ``k_value``
 is a string.  Odds are good you want a regular string anyway, but
@@ -60,7 +55,7 @@ didn't feel that we could do better.
 Compatibility
 -------------
 
-The one way that kalasiris is the same is that it supports the pysis
+The one way that kalasiris is the same is that it supports the pysis_
 syntax to protect Python reserved words like ``from`` and ``min``,
 by appending an underbar (``_``) to the parameter name.  This allows
 the user to provide 'natural' function calls like::

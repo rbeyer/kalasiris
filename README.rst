@@ -29,7 +29,7 @@ Features
 
 * Primarily a very lightweight wrapper around Python's subprocess module
 * Calling compatibility with pysis_ (but not return types)
-* Supports ISIS 3.6.0+
+* Guaranteed to work with ISIS 3.6.0+, probably works with ISIS 3.0.0+
 * Only guaranteed to work with Python 3.6.0+
 
 
@@ -44,7 +44,7 @@ Quickstart
 ----------
 
 Are you new to Python?  Or you just don't want to mess with
-sophisticated installation of Python?  Or you don't want to commit
+sophisticated Python installations?  Or you don't want to commit
 to installing something when you don't know if it will be worth it?
 Or you just want to write something 'real quick' in Python and just
 need to call some ISIS programs **now**?
@@ -92,8 +92,6 @@ lightweight.
 
 Naturally, this means that working with kalasiris is perhaps less
 forgiving, but we think it is more nimble.
-
-More detailed differences can be found in the docs.
 
 
 -------
