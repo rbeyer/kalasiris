@@ -51,8 +51,11 @@ class Test_get_isis_program_names(unittest.TestCase):
 
     def test_get_names(self):
         # for n in isis._get_isis_program_names():
-        #    print(n)
+        #     print(n)
+        # s = sum(1 for _ in isis._get_isis_program_names())
+        # print(f'How many programs: {s}')
         self.assertIn('cam2map', isis._get_isis_program_names())
+        print(len(dir(isis)))
 
 
 # @unittest.skip('Can take a while to run hi2isis.')

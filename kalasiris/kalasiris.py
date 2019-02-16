@@ -82,40 +82,50 @@ def _get_isis_program_names():
     '''Returns an iterable of ISIS program names.
 
     With the new conda distribution, there is a lot of stuff in
-    $ISISROOT/bin that isn't actually an ISIS program.  It would
-    be nice if there was some smart, automatic way to just get ISIS
-    program names, but at the moment, we just slurp up all the names
-    in $ISISROOT/bin and make functions for them.
+    $ISISROOT/bin that isn't actually an ISIS program.  So just
+    slurping the names in $ISISROOT/bin gets too many things that
+    aren't ISIS programs.
 
-    So somebody could try and run ``isis.python('my.py')``, but it
-    would end up calling ``python from=my.py`` in the shell which
-    would error, but the possibility for mischeif exists.
-
-    This also means that the list this function returns is almost
-    a thousand elements long.  And while you can
-
-    ::
-
-        import kalasiris as isis
-
-    programs are strongly encouraged to limit what they import like this::
-
-        from kalasiris import cam2map, hist
-
+    Instead, the isis conda distribution provides $ISISROOT/bin/xml/
+    which contains the documentation XML files.  Every XML file
+    in that directory corresponds to the name of an ISIS program,
+    which is perfect.
     '''
-    bindir = os.path.join(environ['ISISROOT'], 'bin')
+    # bindir = os.path.join(environ['ISISROOT'], 'bin')
+    bindir = os.path.join(environ['ISISROOT'], 'bin', 'xml')
     with os.scandir(bindir) as it:
         for entry in it:
             if(entry.is_file()
                and os.access(entry, os.X_OK)
                and not entry.name.startswith('.')):
-                yield entry.name
+                (name, ext) = os.path.splitext(entry.name)
+                if '.xml' == ext:
+                    yield name
 
 
 # Now use the builder function to automatically create functions
 # with these names:
 for p in _get_isis_program_names():
     _build_isis_fn(p)
+
+# TODO: the above is very heavyweight.  Everytime we load kalasiris, we
+# burn through the $ISISROOT/bin directory and make an entry for every
+# program.  Can I smartly use __getattr__ and __getattribute__ to just
+# have it build an entry when someone tries to use the name?
+# Maybe like this:
+# __name__.__getattr__(self, name):
+#     if name in _get_isis_program_names():
+#         # rewrite _build_isis_fn() to return its isis_fn()
+#         return(_build_isis_fn(name))
+#     else:
+#         raise AttributeError
+#
+# I think this is close to the right function, but not sure if I can
+# override.  Maybe I do need to redefine like this:
+# class _kalasiris(object):
+#     def __getatter__(self, name): # as above
+#
+# sys.modules[__name__] = _kalasiris()
 
 
 # kalasiris-wrapped versions, alphabetically arranged.
