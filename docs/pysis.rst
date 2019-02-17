@@ -1,6 +1,6 @@
-=====
+===================
 kalasiris and pysis
-=====
+===================
 
 The kalasiris module mostly provides the same functionality as
 pysis_, namely the easy ability to call ISIS programs from Python.

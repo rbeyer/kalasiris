@@ -1,6 +1,6 @@
-=====
+=======================
 Why the name kalasiris?
-=====
+=======================
 
 Ancient Egyptian women typically wore a simple sheath dress called
 a *kalasiris*.

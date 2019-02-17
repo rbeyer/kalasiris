@@ -1,6 +1,8 @@
 =========
 kalasiris
 =========
+Calling ISIS programs from Python
+---------------------------------
 
 
 .. image:: https://img.shields.io/pypi/v/kalasiris.svg
@@ -44,10 +46,10 @@ Quickstart
 ----------
 
 Are you new to Python?  Or you just don't want to mess with
-sophisticated Python installations?  Or you don't want to commit
-to installing something when you don't know if it will be worth it?
-Or you just want to write something 'real quick' in Python and just
-need to call some ISIS programs **now**?
+sophisticated Python installation proceedures?  Or you don't want
+to commit to installing something when you don't know if it will
+be worth it?  Or you just want to write something 'real quick' in
+Python and just need to call some ISIS programs **now**?
 
 We've got you covered.
 
@@ -92,6 +94,9 @@ lightweight.
 
 Naturally, this means that working with kalasiris is perhaps less
 forgiving, but we think it is more nimble.
+
+There is also some compatibility with pysis_ calling syntax, see the
+documenation for more information.
 
 
 -------

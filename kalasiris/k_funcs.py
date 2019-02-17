@@ -1,6 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Provides kalasiris _k functions."""
+"""Provides kalasiris _k functions.
+
+   The kalasiris _k functions provide some syntactic sugar to make
+   calling the ISIS programs just that much easier.  For example::
+
+        import kalasiris as isis
+
+        cube_file = 'some.cub'
+
+        keyval = isis.getkey(cube_file, grpname='Instrument',
+                         keyword='InstrumentId').stdout.strip()
+
+        k_keyval = isis.getkey_k(cube_file, 'Instrument', 'InstrumentId')
+
+   And the values of ``keyval`` and ``k_keyval`` are identical, its just
+   that the _k function version is a little easier.  Each of the _k functions
+   implements their modifications a little differently, so make sure to read
+   their documentation.
+"""
 
 # Copyright 2019, Ross A. Beyer (rbeyer@seti.org)
 #

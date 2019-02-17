@@ -10,6 +10,7 @@ Welcome to kalasiris's documentation!
    installation
    usage
    modules
+   lazy
    contributing
    authors
    naming
