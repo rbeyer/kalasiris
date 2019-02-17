@@ -22,7 +22,22 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-import kalasiris
+try:
+    import kalasiris
+except KeyError as err:
+    print('Here is the err:')
+    print(err)
+    if("'ISISROOT'" == str(err) or "'ISIS3DATA'" == str(err)):
+        # Use the fake ISISROOT
+        os.environ['ISISROOT'] = 'fakeISISROOT'
+        os.environ['ISIS3DATA'] = 'fakeISISROOT'
+        # Since we aren't actually going to run the programs in
+        # this case, the code should never need ISIS3DATA, so it
+        # shouldn't matter what it is set to.
+        import kalasiris
+    else:
+        raise
+
 
 # -- General configuration ---------------------------------------------
 
@@ -158,6 +173,3 @@ texinfo_documents = [
      'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-

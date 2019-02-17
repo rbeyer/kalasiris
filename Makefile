@@ -32,9 +32,12 @@ endef
 export DOWNLOAD_PYSCRIPT
 
 
-
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 DOWNLOAD := python -c "$$DOWNLOAD_PYSCRIPT"
+DOCSfakeISISROOTbx := docs/fakeISISROOT/bin/xml
+ISISXMLS = $(notdir $(wildcard $(ISISROOT)/bin/xml/*) )
+fake_isis_progs = $(foreach isisprog, $(ISISXMLS), $(DOCSfakeISISROOTbx)/$(isisprog) )
+
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
@@ -87,6 +90,11 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
+
+fakeISISROOT-docs: ## create a suite of fake ISIS program filenames
+	rm -f $(DOCSfakeISISROOTbx)/*
+	echo $(ISISXMLS)
+	touch $(fake_isis_progs)
 
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
