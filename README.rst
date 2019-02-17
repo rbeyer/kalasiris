@@ -111,12 +111,15 @@ then do the same thing as above, or like this::
     # prints the second row of the histogram:
     # HistRow(DN=3924.0, Pixels=1.0, CumulativePixels=2.0, Percent=4.88281e-05, CumulativePercent=9.76563e-05)
 
+    print(h[1][3])
     print(h[1].Percent)
-    # prints 4.88281e-05
+    # both of the above print 4.88281e-05
 
 
-You can see that you now have access to things the Histogram class,
+You can see that you now have access to things like the Histogram class,
 the ``getkey_k()`` *_k function*, and much more.
+
+Read the documentation for more: https://kalasiris.readthedocs.io
 
 
 Installation
