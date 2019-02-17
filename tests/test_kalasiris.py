@@ -55,7 +55,6 @@ class Test_get_isis_program_names(unittest.TestCase):
         # s = sum(1 for _ in isis._get_isis_program_names())
         # print(f'How many programs: {s}')
         self.assertIn('cam2map', isis._get_isis_program_names())
-        print(len(dir(isis)))
 
 
 # @unittest.skip('Can take a while to run hi2isis.')
@@ -69,7 +68,7 @@ class Test_hi2isis(unittest.TestCase):
 
     def test_hi2isis(self):
         tocube = 'test_hi2isis.cub'
-        isis.hi2isis_k(self.img, to=tocube)
+        isis.hi2isis(self.img, to=tocube)
         self.assertTrue(os.path.isfile(tocube))
         os.remove(tocube)
 
