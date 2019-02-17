@@ -61,21 +61,27 @@ You have at least two options:
     When you activate your other conda environment (the one with
     gdal--or whatever--and kalasiris), just set those same variables
     in your environment, and kalasiris will see them when you import
-    it in your Python code.
+    it in your Python code (even without having to run any kind of ISIS
+    setup, just set the environment variables, but you could run the
+    whole ISIS setup if you wanted to).
 
 2. Set it in your Python program:
-    You can use the ``kalasiris.environ`` dictionary like this:
+    You can add those paths to ``os.environ`` manually *before*
+    you import kalasiris, like so:
 
 ::
-
-   import kalasiris
+   import os
 
    my_isisroot = os.path.join(os.eviron['HOME'],
                               'anaconda3','envs','isis3')
-   my_isis3data = os.path.join(my_isisroot, 'data')
+   os.environ['ISISROOT'] = my_isisroot
+   os.environ['ISIS3DATA'] = os.path.join(my_isisroot, 'data')
 
-   kalasiris.environ['ISISROOT'] = my_isisroot
-   kalasiris.environ['ISIS3DATA'] = my_isis3data
+   import kalasiris
+
+Those environment variables were only set internally to the Python
+runtime, not your actual shell, so they aren't there when the program
+exits (unless you used ``putenv()`` to put them there), tidy!
 
 Other possibilities exist, but either of these allows you to write Python
 programs using kalasiris and run them from a conda environment (or anywhere)
