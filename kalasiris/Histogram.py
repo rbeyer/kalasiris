@@ -31,7 +31,7 @@ class Histogram:
         # collections.namedtuple( 'HistRow', self.headers )
 
     def __str__(self):
-        pass
+        return(str(self.dictionary))
 
     def __repr__(self):
         return (f'{self.__class__.__name__}(\'{self.histfile}\')')
