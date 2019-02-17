@@ -58,7 +58,7 @@ def _run_isis_program(cmd: list) -> subprocess.CompletedProcess:
 
 
 def _build_isis_fn(fn_name: str):
-    '''This automatically builds a simple function to call an ISIS program.'''
+    '''This factory automatically builds a simple function to call an ISIS program.'''
 
     # Define the structure of the generic function, isis_fn:
     def isis_fn(*args, **kwargs) -> subprocess.CompletedProcess:
@@ -107,22 +107,3 @@ def _get_isis_program_names():
 # with these names:
 for p in _get_isis_program_names():
     _build_isis_fn(p)
-
-# TODO: the above is very heavyweight.  Everytime we load kalasiris, we
-# burn through the $ISISROOT/bin directory and make an entry for every
-# program.  Can I smartly use __getattr__ and __getattribute__ to just
-# have it build an entry when someone tries to use the name?
-# Maybe like this:
-# __name__.__getattr__(self, name):
-#     if name in _get_isis_program_names():
-#         # rewrite _build_isis_fn() to return its isis_fn()
-#         return(_build_isis_fn(name))
-#     else:
-#         raise AttributeError
-#
-# I think this is close to the right function, but not sure if I can
-# override.  Maybe I do need to redefine like this:
-# class _kalasiris(object):
-#     def __getatter__(self, name): # as above
-#
-# sys.modules[__name__] = _kalasiris()
