@@ -95,6 +95,12 @@ class Test_getkey(unittest.TestCase):
                           isis.getkey, self.cub,
                           grpname='Pixels', keyword='InstrumentId')
 
+    def test_getkey_k_fail(self):
+        # Calling getkey with getkey_k syntax will fail
+        self.assertRaises(IndexError,
+                          isis.getkey, self.cub,
+                          'Instrument', 'InstrumentId')
+
 
 class Test_histat(unittest.TestCase):
 
