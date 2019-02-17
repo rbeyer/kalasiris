@@ -126,25 +126,3 @@ for p in _get_isis_program_names():
 #     def __getatter__(self, name): # as above
 #
 # sys.modules[__name__] = _kalasiris()
-
-
-# kalasiris-wrapped versions, alphabetically arranged.
-# These we want to be able to call or return differently than
-# _build_isis_fn() provides.  They all end in '_k'.
-# Maybe move them out to another file?
-
-def getkey_k(cube, group, key):
-    '''Simplified calling for getkey.
-
-    No default parameters are needed, and it directly returns a string.
-    '''
-    return(getkey(cube,  # noqa: F821
-                  grpname=group,
-                  keyword=key).stdout.strip())
-
-
-def hi2isis_k(img, **kwargs):
-    '''Creates a default name for the to= cube.'''
-    if 'to' not in kwargs:
-        kwargs['to'] = os.path.splitext(img)[0] + '.cub'
-    return(hi2isis(img, **kwargs))  # noqa: F821

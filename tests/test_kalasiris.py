@@ -73,27 +73,6 @@ class Test_hi2isis(unittest.TestCase):
         os.remove(tocube)
 
 
-class Test_hi2isis_k(unittest.TestCase):
-
-    def setUp(self):
-        self.img = img
-
-    def tearDown(self):
-        os.remove('print.prt')
-
-    def test_hi2isis_k_with_to(self):
-        tocube = 'test_hi2isis.cub'
-        isis.hi2isis_k(self.img, to=tocube)
-        self.assertTrue(os.path.isfile(tocube))
-        os.remove(tocube)
-
-    def test_hi2isis_k_without_to(self):
-        tocube = os.path.splitext(self.img)[0] + '.cub'
-        isis.hi2isis_k(self.img)
-        self.assertTrue(os.path.isfile(tocube))
-        os.remove(tocube)
-
-
 class Test_getkey(unittest.TestCase):
 
     def setUp(self):
@@ -115,22 +94,6 @@ class Test_getkey(unittest.TestCase):
         self.assertRaises(subprocess.CalledProcessError,
                           isis.getkey, self.cub,
                           grpname='Pixels', keyword='InstrumentId')
-
-
-class Test_getkey_k(unittest.TestCase):
-
-    def setUp(self):
-        self.cub = 'test_getkey_k.cub'
-        isis.hi2isis(img, to=self.cub)
-
-    def tearDown(self):
-        os.remove(self.cub)
-        os.remove('print.prt')
-
-    def test_getkey_k(self):
-        truth = 'HIRISE'
-        key = isis.getkey_k(self.cub, 'Instrument', 'InstrumentId')
-        self.assertEqual(truth, key)
 
 
 class Test_histat(unittest.TestCase):
