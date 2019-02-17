@@ -61,6 +61,8 @@ _k function versions to act.  You're welcome.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from sys import modules
+
 from .__init__ import *  # noqa F401,F403
 
 from kalasiris import k_funcs
@@ -69,4 +71,4 @@ for k_func in dir(k_funcs):
     if k_func.endswith('_k'):
         reg_func = k_func.rsplit('_', maxsplit=1)[0]
         print(f'reg: {reg_func}, k: {k_func}')
-        setattr(sys.modules[__name__], reg_func, getattr(k_funcs, k_func))
+        setattr(modules[__name__], reg_func, getattr(k_funcs, k_func))

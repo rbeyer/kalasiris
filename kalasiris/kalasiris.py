@@ -58,7 +58,7 @@ def _run_isis_program(cmd: list) -> subprocess.CompletedProcess:
 
 
 def _build_isis_fn(fn_name: str):
-    '''This factory automatically builds a simple function to call an ISIS program.'''
+    '''This factory builds a simple function to call an ISIS program.'''
 
     # Define the structure of the generic function, isis_fn:
     def isis_fn(*args, **kwargs) -> subprocess.CompletedProcess:
