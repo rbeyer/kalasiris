@@ -1,9 +1,10 @@
 =========
 kalasiris
 =========
-Calling ISIS programs from Python
----------------------------------
 
+*Calling ISIS programs from Python*
+
+---------------------------------
 
 .. image:: https://img.shields.io/pypi/v/kalasiris.svg
         :target: https://pypi.python.org/pypi/kalasiris
@@ -16,10 +17,9 @@ Calling ISIS programs from Python
         :alt: Documentation Status
 
 
-
-A Python library to wrap functions and functionality for the
-`Integrated Software for Imagers and Spectrometers (ISIS)
-<https://isis.astrogeology.usgs.gov>`_.
+The *kalasiris* library is a Python library to wrap functions and
+functionality for the `Integrated Software for Imagers and Spectrometers
+(ISIS) <https://isis.astrogeology.usgs.gov>`_.
 
 
 * Free software: Apache Software License 2.0
@@ -69,18 +69,55 @@ map-projected.
 
 Just grabbing this one file gets you the ability to call ISIS
 programs from your Python programs.  There are other parts of this
-package that provide helper functions (like cubenormDialect) and
-classes (like Histogram), and you don't get them by just grabbing
-``kalasiris.py``.  Of course, you could get what you need out of
-the ``kalasiris`` directory, but they may have more dependencies,
-and at that point, you should probably look into just installing
-kalasiris properly.
+package that provide helper functions (like ``cubenormDialect``),
+classes (like ``Histogram``), and syntactic sugar (the *_k functions*).
+You don't get them by just grabbing ``kalasiris.py`` as described
+above.
+
+If you want *all* of the kalasiris library, but still don't want to
+go through some formal installation process, you can clone this repo,
+and then move (or copy) the whole ``kalasiris/`` directory (instead
+of just the ``kalasiris.py`` file inside of it) to your project, and
+then do the same thing as above, or like this::
+
+    import kalasiris as isis
+
+    img      = 'PSP_010502_2090_RED5_0.IMG'
+    hicube   = 'PSP_010502_2090_RED5_0.cub'
+    histfile = 'PSP_010502_2090_RED5_0.hist'
+
+    isis.hi2isis(img, to=hicube)
+
+    InsID = isis.getkey_k(hicub, 'Instrument', 'InstrumentId')
+    print(InsID)
+    # prints HIRISE
+
+    isis.hist(hicube, to=histfile)
+
+    h = isis.Histogram(histfile)
+
+    print(h)
+    # prints the hist file header info
+
+    print(h['Std Deviation'])
+    # prints 166.739
+
+    print(h[1])
+    # prints the second row of the histogram:
+    # HistRow(DN=3924.0, Pixels=1.0, CumulativePixels=2.0, Percent=4.88281e-05, CumulativePercent=9.76563e-05)
+
+    print(h[1].Percent)
+    # prints 4.88281e-05
+
+
+You can see that you now have access to things the Histogram class,
+the ``getkey_k()`` *_k function*, and much more.
 
 
 Installation
 ------------
 
-*Eventually have some instructions here*
+*Eventually have some instructions here once they've been tested.*
 
 
 How is this different from pysis_?
