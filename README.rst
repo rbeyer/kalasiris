@@ -26,6 +26,11 @@ functionality for the `Integrated Software for Imagers and Spectrometers
 * Documentation: https://kalasiris.readthedocs.io.
 
 
+WARNING
+-------
+**This is a very early development version, be warned!**
+
+
 Features
 --------
 
