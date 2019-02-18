@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Provides kalasiris _k functions.
+"""Provides kalasiris *_k functions*.
 
-   The kalasiris _k functions provide some syntactic sugar to make
-   calling the ISIS programs just that much easier.  For example::
+   The kalasiris *_k functions* provide some syntactic sugar to make
+   calling the ISIS programs just that much easier.  For example here
+   are two ways to do the same thing::
 
         import kalasiris as isis
 
@@ -14,10 +15,10 @@
 
         k_keyval = isis.getkey_k(cube_file, 'Instrument', 'InstrumentId')
 
-   And the values of ``keyval`` and ``k_keyval`` are identical, its just
-   that the _k function version is a little easier.  Each of the _k functions
-   implements their modifications a little differently, so make sure to read
-   their documentation.
+   And the values of ``keyval`` and ``k_keyval`` are identical, its
+   just that the *_k function* version is a little more compact.
+   Each of the *_k functions* implements their modifications a
+   little differently, so make sure to read their documentation.
 """
 
 # Copyright 2019, Ross A. Beyer (rbeyer@seti.org)
@@ -38,7 +39,7 @@ import os
 import kalasiris as isis
 
 
-def getkey_k(cube, group, key):
+def getkey_k(cube: os.PathLike, group: str, key: str) -> str:
     '''Simplified calling for getkey.
 
     No default parameters are needed, and it directly returns a string.
@@ -46,8 +47,10 @@ def getkey_k(cube, group, key):
     return(isis.getkey(cube, grpname=group, keyword=key).stdout.strip())
 
 
-def hi2isis_k(img, **kwargs):
-    '''Creates a default name for the to= cube.'''
+def hi2isis_k(img: os.PathLike, **kwargs):
+    '''Creates a default name for the to= cube.
+
+    If the *img* has the name ``foo.img``, then the output will be ``foo.cub``.'''
     if 'to' not in kwargs:
         kwargs['to'] = os.path.splitext(img)[0] + '.cub'
     return(isis.hi2isis(img, **kwargs))

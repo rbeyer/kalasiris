@@ -34,9 +34,11 @@ WARNING
 Features
 --------
 
-* Primarily a very lightweight wrapper around Python's subprocess module
+* Primarily a very lightweight wrapper around Python's subprocess
+  module to allow easy calling of ISIS programs in the shell from
+  Python.
 * Calling compatibility with pysis_ (but not return types)
-* Guaranteed to work with ISIS 3.6.0+, probably works with ISIS 3.0.0+
+* Guaranteed to work with ISIS 3.6.0+, probably works with ISIS 3+
 * Only guaranteed to work with Python 3.6.0+
 
 
@@ -44,14 +46,16 @@ ISIS
 ----
 
 This library really only works if you already have ISIS_ installed and
-working properly.
+working properly.  Quirks of working with where and how ISIS is loaded
+in your environment and how to use kalasiris with it, can be found
+in the documentation.
 
 
 Quickstart
 ----------
 
 Are you new to Python?  Or you just don't want to mess with
-sophisticated Python installation proceedures?  Or you don't want
+sophisticated Python installation procedures?  Or you don't want
 to commit to installing something when you don't know if it will
 be worth it?  Or you just want to write something 'real quick' in
 Python and just need to call some ISIS programs **now**?

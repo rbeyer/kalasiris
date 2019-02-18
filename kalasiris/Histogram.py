@@ -73,15 +73,20 @@ class Histogram(collections.abc.Sequence):
             return False
 
     def keys(self):
+        '''Gets the keys from the initial portion of the hist output file.
+
+           These will be items like 'Cube', 'Band', 'Average', etc.
+        '''
         return self.dictionary.keys()
 
     def values(self):
+        '''Gets the values from the initial portion of the hist output file.'''
         return self.dictionary.values()
 
     @staticmethod
     def parsehist(histfile: os.PathLike) -> tuple:
-        '''Takes a path-like object, opens it, and expecting the output of ISIS
-        ``hist``, parses the output.
+        '''Takes a path-like object, opens it, and (expecting the output of ISIS
+        ``hist``), parses the output.
 
         A three-element tuple is returned: the first element is a *dictionary*
         of the name:value information at the top of the file, the second

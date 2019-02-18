@@ -34,9 +34,6 @@ environ = {'ISISROOT':  _isisroot,
            'HOME':      os.environ['HOME']}
 # If we don't also set $HOME, ISIS tries to make a local ./\$HOME dir
 
-#########################################################################
-# Helper and wrapper functions for the ISIS commands.
-
 
 def param_fmt(key: str, value: str) -> str:
     '''Returns a "key=value" string from the inputs.
@@ -62,6 +59,8 @@ def _build_isis_fn(fn_name: str):
 
     # Define the structure of the generic function, isis_fn:
     def isis_fn(*args, **kwargs) -> subprocess.CompletedProcess:
+        __name__ = fn_name
+        __doc__ = f'Runs ISIS3 {fn_name}'
         if len(args) > 1:
             e = 'only accepts 1 non-keyword argument to be from= '
             raise IndexError(e)
@@ -70,8 +69,6 @@ def _build_isis_fn(fn_name: str):
             cmd.append(param_fmt('from', args[0]))
         cmd.extend(map(param_fmt, kwargs.keys(), kwargs.values()))
         return(_run_isis_program(cmd))
-    isis_fn.__name__ = fn_name
-    isis_fn.__doc__ = f'Runs ISIS3 {fn_name}'
 
     # Then add it, by name to the enclosing module.
     setattr(sys.modules[__name__], fn_name, isis_fn)
