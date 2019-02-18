@@ -47,10 +47,17 @@ def getkey_k(cube: os.PathLike, group: str, key: str) -> str:
     return(isis.getkey(cube, grpname=group, keyword=key).stdout.strip())
 
 
-def hi2isis_k(img: os.PathLike, **kwargs):
+def hi2isis_k(*args, **kwargs):
     '''Creates a default name for the to= cube.
 
-    If the *img* has the name ``foo.img``, then the output will be ``foo.cub``.'''
-    if 'to' not in kwargs:
-        kwargs['to'] = os.path.splitext(img)[0] + '.cub'
-    return(isis.hi2isis(img, **kwargs))
+    If the FROM file has the name ``foo.img``, then the output will be ``foo.cub``.'''
+    from_file = ''
+    if len(args) > 0 and not args[0].endswith('__'):
+        from_file = args[0]
+    else:
+        for(p, v) in kwargs.items():
+            if 'from_' == p:
+                from_file = v
+    if not (lambda key: 'to' == key or 'to_' == key) in kwargs:
+        kwargs['to'] = os.path.splitext(from_file)[0] + '.cub'
+    return(isis.hi2isis(*args, **kwargs))
