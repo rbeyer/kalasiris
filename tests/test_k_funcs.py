@@ -62,7 +62,7 @@ class Test_hi2isis_k(unittest.TestCase):
         os.remove('print.prt')
 
     def test_with_to(self):
-        tocube = os.path.splitext(self.img)[0] + '.cub'
+        tocube = 'test_hi2isis_k.cub'
         isis.hi2isis_k(self.img, to=tocube)
         self.assertTrue(os.path.isfile(tocube))
         os.remove(tocube)

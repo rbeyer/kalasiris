@@ -59,8 +59,8 @@ def hi2isis_k(*args, **kwargs):
         for(k, v) in kwargs.items():
             if 'from_' == k:
                 from_file = v
-    if not (lambda key: 'to' == key or 'to_' == key) in kwargs:
-        kwargs['to'] = os.path.splitext(from_file)[0] + '.cub'
+    if 'to_' not in kwargs:
+        kwargs.setdefault('to', os.path.splitext(from_file)[0] + '.cub')
     return(isis.hi2isis(*args, **kwargs))
 
 
