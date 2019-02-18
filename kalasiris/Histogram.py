@@ -17,10 +17,21 @@
 
 import collections
 import csv
+import os
 
 
-class Histogram:
-    """Reads and wraps the contents of the output of the ISIS hist program."""
+class Histogram(collections.abc.Sequence):
+    """Reads the output file from ISIS hist and provides it as a sequence.
+
+       The resulting Histogram object primarily behaves like a list, where
+       that list represents the rows of the ISIS hist output.  Each of those
+       rows is a ``namedtuple`` which contains the elements of each row,
+       referenced by their column names.
+
+       The Histogram object also has some dictionary-like capabilities, in
+       order to get at the values listed in the ISIS hist output in the
+       section before the numerical output.
+    """
 
     def __init__(self, histfile):
         self.histfile = histfile
@@ -40,7 +51,7 @@ class Histogram:
         return len(self.hist_list)
 
     def __getitem__(self, key):
-        # if key is integer or slice object, look in self.hist_vals
+        # if key is integer or slice object, look in self.hist_list
         if isinstance(key, int):
             return self.hist_list[key]
 
@@ -56,6 +67,8 @@ class Histogram:
     def __contains__(self, item):
         if item in self.dictionary:
             return True
+        elif item in self.hist_list:
+            return True
         else:
             return False
 
@@ -65,10 +78,20 @@ class Histogram:
     def values(self):
         return self.dictionary.values()
 
-    def parsehist(self, histfile):
+    @staticmethod
+    def parsehist(histfile: os.PathLike) -> tuple:
+        '''Takes a path-like object, opens it, and expecting the output of ISIS
+        ``hist``, parses the output.
+
+        A three-element tuple is returned: the first element is a *dictionary*
+        of the name:value information at the top of the file, the second
+        element is a *list* of the of the fields that decorate the top of the
+        histogram rows, and the third element is a *list* of HistRow namedtuples
+        that represent each row of the hist output.
+        '''
         d = dict()
         headers = []
-        hist_vals = []
+        hist_rows = []
         with open(histfile) as f:
             for line in f:
                 if ':' in line:
@@ -84,6 +107,6 @@ class Histogram:
                     for row in map(HistRow._make,
                                    csv.reader(f,
                                               quoting=csv.QUOTE_NONNUMERIC)):
-                        hist_vals.append(row)
+                        hist_rows.append(row)
 
-        return d, headers, hist_vals
+        return d, headers, hist_rows
