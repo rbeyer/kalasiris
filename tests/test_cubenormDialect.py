@@ -21,6 +21,7 @@ import csv
 import os
 import unittest
 import kalasiris as isis
+from .utils import resource_check as rc
 
 # Hardcoding this, but I sure would like a better solution.
 img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
@@ -30,7 +31,8 @@ class TestResources(unittest.TestCase):
     '''Establishes that the test image exists.'''
 
     def test_resources(self):
-        self.assertTrue(os.path.isfile(img))
+        (truth, test) = rc(img)
+        self.assertEqual(truth, test)
 
 
 class TestCubenormDialect(unittest.TestCase):

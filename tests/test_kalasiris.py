@@ -21,6 +21,7 @@ import os
 import subprocess
 import unittest
 import kalasiris.kalasiris as isis
+from .utils import resource_check as rc
 
 
 # Hardcoding this, but I sure would like a better solution.
@@ -31,7 +32,8 @@ class TestResources(unittest.TestCase):
     '''Establishes that the test image exists.'''
 
     def test_resources(self):
-        self.assertTrue(os.path.isfile(img))
+        (truth, test) = rc(img)
+        self.assertEqual(truth, test)
 
 
 class TestParams(unittest.TestCase):
