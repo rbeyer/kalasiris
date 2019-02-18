@@ -25,7 +25,8 @@ from .utils import resource_check as rc
 
 
 # Hardcoding this, but I sure would like a better solution.
-img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+HiRISE_img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+img = HiRISE_img
 
 
 class TestResources(unittest.TestCase):
@@ -38,7 +39,7 @@ class TestResources(unittest.TestCase):
 
 class TestParams(unittest.TestCase):
 
-    def test_param_fmt(self):
+    def test_format(self):
         t = ('isisprogram', 'from=foo.cub')
         p = {'to': 'to.cub', 'check': False, 'value': 3.0}
         cmd = list(t)
@@ -48,12 +49,21 @@ class TestParams(unittest.TestCase):
         cmd.extend(map(isis.param_fmt, p.keys(), p.values()))
         self.assertEqual(truth, cmd)
 
-    @unittest.skip('Will fire up the gui, not sure how to test properly.')
+    @unittest.skip('Fires up the gui, not sure how to test properly.')
     def test_no_args(self):
-        print('about to getkey()')
+        print('\n  about to getkey()')
         isis.getkey()
         # isis.getkey('gui__') does the same thing.
-        print('just got back from getkey()')
+        print('  just got back from getkey()')
+
+    @unittest.skip('Fires up the gui, not sure how to test properly.')
+    def test_passthrough(self):
+        to_cube = 'test_passthrough.cub'
+        isis.hi2isis(HiRISE_img, to=to_cube)
+        print('\n  about to call qview()')
+        isis.qview(to_cube)
+        print('  just got back from qview()')
+        os.remove(to_cube)
 
     def test_reserved_param(self):
         t = 'isisprogram'

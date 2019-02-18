@@ -36,8 +36,13 @@ environ = {'ISISROOT':  _isisroot,
 
 # These are the names of the reserved parameters that can be given
 # as arguments to any ISIS program, prefixed by a dash (-).
-_res_param_no_vals = ['webhelp', 'last', 'gui', 'nogui', 'verbose']
-_res_param_maybe = ['help', 'log', 'info', 'save']
+_res_param_no_vals = set(['webhelp', 'last', 'gui', 'nogui', 'verbose'])
+_res_param_maybe = set(['help', 'log', 'info', 'save'])
+
+# The ISIS programs in this list do not follow the 'normal' argument
+# patters for most ISIS programs, they just consume everything you
+# give them, so we need to treat them differently.
+_pass_through_programs = set(['cneteditor', 'qmos', 'qnet', 'qtie', 'qview'])
 
 
 def param_fmt(key: str, value: str) -> str:
@@ -92,17 +97,21 @@ def _build_isis_fn(fn_name: str):
         __name__ = fn_name
         __doc__ = f'Runs ISIS3 {fn_name}'
         cmd = [fn_name]
-        args_list = list(args)
-        if len(args) > 0 and not args[0].endswith('__'):
-            cmd.append(param_fmt('from', args_list.pop(0)))
-        for a in args_list:
-            if a.endswith('__') and a.rstrip('_') in _res_param_no_vals + _res_param_maybe:
-                cmd.append('-{}'.format(a.rstrip('_')))
-            else:
-                e = ('only accepts 1 non-keyword argument (and sets it to from= ) '
-                     'not sure what to do with ' + a)
-                raise IndexError(e)
-        cmd.extend(map(param_fmt, kwargs.keys(), kwargs.values()))
+        if fn_name in _pass_through_programs:
+            cmd.extend(args)
+        else:
+            args_list = list(args)
+            if len(args) > 0 and not args[0].endswith('__'):
+                cmd.append(param_fmt('from', args_list.pop(0)))
+            for a in args_list:
+                if a.endswith('__') and a.rstrip('_') in \
+                        _res_param_no_vals.union(_res_param_maybe):
+                    cmd.append('-{}'.format(a.rstrip('_')))
+                else:
+                    e = ('only accepts 1 non-keyword argument (and sets it to from= ) '
+                         'not sure what to do with ' + a)
+                    raise IndexError(e)
+            cmd.extend(map(param_fmt, kwargs.keys(), kwargs.values()))
         return(_run_isis_program(cmd))
 
     # Then add it, by name to the enclosing module.

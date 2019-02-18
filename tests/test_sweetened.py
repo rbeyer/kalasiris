@@ -24,7 +24,8 @@ from .utils import resource_check as rc
 
 
 # Hardcoding this, but I sure would like a better solution.
-img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+HiRISE_img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+img = HiRISE_img
 
 
 class TestResources(unittest.TestCase):
@@ -60,7 +61,7 @@ class Test_getkey(unittest.TestCase):
 
     def setUp(self):
         self.cub = 'test_getkey_k.cub'
-        isis.hi2isis(img, to=self.cub)
+        isis.hi2isis(HiRISE_img, to=self.cub)
 
     def tearDown(self):
         os.remove(self.cub)
