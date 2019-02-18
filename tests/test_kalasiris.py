@@ -46,6 +46,28 @@ class TestParams(unittest.TestCase):
         cmd.extend(map(isis.param_fmt, p.keys(), p.values()))
         self.assertEqual(truth, cmd)
 
+    @unittest.skip('Will fire up the gui, not sure how to test properly.')
+    def test_no_args(self):
+        print('about to getkey()')
+        isis.getkey()
+        # isis.getkey('gui__') does the same thing.
+        print('just got back from getkey()')
+
+    def test_reserved_param(self):
+        t = 'isisprogram'
+        p = {'help__': 'parameter'}
+        cmd = [t]
+        truth = [t]
+        truth.append('-help=parameter')
+
+        cmd.extend(map(isis.param_fmt, p.keys(), p.values()))
+        self.assertEqual(truth, cmd)
+
+    def test_reserved_nokey(self):
+        cp = isis.getkey('help__').stdout.split()
+
+        self.assertEqual('FROM', cp[0])
+
 
 class Test_get_isis_program_names(unittest.TestCase):
 

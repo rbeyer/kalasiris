@@ -34,6 +34,11 @@ environ = {'ISISROOT':  _isisroot,
            'HOME':      os.environ['HOME']}
 # If we don't also set $HOME, ISIS tries to make a local ./\$HOME dir
 
+# These are the names of the reserved parameters that can be given
+# as arguments to any ISIS program, prefixed by a dash (-).
+_res_param_no_vals = ['webhelp', 'last', 'gui', 'nogui', 'verbose']
+_res_param_maybe = ['help', 'log', 'info', 'save']
+
 
 def param_fmt(key: str, value: str) -> str:
     '''Returns a "key=value" string from the inputs.
@@ -42,9 +47,34 @@ def param_fmt(key: str, value: str) -> str:
     any trailing underbars (_) on the key, they will be stripped
     off.  This supports the old pysis syntax to protect Python
     reserved words like from and min, while still allowing the user
-    to provide 'natural' function calls like isis.stats(from_=cubefile)
+    to provide 'natural' function calls like isis.stats(from_=cubefile).
+
+    Additionally, it also supports passing what ISIS calls *reserved
+    parameters* for any ISIS program, denoted with a prefix of a single
+    dash, like ``-restore=file`` or ``-verbose`` via keys with two trailing
+    underbars.  So to call ``spiceinit from= some.cub -restore=file`` you
+    would do this::
+
+        cubefile = 'some.cub'
+        restore_file = 'some.par'
+        isis.spiceinit(cubefile, restore__=restore_file)
+
+    Likewise, to call ``getkey -help``, or ``getkey -help=GRPNAME`` do this::
+
+        isis.getkey('help__')
+        isis.getkey(help__='GRPNAME')
+
+    Of course, you'll probably want to do this::
+
+        help_text = isis.getkey(help__='').stdout
     '''
-    return '{}={}'.format(key.rstrip('_'), value)
+    # The logic for dealing with a single parameter, like
+    # isis.getkey('help__') # is down in the _build_isis_fn() factory
+    # method.
+    if key.endswith('__') and key.rstrip('_') in _res_param_maybe:
+        return '-{}={}'.format(key.rstrip('_'), value)
+    else:
+        return '{}={}'.format(key.rstrip('_'), value)
 
 
 def _run_isis_program(cmd: list) -> subprocess.CompletedProcess:
@@ -61,12 +91,17 @@ def _build_isis_fn(fn_name: str):
     def isis_fn(*args, **kwargs) -> subprocess.CompletedProcess:
         __name__ = fn_name
         __doc__ = f'Runs ISIS3 {fn_name}'
-        if len(args) > 1:
-            e = 'only accepts 1 non-keyword argument to be from= '
-            raise IndexError(e)
         cmd = [fn_name]
-        if len(args) == 1:
-            cmd.append(param_fmt('from', args[0]))
+        args_list = list(args)
+        if len(args) > 0 and not args[0].endswith('__'):
+            cmd.append(param_fmt('from', args_list.pop(0)))
+        for a in args_list:
+            if a.endswith('__') and a.rstrip('_') in _res_param_no_vals + _res_param_maybe:
+                cmd.append('-{}'.format(a.rstrip('_')))
+            else:
+                e = ('only accepts 1 non-keyword argument (and sets it to from= ) '
+                     'not sure what to do with ' + a)
+                raise IndexError(e)
         cmd.extend(map(param_fmt, kwargs.keys(), kwargs.values()))
         return(_run_isis_program(cmd))
 
