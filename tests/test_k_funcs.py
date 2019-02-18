@@ -18,27 +18,45 @@
 # limitations under the License.
 
 import os
+import subprocess
 import unittest
 import kalasiris as isis
 from .utils import resource_check as rc
 
 
-# Hardcoding this, but I sure would like a better solution.
-img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+# Hardcoding these, but I sure would like a better solution.
+# IsisPreferences = os.path.join('test-resources', 'IsisPreferences')
+HiRISE_img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
 
 
 class TestResources(unittest.TestCase):
     '''Establishes that the test image exists.'''
 
     def test_resources(self):
-        (truth, test) = rc(img)
+        (truth, test) = rc(HiRISE_img)
         self.assertEqual(truth, test)
+
+
+class Test_getkey_k(unittest.TestCase):
+
+    def setUp(self):
+        self.cub = 'test_getkey_k.cub'
+        isis.hi2isis(HiRISE_img, to=self.cub)
+
+    def tearDown(self):
+        os.remove(self.cub)
+        os.remove('print.prt')
+
+    def test_getkey_k(self):
+        truth = 'HIRISE'
+        key = isis.getkey_k(self.cub, 'Instrument', 'InstrumentId')
+        self.assertEqual(truth, key)
 
 
 class Test_hi2isis_k(unittest.TestCase):
 
     def setUp(self):
-        self.img = img
+        self.img = HiRISE_img
 
     def tearDown(self):
         os.remove('print.prt')
@@ -56,17 +74,27 @@ class Test_hi2isis_k(unittest.TestCase):
         os.remove(tocube)
 
 
-class Test_getkey_k(unittest.TestCase):
+class Test_hist_k(unittest.TestCase):
 
     def setUp(self):
-        self.cub = 'test_getkey_k.cub'
-        isis.hi2isis(img, to=self.cub)
+        self.cube = 'test_hist.cub'
+        isis.hi2isis(HiRISE_img, to=self.cube)
 
     def tearDown(self):
-        os.remove(self.cub)
+        os.remove(self.cube)
         os.remove('print.prt')
 
-    def test_getkey_k(self):
-        truth = 'HIRISE'
-        key = isis.getkey_k(self.cub, 'Instrument', 'InstrumentId')
-        self.assertEqual(truth, key)
+    def test_run(self):
+        hist_as_string = isis.hist_k(self.cube)
+        self.assertTrue(hist_as_string.startswith('Cube'))
+
+    def test_run_with_to(self):
+        text_file = 'test_hist.hist'
+        hist_as_string = isis.hist_k(self.cube, to=text_file)
+        self.assertTrue(os.path.isfile(text_file))
+        self.assertTrue(hist_as_string.startswith('Cube'))
+        os.remove(text_file)
+
+    def test_fail(self):
+        # ISIS hist_k needs at least a FROM=, giving it nothing:
+        self.assertRaises(subprocess.CalledProcessError, isis.hist_k)

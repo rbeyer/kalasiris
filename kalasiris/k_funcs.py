@@ -35,6 +35,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import tempfile
 import os
 import kalasiris as isis
 
@@ -55,9 +56,35 @@ def hi2isis_k(*args, **kwargs):
     if len(args) > 0 and not args[0].endswith('__'):
         from_file = args[0]
     else:
-        for(p, v) in kwargs.items():
-            if 'from_' == p:
+        for(k, v) in kwargs.items():
+            if 'from_' == k:
                 from_file = v
     if not (lambda key: 'to' == key or 'to_' == key) in kwargs:
         kwargs['to'] = os.path.splitext(from_file)[0] + '.cub'
     return(isis.hi2isis(*args, **kwargs))
+
+
+def hist_k(*args, **kwargs) -> str:
+    '''Returns the contents of the file created by ISIS hist as a string.
+
+       If there is a TO= parameter in the arguments, ``hist_k()`` will
+       create the file, and return its contents as a string
+    '''
+    to_pathlike = None
+    for (k, v) in kwargs.items():
+        if 'to' == k or 'to_' == k:
+            to_pathlike = v
+
+    f = None
+    if not to_pathlike:
+        f = tempfile.NamedTemporaryFile(mode='w+')
+        kwargs['to'] = f.name
+
+    isis.hist(*args, **kwargs)
+
+    if not f:
+        f = open(to_pathlike, 'r')
+    contents = f.read()
+    f.close()
+
+    return contents
