@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Makes the 'regular' ISIS functions act like the k functions.
+"""Makes the 'regular' ISIS functions act like the *_k functions*.
 
 If you prefer the simplified argument structure and behavior of the
-_k functions, but are constantly forgetting to put the ``_k`` on the end
+*_k functions*, but are constantly forgetting to put the ``_k`` on the end
 of your function names, this module is for you.
 
-For example, here's the 'regular' and _k function way of calling the ISIS
+For example, here's the 'regular' and *_k function* way of calling the ISIS
 getkey program::
 
     import kalasiris as isis
@@ -33,7 +33,7 @@ You'll get this exception::
     IndexError: only accepts 1 non-keyword argument to be from=
 
 Because you tried to call ``isis.getkey()`` with the argument signature
-of ``isis.getkey_k()`` and then ``isis.getkey()`` couldn't deal.
+of ``isis.getkey_k()`` and then ``isis.getkey()`` couldn't deal with it.
 
 If you are always doing this, then instead of the above, do this::
 
@@ -44,7 +44,7 @@ If you are always doing this, then instead of the above, do this::
     key = isis.getkey(cube_file, 'Instrument', 'InstrumentId')
 
 And now the 'regularly' named functions will work the way that you expect the
-_k function versions to act.  You're welcome.
+*_k function* versions to act.
 """
 
 # Copyright 2019, Ross A. Beyer (rbeyer@seti.org)
@@ -70,5 +70,4 @@ from kalasiris import k_funcs
 for k_func in dir(k_funcs):
     if k_func.endswith('_k'):
         reg_func = k_func.rsplit('_', maxsplit=1)[0]
-        print(f'reg: {reg_func}, k: {k_func}')
         setattr(modules[__name__], reg_func, getattr(k_funcs, k_func))

@@ -23,7 +23,7 @@ import unittest
 import kalasiris as isis
 
 # Hardcoding this, but I sure would like a better solution.
-img = os.path.join('test-resources', 'HiRISE_test.img')
+img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
 
 
 class TestResources(unittest.TestCase):

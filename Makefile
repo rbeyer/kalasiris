@@ -75,7 +75,7 @@ test-all: ## run tests on every Python version with tox
 
 test-resources: ## Download what we need for testing
 	mkdir test-resources
-	$(DOWNLOAD) https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG test-resources/HiRISE_test.img
+	$(DOWNLOAD) https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG test-resources/PSP_010502_2090_RED5_0.img
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source kalasiris setup.py test
