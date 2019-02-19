@@ -24,7 +24,8 @@ from .utils import resource_check as rc
 
 
 # Hardcoding this, but I sure would like a better solution.
-img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+HiRISE_img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+img = HiRISE_img
 
 
 class TestResources(unittest.TestCase):
@@ -48,8 +49,16 @@ class TestHistogram(unittest.TestCase):
         os.remove(self.cube)
         os.remove(self.histfile)
 
-    def test_init(self):
+    def test_init_histfile(self):
         h = isis.Histogram(self.histfile)
+        self.assertIsInstance(h, isis.Histogram)
+
+    def test_init_cube(self):
+        h = isis.Histogram(self.cube)
+        self.assertIsInstance(h, isis.Histogram)
+
+    def test_init_str(self):
+        h = isis.Histogram(isis.hist_k(self.cube))
         self.assertIsInstance(h, isis.Histogram)
 
     def test_dictlike(self):
