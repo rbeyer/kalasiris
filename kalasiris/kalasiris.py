@@ -22,6 +22,9 @@ import subprocess
 import sys
 # This file shall have *NO* external dependencies.
 
+# kalasiris library version:
+__version__ = '0.1.0-dev'
+
 # These definitions and the use of env= in the subprocess.run calls allow us to
 # run ISIS in a very lean environment.  Of course, users can override with
 # their complete environment by making kalasiris.environ = os.environ
