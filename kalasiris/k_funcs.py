@@ -53,7 +53,9 @@ def getkey_k(cube: os.PathLike, group: str, key: str) -> str:
 def hi2isis_k(*args, **kwargs):
     '''Creates a default name for the to= cube.
 
-    If the FROM file has the name ``foo.img``, then the output will be ``foo.cub``.'''
+       If the FROM file has the name ``foo.img``, then the output will
+       be ``foo.cub``.
+    '''
     from_path = Path()
     if len(args) > 0 and not str(args[0]).endswith('__'):
         from_path = Path(args[0])

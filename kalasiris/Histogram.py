@@ -17,7 +17,6 @@
 
 import collections
 import csv
-import itertools
 import subprocess
 from .k_funcs import hist_k
 
@@ -39,7 +38,8 @@ class Histogram(collections.abc.Sequence):
         self.histinfo = histinfo
 
         try:
-            (self.dictionary, self.headers, self.hist_list) = self.parse(histinfo)
+            (self.dictionary, self.headers, self.hist_list) \
+                = self.parse(histinfo)
         except StopIteration:
             try:
                 (self.dictionary, self.headers, self.hist_list) \
@@ -89,14 +89,15 @@ class Histogram(collections.abc.Sequence):
         '''Takes a string (expecting the output of ISIS ``hist``), and
            parses the output.
 
-           A three-element namedtuple is returned: the first element is a *dictionary*
-           of the name:value information at the top of the file, the second
-           element is a *list* of the of the fields that decorate the top of the
-           histogram rows, and the third element is a *list* of HistRow namedtuples
-           that represent each row of the hist output.
+           A three-element namedtuple is returned: the first element
+           is a *dictionary* of the name:value information at the
+           top of the file, the second element is a *list* of the
+           of the fields that decorate the top of the histogram
+           rows, and the third element is a *list* of HistRow
+           namedtuples that represent each row of the hist output.
 
-           The contents of the file that results from ISIS ``hist`` look like
-           this::
+           The contents of the file that results from ISIS ``hist``
+           look like this::
 
                 Cube:           PSP_010502_2090_RED5_0.EDR_Stats.cub
                 Band:           1
@@ -131,10 +132,11 @@ class Histogram(collections.abc.Sequence):
            Where each of the letters above is a string value that the parser
            reads.
 
-           First, it takes all of the ``k`` and ``v`` elements and saves them as the
-           keys and values in the returned dictionary.
+           First, it takes all of the ``k`` and ``v`` elements and saves them
+           as the keys and values in the returned dictionary.
 
-           Second, the ``h`` elements are returned them as the list of fieldnames.
+           Second, the ``h`` elements are returned them as the list of
+           fieldnames.
 
            Third, it reads the lines with ``n`` and stores them as
            ``namedtuples`` in the returned list.
@@ -147,7 +149,8 @@ class Histogram(collections.abc.Sequence):
             # d[k.strip()] = v.strip()
             d.setdefault(k.strip(), v.strip())
 
-        reader = csv.reader(filter(lambda x: ',' in x, str(histinfo).splitlines()))
+        reader = csv.reader(filter(lambda x: ',' in x,
+                                   str(histinfo).splitlines()))
         fieldnames = next(reader)
 
         HistRow = collections.namedtuple('HistRow', fieldnames)

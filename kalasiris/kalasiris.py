@@ -112,7 +112,8 @@ def _build_isis_fn(fn_name: str):
                         _res_param_no_vals.union(_res_param_maybe):
                     cmd.append('-{}'.format(a.rstrip('_')))
                 else:
-                    e = ('only accepts 1 non-keyword argument (and sets it to from= ) '
+                    e = ('only accepts 1 non-keyword argument '
+                         '(and sets it to from= ) '
                          'not sure what to do with ' + a)
                     raise IndexError(e)
             cmd.extend(map(param_fmt, kwargs.keys(), kwargs.values()))
