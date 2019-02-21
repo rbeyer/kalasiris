@@ -36,7 +36,7 @@ Features
 
 * Primarily a very lightweight wrapper around Python's subprocess
   module to allow easy calling of ISIS programs in the shell from
-  Python.
+  within Python.
 * Calling compatibility with pysis_ (but not return types)
 * Guaranteed to work with ISIS 3.6.0+, probably works with ISIS 3+
 * Only guaranteed to work with Python 3.6.0+
@@ -87,7 +87,8 @@ If you want *all* of the kalasiris library, but still don't want to
 go through some formal installation process, you can clone this repo,
 and then move (or copy) the whole ``kalasiris/`` directory (instead
 of just the ``kalasiris.py`` file inside of it) to your project, and
-then do the same thing as above, or like this::
+then do the same thing as above, but now you can do more fun things
+like this::
 
     import kalasiris as isis
 
@@ -137,7 +138,7 @@ How is this different from pysis_?
 
 Folks got a lot of use out of pysis_, but it hasn't had a release
 or commits in some time, and due to its implementation and strict
-checking, it is not compatible with post 3.6.0 versions of ISIS.
+checking, it is not compatible with recent versions of ISIS.
 The main kalasiris implementation can fit in one file and is very
 lightweight.
 
