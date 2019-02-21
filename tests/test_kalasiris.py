@@ -17,15 +17,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import subprocess
 import unittest
+from pathlib import Path
+
 import kalasiris.kalasiris as isis
 from .utils import resource_check as rc
 
 
 # Hardcoding this, but I sure would like a better solution.
-HiRISE_img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+HiRISE_img = Path('test-resources') / 'PSP_010502_2090_RED5_0.img'
 img = HiRISE_img
 
 
@@ -58,12 +59,12 @@ class TestParams(unittest.TestCase):
 
     @unittest.skip('Fires up the gui, not sure how to test properly.')
     def test_passthrough(self):
-        to_cube = 'test_passthrough.cub'
+        to_cube = Path('test_passthrough.cub')
         isis.hi2isis(HiRISE_img, to=to_cube)
         print('\n  about to call qview()')
         isis.qview(to_cube)
         print('  just got back from qview()')
-        os.remove(to_cube)
+        to_cube.unlink()
 
     def test_reserved_param(self):
         t = 'isisprogram'
@@ -98,24 +99,24 @@ class Test_hi2isis(unittest.TestCase):
         self.img = img
 
     def tearDown(self):
-        os.remove('print.prt')
+        Path('print.prt').unlink()
 
     def test_hi2isis(self):
-        tocube = 'test_hi2isis.cub'
+        tocube = Path('test_hi2isis.cub')
         isis.hi2isis(self.img, to=tocube)
-        self.assertTrue(os.path.isfile(tocube))
-        os.remove(tocube)
+        self.assertTrue(tocube.is_file())
+        tocube.unlink()
 
 
 class Test_getkey(unittest.TestCase):
 
     def setUp(self):
-        self.cub = 'test_getkey.cub'
+        self.cub = Path('test_getkey.cub')
         isis.hi2isis(img, to=self.cub)
 
     def tearDown(self):
-        os.remove(self.cub)
-        os.remove('print.prt')
+        self.cub.unlink()
+        Path('print.prt').unlink()
 
     def test_getkey(self):
         truth = 'HIRISE'
@@ -139,18 +140,18 @@ class Test_getkey(unittest.TestCase):
 class Test_histat(unittest.TestCase):
 
     def setUp(self):
-        self.cub = 'test_histat.cub'
+        self.cub = Path('test_histat.cub')
         isis.hi2isis(img, to=self.cub)
 
     def tearDown(self):
-        os.remove(self.cub)
-        os.remove('print.prt')
+        self.cub.unlink()
+        Path('print.prt').unlink()
 
     def test_histat_with_to(self):
-        tofile = self.cub + '.histat'
+        tofile = self.cub.with_suffix('.histat')
         isis.histat(self.cub, to=tofile)
-        self.assertTrue(os.path.isfile(tofile))
-        os.remove(tofile)
+        self.assertTrue(tofile.is_file())
+        tofile.unlink()
 
     def test_histat_without_to(self):
         s = isis.histat(self.cub).stdout

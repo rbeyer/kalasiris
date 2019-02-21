@@ -17,14 +17,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import unittest
+from pathlib import Path
+
 import kalasiris as isis
 from .utils import resource_check as rc
 
 
 # Hardcoding this, but I sure would like a better solution.
-HiRISE_img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+HiRISE_img = Path('test-resources') / 'PSP_010502_2090_RED5_0.img'
 img = HiRISE_img
 
 
@@ -39,15 +40,15 @@ class TestResources(unittest.TestCase):
 class TestHistogram(unittest.TestCase):
 
     def setUp(self):
-        self.cube = 'test_Histogram.cub'
-        self.histfile = 'test_Histogram.hist'
+        self.cube = Path('test_Histogram.cub')
+        self.histfile = Path('test_Histogram.hist')
         isis.hi2isis(img, to=self.cube)
         isis.hist(self.cube, to=self.histfile)
 
     def tearDown(self):
-        os.remove('print.prt')
-        os.remove(self.cube)
-        os.remove(self.histfile)
+        Path('print.prt').unlink()
+        self.cube.unlink()
+        self.histfile.unlink()
 
     def test_init_histfile(self):
         h = isis.Histogram(self.histfile)
@@ -63,7 +64,7 @@ class TestHistogram(unittest.TestCase):
 
     def test_dictlike(self):
         h = isis.Histogram(self.histfile)
-        self.assertEqual(self.cube, h['Cube'])
+        self.assertEqual(self.cube.name, h['Cube'])
 
     def test_listlike(self):
         h = isis.Histogram(self.histfile)

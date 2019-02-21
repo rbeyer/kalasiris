@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
+from pathlib import Path
 import unittest
 from .utils import resource_check as rc
 
@@ -25,10 +25,11 @@ from .utils import resource_check as rc
 class TestResources(unittest.TestCase):
 
     def setUp(self):
-        self.exists1 = os.path.join('tests', 'test_kalasiris.py')
-        self.exists2 = os.path.join('tests', 'test_utils.py')
-        self.not1 = os.path.join('tests', 'notexists', 'foo')
-        self.not2 = os.path.join('tests', 'notexists', 'foo2')
+        t = Path('tests')
+        self.exists1 = t / 'test_kalasiris.py'
+        self.exists2 = t / 'test_utils.py'
+        self.not1 = t / 'notexists' / 'foo'
+        self.not2 = t / 'notexists' / 'foo2'
 
     def test_have(self):
         (truth, test) = rc(self.exists1, self.exists2)

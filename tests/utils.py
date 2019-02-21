@@ -18,7 +18,7 @@
 # limitations under the License.
 
 import collections
-import os
+from pathlib import Path
 
 
 def resource_check(*args):
@@ -36,12 +36,11 @@ def resource_check(*args):
     test = truth
 
     the_missing = []
-    print(args)
-    for path_like in args:
-        if not os.path.isfile(path_like):
-            the_missing.append(path_like)
+    for path in map(Path, args):
+        if not path.is_file():
+            the_missing.append(path)
     if len(the_missing) > 0:
-        test = '\n'.join(map(lambda x: '    ' + x, the_missing))
+        test = '\n'.join(map(lambda x: '    ' + str(x), the_missing))
         test += "\n probably just need to 'make test-resources'"
 
     return CheckReturn(truth, test)

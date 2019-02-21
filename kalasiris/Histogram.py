@@ -18,7 +18,6 @@
 import collections
 import csv
 import itertools
-import os
 import subprocess
 from .k_funcs import hist_k
 
@@ -143,12 +142,12 @@ class Histogram(collections.abc.Sequence):
         d = dict()
         fieldnames = []
         hist_rows = []
-        for line in filter(lambda x: ':' in x, histinfo.splitlines()):
+        for line in filter(lambda x: ':' in x, str(histinfo).splitlines()):
             (k, v) = line.split(':')
             # d[k.strip()] = v.strip()
             d.setdefault(k.strip(), v.strip())
 
-        reader = csv.reader(filter(lambda x: ',' in x, histinfo.splitlines()))
+        reader = csv.reader(filter(lambda x: ',' in x, str(histinfo).splitlines()))
         fieldnames = next(reader)
 
         HistRow = collections.namedtuple('HistRow', fieldnames)

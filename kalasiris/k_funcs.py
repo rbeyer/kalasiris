@@ -37,6 +37,8 @@
 
 import tempfile
 import os
+from pathlib import Path
+
 import kalasiris as isis
 
 
@@ -52,15 +54,15 @@ def hi2isis_k(*args, **kwargs):
     '''Creates a default name for the to= cube.
 
     If the FROM file has the name ``foo.img``, then the output will be ``foo.cub``.'''
-    from_file = ''
-    if len(args) > 0 and not args[0].endswith('__'):
-        from_file = args[0]
+    from_path = Path()
+    if len(args) > 0 and not str(args[0]).endswith('__'):
+        from_path = Path(args[0])
     else:
         for(k, v) in kwargs.items():
             if 'from_' == k:
-                from_file = v
+                from_path = Path(v)
     if 'to_' not in kwargs:
-        kwargs.setdefault('to', os.path.splitext(from_file)[0] + '.cub')
+        kwargs.setdefault('to', from_path.with_suffix('.cub'))
     return(isis.hi2isis(*args, **kwargs))
 
 

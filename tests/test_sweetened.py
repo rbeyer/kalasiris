@@ -17,14 +17,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import unittest
+from pathlib import Path
+
 import kalasiris.sweetened as isis
 from .utils import resource_check as rc
 
 
 # Hardcoding this, but I sure would like a better solution.
-HiRISE_img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+HiRISE_img = Path('test-resources') / 'PSP_010502_2090_RED5_0.img'
 img = HiRISE_img
 
 
@@ -42,30 +43,30 @@ class Test_hi2isis(unittest.TestCase):
         self.img = img
 
     def tearDown(self):
-        os.remove('print.prt')
+        Path('print.prt').unlink()
 
     def test_hi2isis_with_to(self):
-        tocube = 'test_hi2isis.cub'
+        tocube = Path('test_hi2isis.cub')
         isis.hi2isis(self.img, to=tocube)
-        self.assertTrue(os.path.isfile(tocube))
-        os.remove(tocube)
+        self.assertTrue(tocube.is_file())
+        tocube.unlink()
 
     def test_hi2isis_without_to(self):
-        tocube = os.path.splitext(self.img)[0] + '.cub'
+        tocube = self.img.with_suffix('.cub')
         isis.hi2isis(self.img)
-        self.assertTrue(os.path.isfile(tocube))
-        os.remove(tocube)
+        self.assertTrue(tocube.is_file())
+        tocube.unlink()
 
 
 class Test_getkey(unittest.TestCase):
 
     def setUp(self):
-        self.cub = 'test_getkey_k.cub'
+        self.cub = Path('test_getkey_k.cub')
         isis.hi2isis(HiRISE_img, to=self.cub)
 
     def tearDown(self):
-        os.remove(self.cub)
-        os.remove('print.prt')
+        self.cub.unlink()
+        Path('print.prt').unlink()
 
     def test_getkey_k(self):
         truth = 'HIRISE'

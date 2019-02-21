@@ -18,13 +18,14 @@
 # limitations under the License.
 
 import csv
-import os
 import unittest
+from pathlib import Path
+
 import kalasiris as isis
 from .utils import resource_check as rc
 
 # Hardcoding this, but I sure would like a better solution.
-img = os.path.join('test-resources', 'PSP_010502_2090_RED5_0.img')
+img = Path('test-resources') / 'PSP_010502_2090_RED5_0.img'
 
 
 class TestResources(unittest.TestCase):
@@ -38,15 +39,15 @@ class TestResources(unittest.TestCase):
 class TestCubenormDialect(unittest.TestCase):
 
     def setUp(self):
-        self.cube = 'test_cubenorm.cub'
-        self.statsfile = 'test_cubenorm.stats'
+        self.cube = Path('test_cubenorm.cub')
+        self.statsfile = Path('test_cubenorm.stats')
         isis.hi2isis(img, to=self.cube)
         isis.cubenorm(self.cube, stats=self.statsfile)
 
     def tearDown(self):
-        os.remove('print.prt')
-        os.remove(self.cube)
-        os.remove(self.statsfile)
+        Path('print.prt').unlink()
+        self.cube.unlink()
+        self.statsfile.unlink()
 
     def test_cubenorm_reader(self):
         with open(self.statsfile) as csvfile:

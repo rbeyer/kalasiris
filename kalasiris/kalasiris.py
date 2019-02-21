@@ -20,7 +20,8 @@
 import os
 import subprocess
 import sys
-# This file shall have *NO* external dependencies.
+from pathlib import Path
+# This file shall have *NO* non-Standard Library dependencies.
 
 # kalasiris library version:
 __version__ = '0.1.0-dev'
@@ -33,7 +34,7 @@ _isisroot = os.environ['ISISROOT']
 _isis3data = os.environ['ISIS3DATA']
 environ = {'ISISROOT':  _isisroot,
            'ISIS3DATA': _isis3data,
-           'PATH':      os.path.join(_isisroot, 'bin'),
+           'PATH':      str(Path(_isisroot) / 'bin'),
            'HOME':      os.environ['HOME']}
 # If we don't also set $HOME, ISIS tries to make a local ./\$HOME dir
 
@@ -104,7 +105,7 @@ def _build_isis_fn(fn_name: str):
             cmd.extend(args)
         else:
             args_list = list(args)
-            if len(args) > 0 and not args[0].endswith('__'):
+            if len(args) > 0 and not str(args[0]).endswith('__'):
                 cmd.append(param_fmt('from', args_list.pop(0)))
             for a in args_list:
                 if a.endswith('__') and a.rstrip('_') in \
@@ -135,16 +136,13 @@ def _get_isis_program_names():
     in that directory corresponds to the name of an ISIS program,
     which is perfect.
     '''
-    # bindir = os.path.join(environ['ISISROOT'], 'bin')
-    bindir = os.path.join(environ['ISISROOT'], 'bin', 'xml')
-    with os.scandir(bindir) as it:
-        for entry in it:
-            if(entry.is_file()
-               and os.access(entry, os.X_OK)
-               and not entry.name.startswith('.')):
-                (name, ext) = os.path.splitext(entry.name)
-                if '.xml' == ext:
-                    yield name
+    bindir = Path(environ['ISISROOT']) / 'bin' / 'xml'
+    for entry in bindir.iterdir():
+        if(entry.is_file() and
+           os.access(entry, os.X_OK) and
+           not entry.name.startswith('.')):
+            if '.xml' == entry.suffix:
+                yield entry.stem
 
 
 # Now use the builder function to automatically create functions
