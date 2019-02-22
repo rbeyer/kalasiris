@@ -17,6 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import contextlib
 import unittest
 from pathlib import Path
 
@@ -46,7 +47,8 @@ class TestHistogram(unittest.TestCase):
         isis.hist(self.cube, to=self.histfile)
 
     def tearDown(self):
-        Path('print.prt').unlink()
+        with contextlib.suppress(FileNotFoundError):
+            Path('print.prt').unlink()
         self.cube.unlink()
         self.histfile.unlink()
 

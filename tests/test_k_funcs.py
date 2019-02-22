@@ -17,6 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import contextlib
 import subprocess
 import unittest
 from pathlib import Path
@@ -46,7 +47,8 @@ class Test_getkey_k(unittest.TestCase):
 
     def tearDown(self):
         self.cub.unlink()
-        Path('print.prt').unlink()
+        with contextlib.suppress(FileNotFoundError):
+            Path('print.prt').unlink()
 
     def test_getkey_k(self):
         truth = 'HIRISE'
@@ -60,7 +62,8 @@ class Test_hi2isis_k(unittest.TestCase):
         self.img = HiRISE_img
 
     def tearDown(self):
-        Path('print.prt').unlink()
+        with contextlib.suppress(FileNotFoundError):
+            Path('print.prt').unlink()
 
     def test_with_to(self):
         tocube = Path('test_hi2isis_k.cub')
@@ -83,7 +86,8 @@ class Test_hist_k(unittest.TestCase):
 
     def tearDown(self):
         self.cube.unlink()
-        Path('print.prt').unlink()
+        with contextlib.suppress(FileNotFoundError):
+            Path('print.prt').unlink()
 
     def test_run(self):
         hist_as_string = isis.hist_k(self.cube)

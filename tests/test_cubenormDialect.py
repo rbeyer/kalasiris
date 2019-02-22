@@ -17,6 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import contextlib
 import csv
 import unittest
 from pathlib import Path
@@ -45,7 +46,8 @@ class TestCubenormDialect(unittest.TestCase):
         isis.cubenorm(self.cube, stats=self.statsfile)
 
     def tearDown(self):
-        Path('print.prt').unlink()
+        with contextlib.suppress(FileNotFoundError):
+            Path('print.prt').unlink()
         self.cube.unlink()
         self.statsfile.unlink()
 

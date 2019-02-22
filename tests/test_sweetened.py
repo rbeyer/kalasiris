@@ -17,6 +17,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import contextlib
+import shutil
 import unittest
 from pathlib import Path
 
@@ -43,30 +45,35 @@ class Test_hi2isis(unittest.TestCase):
         self.img = img
 
     def tearDown(self):
-        Path('print.prt').unlink()
+        with contextlib.suppress(FileNotFoundError):
+            Path('print.prt').unlink()
 
     def test_hi2isis_with_to(self):
-        tocube = Path('test_hi2isis.cub')
+        tocube = Path('test_sweetened_hi2isis.cub')
         isis.hi2isis(self.img, to=tocube)
         self.assertTrue(tocube.is_file())
         tocube.unlink()
 
     def test_hi2isis_without_to(self):
-        tocube = self.img.with_suffix('.cub')
-        isis.hi2isis(self.img)
+        sweet_img = self.img.with_name('sweet.img')
+        shutil.copy(self.img, sweet_img)
+        tocube = sweet_img.with_suffix('.cub')
+        isis.hi2isis(sweet_img)
         self.assertTrue(tocube.is_file())
         tocube.unlink()
+        sweet_img.unlink()
 
 
 class Test_getkey(unittest.TestCase):
 
     def setUp(self):
-        self.cub = Path('test_getkey_k.cub')
+        self.cub = Path('test_sweetened_getkey.cub')
         isis.hi2isis(HiRISE_img, to=self.cub)
 
     def tearDown(self):
         self.cub.unlink()
-        Path('print.prt').unlink()
+        with contextlib.suppress(FileNotFoundError):
+            Path('print.prt').unlink()
 
     def test_getkey_k(self):
         truth = 'HIRISE'
