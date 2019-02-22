@@ -137,10 +137,11 @@ def _get_isis_program_names():
     in that directory corresponds to the name of an ISIS program,
     which is perfect.
     '''
-    bindir = Path(environ['ISISROOT']) / 'bin' / 'xml'
-    for entry in bindir.iterdir():
+    bindir = Path(environ['ISISROOT']) / 'bin'
+    xmldir = bindir / 'xml'
+    for entry in xmldir.iterdir():
         if(entry.is_file() and
-           os.access(entry, os.X_OK) and
+           os.access(bindir / entry.stem, os.X_OK) and
            not entry.name.startswith('.')):
             if '.xml' == entry.suffix:
                 yield entry.stem
