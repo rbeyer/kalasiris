@@ -141,6 +141,7 @@ def _get_isis_program_names():
     xmldir = bindir / 'xml'
     for entry in xmldir.iterdir():
         if(entry.is_file() and
+           (bindir / entry.stem).is_file() and
            os.access(bindir / entry.stem, os.X_OK) and
            not entry.name.startswith('.')):
             if '.xml' == entry.suffix:
