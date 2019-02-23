@@ -2,6 +2,15 @@
 History
 =======
 
+0.1.1 (2019-02-22)
+------------------
+
+* Jesse discovered that the code was incorrectly testing for
+executability of the ``$ISISROOT/bin/xml/*xml`` files instead of
+the the ``$ISISROOT/bin/*`` program files, and issued a PR that
+fixed it.
+
+
 0.1.0 (2019-02-20)
 ------------------
 
