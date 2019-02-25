@@ -25,9 +25,10 @@ sys.path.insert(0, os.path.abspath('..'))
 try:
     import kalasiris
 except KeyError as err:
-    print('Here is the err:')
-    print(err)
+    # print(err)
     if("'ISISROOT'" == str(err) or "'ISIS3DATA'" == str(err)):
+        print('Not running in an ISIS enabled environment.')
+        print('Using fakeISISROOT/ to build the docs.')
         # Use the fake ISISROOT
         os.environ['ISISROOT'] = 'fakeISISROOT'
         os.environ['ISIS3DATA'] = 'fakeISISROOT'
@@ -85,7 +86,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'fakeISISROOT']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
