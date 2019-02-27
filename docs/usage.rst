@@ -7,6 +7,146 @@ To use kalasiris in a project::
     import kalasiris
 
 
+kalasiris Core
+--------------
+
+The central piece of the kalasiris library provides Python function calls
+that allow you to easily run ISIS programs from within Python in a manner
+similar to the way that you run ISIS programs on the command line.
+
+So if you would type this in an ISIS enabled command line::
+
+    (isis3) % catlab from=some.cub to=some.pvl
+
+To achieve the same thing from within a Python program, you could do
+this (you don't need to alias *kalasiris* as *isis* in your programs,
+but it is shorter to type)::
+
+    import kalasiris as isis
+
+    isis.catlab('some.cub', to='some.pvl')
+
+Of course, you could use variables instead of strings::
+
+    import kalasiris as isis
+
+    from_cube = 'some.cub'
+    pvl_file = 'some.pvl'
+
+    isis.catlab(from_cub, to=pvl_file)
+
+Or with ``pathlib.Path`` objects::
+
+    from pathlib import Path
+
+    import kalasiris as isis
+
+    from_path = Path('some.cub')
+
+    isis.catlab(from_path, to=from_path.with_suffix('.pvl'))
+
+Possibilities abound.
+
+Each of the 300+ ISIS programs that you can use on the command line
+can be called this way from within Python.
+
+Most ISIS programs have a ``FROM=`` parameter, and so all kalasiris
+versions of them will assume that the first item in the argument
+signature is what should be assigned to the ``FROM=`` parameter if
+you were typing the ISIS program at the command line, that's one
+of the reasons why in the calls above you DO NOT write
+``isis.catlab(from=from_cub, to=pvl_file)``.  The other reason is
+that ``from`` is a reserved word in Python, so it just won't work.
+If you really want to use a named parameter, you can append an
+underbar to any parameter, like this::
+
+    isis.catlab(from_=from_cub, to=pvl_file)
+
+Or even like this::
+
+    isis.catlab(from_=from_cub, to_=pvl_file)
+
+There are some other reserved words like ``min``, so while you can't
+have a ``min=something`` in your Python, you can do either of these::
+
+    isis.hist('some.cub', min_=5)
+
+    isis.hist('some.cub', minimum=5)
+
+So trailing underbars can be handy.  In addition to the parameters that each
+ISIS has (like ``FROM=``, ``TO=``, etc.), ISIS programs can also take what
+ISIS calls 'reserved parameters' which are things like ``-restore=file`` or
+``-log`` to use those kinds of parameters from kalasiris, just append them
+with two underbars (``_``) like so::
+
+    isis.hist('some.cub', min_=5, gui__)
+
+Which, when called in your Python program, would actually fire up
+the GUI window for ISIS hist, with a default value for ``MINIMUM``
+set to 5, where you could fiddle with controls, hit the run button,
+and when you closed the window, your Python program would start
+right back up where it left off.
+
+
+kalasiris as wrapper
+~~~~~~~~~~~~~~~~~~~~
+
+We mention this from time to time, but what does it mean?  Well,
+it means that whenever you call one of the 'ISIS' functions with
+the kalasiris library, it basically just gathers the inputs, does
+some stuff to build the right 'command line' and then passes that
+to a call of Python's ``subprocess.run()`` function which takes care
+of actually running the ISIS program.  Of course, what this means
+is that you can also give a kalasiris ISIS program bad inputs, just
+like you can on the command line::
+
+    isis.spiceinit('some.cub', jesse='Awesome!')
+
+which ``subprocess.call()`` would dutifully run ``spiceinit`` with.
+Doing so would be the equivalent to typing this on the command line::
+
+    (isis3) % spiceinit fr= some_file.cub jesse=awesome
+    **USER ERROR** Invalid command line.
+    **USER ERROR** Unknown parameter [jesse].
+
+If you tried to do that in your Python, calling the above function
+would throw a ``subprocess.CalledProcessError`` (because that's what
+``subprocess.run()`` throws when something goes wrong).  And you
+can either be prepared for that with a try-block, or the exception
+will bubble up and halt your program, and you'll get errors that
+you'll have to deal with.
+
+
+What do kalasiris ISIS functions return?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Since the ISIS functions that kalasiris provides are wrappers around
+a call to ``subprocess.run()``, every kalasiris ISIS function returns
+a ``subprocess.CompletedProcess`` object.  Most of the time, you're
+either going to want to ignore it, or get at the output of the ISIS
+program, like so::
+
+    import kalasiris as isis
+
+    completed = isis.getkey('some.cub',
+                            grp='Dimensions',
+                            keyword='Samples')
+
+    value = completed.stdout
+    print(value)
+    # prints '512' or whatever the string
+    # is that's returned from getkey
+
+    # you could also do it in one go:
+
+    print(isis.getkey('some.cub',
+                            grp='Dimensions',
+                            keyword='Samples').stdout)
+
+Of course, a  ``subprocess.CompletedProcess`` object has other
+methods and attributes that you can use, if you need to.
+
+
 ISIS Interaction
 ----------------
 
