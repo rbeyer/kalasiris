@@ -2,6 +2,12 @@
 History
 =======
 
+
+_._._ (2019-__-__)
+------------------
+
+* Made a variety of documentation improvements.
+
 0.1.1 (2019-02-22)
 ------------------
 
