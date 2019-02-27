@@ -58,7 +58,7 @@ Are you new to Python?  Or you just don't want to mess with
 sophisticated Python installation procedures?  Or you don't want
 to commit to installing something when you don't know if it will
 be worth it?  Or you just want to write something 'real quick' in
-Python and just need to call some ISIS programs **now**?
+Python and need to call some ISIS programs **now**?
 
 We've got you covered.
 
