@@ -98,8 +98,8 @@ def _build_isis_fn(fn_name: str):
 
     # Define the structure of the generic function, isis_fn:
     def isis_fn(*args, **kwargs) -> subprocess.CompletedProcess:
-        __name__ = fn_name
-        __doc__ = f'Runs ISIS3 {fn_name}'
+        __name__ = fn_name                 # noqa: F841
+        __doc__ = f'Runs ISIS3 {fn_name}'  # noqa: F841
         cmd = [fn_name]
         if fn_name in _pass_through_programs:
             cmd.extend(args)
