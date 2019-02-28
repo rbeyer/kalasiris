@@ -130,7 +130,12 @@ Read the documentation for more: https://kalasiris.readthedocs.io
 Installation
 ------------
 
-*Eventually have some instructions here once they've been tested.*
+To install kalasiris, run this command in your terminal:
+
+.. code-block:: console
+
+    $ pip install kalasiris
+
 
 
 How is this different from pysis_?

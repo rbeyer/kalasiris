@@ -4,10 +4,6 @@
 Installation
 ============
 
-WARNING
--------
-None of this has been tested, or even exercised.
-
 
 Stable release
 --------------
