@@ -190,7 +190,8 @@ Here is an example workflow for working on a bug that was discovered:
 | 1. Are there tests that exercise the bug?      |        |       |           |
 | 2. Does ``make lint`` pass?                    |        |       |           |
 | 3. Does ``make test`` pass?                    |        |       |           |
-| 4. Is it based on master?                      |        |       |           |
+| 4. Does ``make test-all`` pass?                |        |       |           |
+| 5. Is it based on master?                      |        |       |           |
 |                                                |        |       |           |
 | Iterate with the submitter, if needed.         |        |       |           |
 +------------------------------------------------+--------+-------+-----------+
@@ -259,6 +260,10 @@ Here is an example workflow for working on a bug that was discovered:
 | The topic branch can now be deleted::                                       |
 |                                                                             |
 |   git branch -d hotfix                                                      |
++-----------------------------------------------------------------------------+
+| Push new release to PyPI::                                                  |
+|                                                                             |
+|   make release                                                              |
 +-----------------------------------------------------------------------------+
 
 The workflow for a minor feature is identical to the above, but we
