@@ -3,12 +3,32 @@
 language: python
 python:
   - 3.6
-  - 3.5
-  - 3.4
-  - 2.7
+env:
+    - ISISVER=3.6.0
+    - ISISVER=3.6.1
+    - ISISVER=3.6.2
+
+
+# Here we just install Miniconda, thanks to @astrofrog's example from astropy
+before_install:
+    - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+    - chmod +x miniconda.sh
+    - ./miniconda.sh -b
+    - export PATH=$HOME/miniconda/bin:$PATH
+    - conda update --yes conda
 
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -U tox-travis
+install:
+    # Install and activate ISIS:
+    # - source activate test
+    - conda config --add channels conda-forge
+    - conda config --add channels usgs-astrogeology
+    - conda config --show channels
+    - conda create --yes -n test python=$TRAVIS_PYTHON_VERSION
+    - conda install --yes -n test -c usgs-astrogeology isis3=$ISISVER
+    - python $CONDA_PREFIX/scripts/isis3VarInit.py
+    - source activate test
+    - pip install -U tox-travis
 
 # Command to run tests, e.g. python setup.py test
 script: tox
@@ -17,13 +37,13 @@ script: tox
 # create the Github repo and add it to Travis, run the
 # following command to finish PyPI deployment setup:
 # $ travis encrypt --add deploy.password
-deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  user: rbeyer
-  password:
-    secure: PLEASE_REPLACE_ME
-  on:
-    tags: true
-    repo: rbeyer/kalasiris
-    python: 3.6
+# deploy:
+#   provider: pypi
+#   distributions: sdist bdist_wheel
+#   user: rbeyer
+#   password:
+#     secure: PLEASE_REPLACE_ME
+#   on:
+#     tags: true
+#     repo: rbeyer/kalasiris
+#     python: 3.6
