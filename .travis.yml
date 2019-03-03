@@ -4,7 +4,7 @@ language: python
 python:
   - 3.6
 env:
-#     - ISISVER=3.6.0
+    - ISISVER=3.6.0
     - ISISVER=3.6.1
     - ISISVER=3.6.2
 
