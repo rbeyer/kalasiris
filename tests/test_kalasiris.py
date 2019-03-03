@@ -105,7 +105,7 @@ class Test_hi2isis(unittest.TestCase):
 
     def test_hi2isis(self):
         tocube = Path('test_hi2isis.cub')
-        print(isis.hi2isis(self.img, to=tocube).stderr)
+        isis.hi2isis(self.img, to=tocube)
         self.assertTrue(tocube.is_file())
         tocube.unlink()
 

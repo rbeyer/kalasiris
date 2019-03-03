@@ -63,6 +63,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 	rm -fr test-resources
+	rm -fr test-ISIS3DATA
 
 lint: ## check style with flake8
 	flake8 kalasiris tests
@@ -73,7 +74,16 @@ test: test-resources ## run tests quickly with the default Python
 test-all: ## run tests on every Python version with tox
 	tox
 
-test-resources: ## Download what we need for testing
+# mkdir -p test-ISIS3DATA/base/translations/
+test-ISIS3DATA: ## Download a minimal $ISIS3DATA for testing
+	mkdir -p test-ISIS3DATA
+	rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/translations/pdsImage.trn test-ISIS3DATA/
+	rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/templates/labels/CubeFormatTemplate.pft test-ISIS3DATA/
+	rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseInstrument.trn test-ISIS3DATA/
+	rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseBandBin.trn test-ISIS3DATA/
+	rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseArchive.trn test-ISIS3DATA/
+
+test-resources: test-ISIS3DATA ## Download what we need for testing
 	mkdir test-resources
 	$(DOWNLOAD) https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG test-resources/PSP_010502_2090_RED5_0.img
 
