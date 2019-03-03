@@ -40,6 +40,8 @@ install:
 before_script:
     - make test-resources
     - ls test-ISIS3DATA
+    - ls -la test-ISIS3DATA/base/translations/pdsImage.trn
+    - pwd
 
 
 # Command to run tests, e.g. python setup.py test
