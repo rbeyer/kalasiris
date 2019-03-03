@@ -16,7 +16,6 @@ before_install:
     - chmod +x miniconda.sh
     - ./miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
-    - hash -r
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
     - conda info -a
@@ -28,10 +27,10 @@ install:
     - conda config --add channels conda-forge
     - conda config --add channels usgs-astrogeology
     - conda config --show channels
-    - conda create --yes -n test python=$TRAVIS_PYTHON_VERSION
-    - conda install --yes -n test -c usgs-astrogeology isis3=$ISISVER
-    - python $CONDA_PREFIX/scripts/isis3VarInit.py
+    - conda create -q -n test python=$TRAVIS_PYTHON_VERSION
+    - conda install -q -n test -c usgs-astrogeology isis3=$ISISVER
     - source activate test
+    - python $CONDA_PREFIX/scripts/isis3VarInit.py
     - pip install -U tox-travis
 
 # Command to run tests, e.g. python setup.py test
