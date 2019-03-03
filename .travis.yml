@@ -31,10 +31,17 @@ install:
     - conda install -q -n test -c usgs-astrogeology isis3=$ISISVER
     - source activate test
     - python $CONDA_PREFIX/scripts/isis3VarInit.py
-    - pip install -U tox-travis
+    #- pip install -U tox-travis
+    - pip install -U flake8
+
+before_script: make test-resources
 
 # Command to run tests, e.g. python setup.py test
-script: tox
+#script: tox
+script:
+    - flake8 kalasiris tests
+    - python setup.py test
+
 
 # Assuming you have installed the travis-ci CLI tool, after you
 # create the Github repo and add it to Travis, run the
