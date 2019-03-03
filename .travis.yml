@@ -3,10 +3,10 @@
 language: python
 python:
   - 3.6
-env:
-    - ISISVER=3.6.0
-    - ISISVER=3.6.1
-    - ISISVER=3.6.2
+env: ISISVER=3.6.1
+#     - ISISVER=3.6.0
+#     - ISISVER=3.6.1
+#     - ISISVER=3.6.2
 
 
 # Here we just install Miniconda, thanks to @astrofrog's example from astropy
@@ -33,6 +33,7 @@ install:
     - python $CONDA_PREFIX/scripts/isis3VarInit.py
     - source activate test
     - conda info -a
+    - python --version
     #- pip install -U tox-travis
     - pip install -U flake8
 
