@@ -30,7 +30,7 @@ install:
     - conda create -q -n test python=$TRAVIS_PYTHON_VERSION
     - conda install -q -n test -c usgs-astrogeology isis3=$ISISVER
     - source activate test
-    - python $CONDA_PREFIX/scripts/isis3VarInit.py --data-dir="$HOME/test-ISIS3DATA"
+    - python $CONDA_PREFIX/scripts/isis3VarInit.py --data-dir="$TRAVIS_BUILD_DIR/test-ISIS3DATA"
     - source activate test
     - conda info -a
     - python --version
