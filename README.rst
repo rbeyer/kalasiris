@@ -137,23 +137,6 @@ To install kalasiris, run this command in your terminal:
     $ pip install kalasiris
 
 
-
-How is this different from pysis_?
-----------------------------------
-
-Folks got a lot of use out of pysis_, but it hasn't had a release
-or commits in some time, and due to its implementation and strict
-checking, it is not compatible with recent versions of ISIS.
-The main kalasiris implementation can fit in one file and is very
-lightweight.
-
-Naturally, this means that working with kalasiris is perhaps less
-forgiving, but we think it is more nimble.
-
-There is also some compatibility with pysis_ calling syntax, see the
-documenation for more information.
-
-
 -------
 
 This repository layout was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.

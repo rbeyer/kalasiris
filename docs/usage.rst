@@ -73,11 +73,12 @@ have a ``min=something`` in your Python, you can do either of these::
 
     isis.hist('some.cub', minimum=5)
 
-So trailing underbars can be handy.  In addition to the parameters that each
-ISIS has (like ``FROM=``, ``TO=``, etc.), ISIS programs can also take what
-ISIS calls 'reserved parameters' which are things like ``-restore=file`` or
-``-log`` to use those kinds of parameters from kalasiris, just append them
-with two underbars (``_``) like so::
+So trailing underbars can be handy.  In addition to the parameters
+that each ISIS program has (like ``FROM=``, ``TO=``, etc.), ISIS
+programs can also take what ISIS calls 'reserved parameters' which
+are things like ``-restore=file`` or ``-log``. In order to use those
+kinds of parameters from kalasiris, just append them with two
+underbars (``_``) like so::
 
     isis.hist('some.cub', min_=5, gui__)
 

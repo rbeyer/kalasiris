@@ -9,6 +9,7 @@ _._._ (2019-__-__)
 * Made a variety of documentation improvements.
 * Enabled and tested install via ``pip install``
 * Enabled testing via tox
+* Enabled testing via Travis CI
 
 0.1.1 (2019-02-22)
 ------------------

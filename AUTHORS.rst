@@ -10,4 +10,4 @@ Development Lead
 Contributors
 ------------
 
-* Jesse Mapel
+* `Jesse Mapel <https://github.com/jessemapel>`_

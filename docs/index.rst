@@ -6,10 +6,10 @@ Welcome to kalasiris's documentation!
    :caption: Contents:
 
    readme
-   pysis
    installation
    usage
    modules
+   pysis
    lazy
    contributing
    authors

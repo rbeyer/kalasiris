@@ -6,6 +6,18 @@ The kalasiris module mostly provides the same functionality as
 pysis_, namely the easy ability to call ISIS programs from Python.
 Of course, there are some differences, and some similarities.
 
+How is this different from pysis_?
+----------------------------------
+
+Folks got a lot of use out of pysis_, but it hasn't had a release
+or commits in some time, and due to its implementation and strict
+checking, it is not compatible with recent versions of ISIS.
+The main kalasiris implementation can fit in one file and is very
+lightweight.
+
+There is also some compatibility with pysis_ calling syntax, see below.
+
+
 Differences
 -----------
 
