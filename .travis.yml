@@ -31,6 +31,8 @@ install:
     - conda install -q -n test -c usgs-astrogeology isis3=$ISISVER
     - source activate test
     - python $CONDA_PREFIX/scripts/isis3VarInit.py
+    - source activate test
+    - conda info -a
     #- pip install -U tox-travis
     - pip install -U flake8
 
