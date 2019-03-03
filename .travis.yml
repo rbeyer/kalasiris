@@ -38,7 +38,7 @@ install:
     - pip install -U flake8
 
 before_script:
-    - make test-resources
+    - make -B test-resources
     - ls test-ISIS3DATA
     - ls -la test-ISIS3DATA/base/translations/pdsImage.trn
     - pwd

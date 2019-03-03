@@ -74,7 +74,6 @@ test: test-resources ## run tests quickly with the default Python
 test-all: ## run tests on every Python version with tox
 	tox
 
-# mkdir -p test-ISIS3DATA/base/translations/
 test-ISIS3DATA: ## Download a minimal $ISIS3DATA for testing
 	mkdir -p test-ISIS3DATA
 	rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/translations/pdsImage.trn test-ISIS3DATA/
