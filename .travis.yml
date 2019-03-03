@@ -37,13 +37,17 @@ install:
     #- pip install -U tox-travis
     - pip install -U flake8
 
-before_script: make test-resources
+before_script:
+    - make test-resources
+    - ls test-ISIS3DATA
+
 
 # Command to run tests, e.g. python setup.py test
 #script: tox
 script:
     - flake8 kalasiris tests
-    - python setup.py test
+#- python setup.py test
+    - python setup.py test -s tests.test_kalasiris.Test_hi2isis
 
 
 # Assuming you have installed the travis-ci CLI tool, after you
