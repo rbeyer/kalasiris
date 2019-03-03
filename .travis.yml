@@ -9,7 +9,7 @@ env: ISISVER=3.6.1
 #     - ISISVER=3.6.2
 
 
-# Here we just install Miniconda, thanks to @astrofrog's example from astropy
+# Here we install Miniconda:
 before_install:
     - sudo apt-get update
     - wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
@@ -19,14 +19,13 @@ before_install:
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
     - conda info -a
+    - conda config --add channels conda-forge
+    - conda config --add channels usgs-astrogeology
+    - conda config --show channels
 
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
     # Install and activate ISIS:
-    # - source activate test
-    - conda config --add channels conda-forge
-    - conda config --add channels usgs-astrogeology
-    - conda config --show channels
     - conda create -q -n test python=$TRAVIS_PYTHON_VERSION
     - conda install -q -n test -c usgs-astrogeology isis3=$ISISVER
     - source activate test
@@ -37,19 +36,13 @@ install:
     #- pip install -U tox-travis
     - pip install -U flake8
 
-before_script:
-    - make -B test-resources
-    - ls test-ISIS3DATA
-    - ls -la test-ISIS3DATA/base/translations/pdsImage.trn
-    - pwd
-
+before_script: make -B test-resources
 
 # Command to run tests, e.g. python setup.py test
 #script: tox
 script:
     - flake8 kalasiris tests
-#- python setup.py test
-    - python setup.py test -s tests.test_kalasiris.Test_hi2isis
+    - python setup.py test
 
 
 # Assuming you have installed the travis-ci CLI tool, after you
