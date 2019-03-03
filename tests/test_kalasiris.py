@@ -105,11 +105,7 @@ class Test_hi2isis(unittest.TestCase):
 
     def test_hi2isis(self):
         tocube = Path('test_hi2isis.cub')
-        try:
-            isis.hi2isis(self.img, to=tocube)
-        except subprocess.CalledProcessError as err:
-            print(err.stdout)
-            print(err.stderr)
+        isis.hi2isis(self.img, to=tocube)
         self.assertTrue(tocube.is_file())
         tocube.unlink()
 

@@ -3,10 +3,10 @@
 language: python
 python:
   - 3.6
-env: ISISVER=3.6.1
+env:
 #     - ISISVER=3.6.0
-#     - ISISVER=3.6.1
-#     - ISISVER=3.6.2
+    - ISISVER=3.6.1
+    - ISISVER=3.6.2
 
 
 # Here we install Miniconda:
@@ -18,7 +18,6 @@ before_install:
     - export PATH="$HOME/miniconda/bin:$PATH"
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
-    - conda info -a
     - conda config --add channels conda-forge
     - conda config --add channels usgs-astrogeology
     - conda config --show channels
