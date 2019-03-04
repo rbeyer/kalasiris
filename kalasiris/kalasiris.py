@@ -35,8 +35,10 @@ _isis3data = os.environ['ISIS3DATA']
 environ = {'ISISROOT':  _isisroot,
            'ISIS3DATA': _isis3data,
            'PATH':      str(Path(_isisroot) / 'bin'),
-           'HOME':      os.environ['HOME']}
+           'HOME':      os.path.expanduser('~')}
 # If we don't also set $HOME, ISIS tries to make a local ./\$HOME dir
+# Can't just use os.environ['HOME'] because not all platforms have
+# that environment variable set (Windows uses something different).
 
 # These are the names of the reserved parameters that can be given
 # as arguments to any ISIS program, prefixed by a dash (-).

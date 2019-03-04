@@ -3,13 +3,14 @@ History
 =======
 
 
-_._._ (2019-__-__)
+0.1.2 (2019-03-04)
 ------------------
 
 * Made a variety of documentation improvements.
 * Enabled and tested install via ``pip install``
 * Enabled testing via tox
 * Enabled testing via Travis CI
+* Discovered a bug that made us platform-dependent.  Fixed.
 
 0.1.1 (2019-02-22)
 ------------------
