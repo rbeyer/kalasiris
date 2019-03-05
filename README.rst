@@ -9,8 +9,14 @@ kalasiris
 .. image:: https://img.shields.io/pypi/v/kalasiris.svg
         :target: https://pypi.python.org/pypi/kalasiris
 
-.. image:: https://img.shields.io/travis/rbeyer/kalasiris.svg
-        :target: https://travis-ci.org/rbeyer/kalasiris
+.. image:: https://img.shields.io/conda/vn/conda-forge/kalasiris.svg
+        :target: https://anaconda.org/conda-forge/kalasiris
+
+.. image:: https://travis-ci.com/rbeyer/kalasiris.svg?branch=master
+        :target: https://travis-ci.com/rbeyer/kalasiris
+
+.. image:: https://img.shields.io/circleci/project/github/conda-forge/kalasiris-feedstock/master.svg?label=noarch
+        :target: https://circleci.com/gh/conda-forge/kalasiris-feedstock
 
 .. image:: https://readthedocs.org/projects/kalasiris/badge/?version=latest
         :target: https://kalasiris.readthedocs.io/en/latest/?badge=latest
@@ -130,11 +136,32 @@ Read the documentation for more: https://kalasiris.readthedocs.io
 Installation
 ------------
 
-To install kalasiris, run this command in your terminal:
+You can install ``kalasiris`` via ``pip`` or ``conda-forge``:
+
+To install ``kalasiris`` via ``pip``, run this command in your terminal:
 
 .. code-block:: console
 
     $ pip install kalasiris
+
+Installing ``kalasiris`` from the ``conda-forge`` channel can be
+achieved by adding ``conda-forge`` to your channels with:
+
+.. code-block:: console
+
+    conda config --add channels conda-forge
+
+Once the ``conda-forge`` channel has been enabled, ``kalasiris`` can be installed with:
+
+.. code-block:: console
+
+    conda install kalasiris
+
+It is possible to list all of the versions of ``kalasiris`` available on your platform with:
+
+.. code-block:: console
+
+    conda search kalasiris --channel conda-forge
 
 
 -------

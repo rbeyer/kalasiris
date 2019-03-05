@@ -19,8 +19,29 @@ This is the preferred method to install kalasiris, as it will always install the
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
 
+Alternately, you can install ``kalasiris`` from the `conda-forge`_ channel
+by adding ``conda-forge`` to your channels with:
+
+.. code-block:: console
+
+    conda config --add channels conda-forge
+
+Once the ``conda-forge`` channel has been enabled, ``kalasiris`` can be installed with:
+
+.. code-block:: console
+
+    conda install kalasiris
+
+It is possible to list all of the versions of ``kalasiris`` available on your platform with:
+
+.. code-block:: console
+
+    conda search kalasiris --channel conda-forge
+
+
 .. _pip: https://pip.pypa.io
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
+.. _conda-forge: https://anaconda.org/conda-forge/kalasiris
 
 
 From sources
