@@ -7,6 +7,7 @@ History
 ------------------
 
 * Enabled installation via ``conda-forge``
+* Updated some documentation.
 
 0.1.2 (2019-03-04)
 ------------------
