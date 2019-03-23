@@ -265,6 +265,15 @@ Here is an example workflow for working on a bug that was discovered:
 |                                                                             |
 |   make release                                                              |
 +-----------------------------------------------------------------------------+
+| Update the `conda-forge feedstock                                           |
+| <https://github.com/conda-forge/kalasiris-feedstock>`_                      |
+|                                                                             |
+| Basically just follow the directions at the bottom of the feedstock repo:   |
+|                                                                             |
+| #. Fork the feestock repo                                                   |
+| #. Update the ``recipe/meta.yml`` file                                      |
+| #. Submit PR                                                                |
++-----------------------------------------------------------------------------+
 
 The workflow for a minor feature is identical to the above, but we
 might name the branch *feature* or *minor-feature* instead of
