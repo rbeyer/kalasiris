@@ -8,6 +8,7 @@ History
 
 * Enabled installation via ``conda-forge``
 * Updated some documentation.
+* Fixed it so that the module documentation appears in readthedocs
 
 0.1.2 (2019-03-04)
 ------------------
