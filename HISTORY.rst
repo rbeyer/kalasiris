@@ -3,9 +3,10 @@ History
 =======
 
 
-0._._ (2019-__-__)
+0.2.0 (2019-03-23)
 ------------------
 
+* Implemented a new feature: the PathSet Class.
 * Enabled installation via ``conda-forge``
 * Updated some documentation.
 * Fixed it so that the module documentation appears in readthedocs
@@ -13,11 +14,11 @@ History
 0.1.2 (2019-03-04)
 ------------------
 
+* Discovered a bug that made us platform-dependent.  Fixed.
 * Made a variety of documentation improvements.
 * Enabled and tested install via ``pip install``
 * Enabled testing via tox
 * Enabled testing via Travis CI
-* Discovered a bug that made us platform-dependent.  Fixed.
 
 0.1.1 (2019-02-22)
 ------------------
