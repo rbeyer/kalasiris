@@ -16,7 +16,4 @@ formats: all
 python:
   version: 3.6
   install:
-      - method: pip
-        extra_requirements:
-            - pbr
-            - sphinxcontrib-apidoc
+      - requirements: requirements_rtd.txt
