@@ -22,6 +22,7 @@ import subprocess
 import unittest
 from pathlib import Path
 
+from kalasiris.kalasiris import _get_isis_program_names as gipn
 import kalasiris.kalasiris as isis
 from .utils import resource_check as rc
 
@@ -86,11 +87,11 @@ class TestParams(unittest.TestCase):
 class Test_get_isis_program_names(unittest.TestCase):
 
     def test_get_names(self):
-        # for n in isis._get_isis_program_names():
+        # for n in gipn():
         #     print(n)
-        # s = sum(1 for _ in isis._get_isis_program_names())
+        # s = sum(1 for _ in gipn())
         # print(f'How many programs: {s}')
-        self.assertIn('cam2map', isis._get_isis_program_names())
+        self.assertIn('cam2map', gipn())
 
 
 # @unittest.skip('Can take a while to run hi2isis.')
