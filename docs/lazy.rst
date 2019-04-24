@@ -80,10 +80,10 @@ And then this after the ``from ... import`` statements::
   modules[__name__] = kalasiris
 
   setattr(modules[__name__], 'Histogram', Histogram)
-  setattr(modules[__name__], 'cubenormDialect', cubenormDialect)
+  setattr(modules[__name__], 'PathSet', PathSet)
 
 Setting ``modules[__name__]`` brings up the namespace up a level, but
-then masks the imports of Histogram and cubenormDialect from being
+then masks the imports of Histogram and PathSet from being
 exposed, so you need to setattr them to add them back to the namespace
 that is exposed when someone loads the package.  Clearly, something
 more elegant than a bunch of individual ``setattr()`` calls, but this

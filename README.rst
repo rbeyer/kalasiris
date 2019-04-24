@@ -84,7 +84,7 @@ map-projected.
 
 Just grabbing this one file gets you the ability to call ISIS
 programs from your Python programs.  There are other parts of this
-package that provide helper functions (like ``cubenormDialect``),
+package that provide helper functions (like ``cubenormfile.writer``),
 classes (like ``Histogram``), and syntactic sugar (the *_k functions*).
 You don't get them by just grabbing ``kalasiris.py`` as described
 above.
