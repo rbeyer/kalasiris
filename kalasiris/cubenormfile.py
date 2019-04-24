@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""The ISIS cubenorm file outputs plain text table information and also reads
-   it in, but the format is a very specific fixed-width table format.  A
-   plain csv.reader or csv.DictReader using the cubenormfile.Dialect object will
-   be able to read the text output of cubenorm, but to write out a file that
-   cubenorm will read in, you will need to use the cubenormfile.writer or
+"""The ISIS cubenorm file outputs plain text table information and
+   also reads it in, but the format is a very specific fixed-width
+   table format.  A plain csv.reader or csv.DictReader using the
+   cubenormfile.Dialect object will be able to read the text output
+   of cubenorm, but to write out a file that cubenorm will read in,
+   you will need to use the cubenormfile.writer or
    cubenormfile.DictWriter classes.
 """
 
@@ -75,7 +76,8 @@ class writer:
 class DictWriter(csv.DictWriter):
     '''A DictWriter for cubenorm files.'''
 
-    def __init__(self, f, restval="", extrasaction="raise", dialect=Dialect, *args, **kwds):
+    def __init__(self, f, restval="", extrasaction="raise",
+                 dialect=Dialect, *args, **kwds):
         self.fieldnames = fieldnames
         self.restval = restval
         if extrasaction.lower() not in ("raise", "ignore"):

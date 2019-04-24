@@ -3,6 +3,13 @@ History
 =======
 
 
+1.0.0 (2019-04-24)
+------------------
+
+* Removed cubenormDialect, and moved it to cubenormfile.Dialect
+* Implemented cubenormfile.writer and cubenormfile.DictWriter, to
+  write the fixed-width file format that ISIS cubenorm will actually read.
+
 0.2.0 (2019-03-23)
 ------------------
 
