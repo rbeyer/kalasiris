@@ -25,13 +25,14 @@ from pathlib import Path
 
 from kalasiris import environ
 
-ISISversion = collections.named_tuple('ISISVersion', ['major', 'minor',
-                                                      'patch',
-                                                      'releaselevel',
-                                                      'date'])
+ISISversion = collections.namedtuple('ISISVersion', ['major', 'minor',
+                                                     'patch',
+                                                     'releaselevel',
+                                                     'date'])
 
 version_re = re.compile(r"(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)")
-date_re = re.compile(r"(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})|(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})")
+date_re = re.compile(r"(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})")
+date_yearlast_re = re.compile(r"(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})")
 level_re = re.compile(r"^alpha|beta|stable")
 
 
@@ -58,23 +59,29 @@ def get_from_string(s: str) -> ISISversion:
                                                                      version_re.pattern))
 
     # Date Matching
+    d = None
     d_match = date_re.search(s)
     if d_match:
-        d = match.groupdict()
-        date = datetime.date(d['year'], d['month'], d['day'])
+        d = d_match.groupdict()
+    else:
+        d_match = date_yearlast_re.search(s)
+        if d_match:
+            d = d_match.groupdict()
+
+    if d is not None:
+        date = datetime.date(int(d['year']), int(d['month']), int(d['day']))
     else:
         date = None
 
     # Level Matching
+    level = None
     l_match = level_re.search(s)
     if l_match:
-        level = l_match.group
-    else:
-        level = None
+        level = l_match.group()
 
-    version = ISISversion(major=v['major'],
-                          minor=v['minor'],
-                          patch=v['patch'],
+    version = ISISversion(major=int(v['major']),
+                          minor=int(v['minor']),
+                          patch=int(v['patch']),
                           releaselevel=level,
                           date=date)
     return version
