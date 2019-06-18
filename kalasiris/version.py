@@ -40,40 +40,52 @@ def version_info() -> ISISversion:
     return get_from_file(Path(environ['ISISROOT']) / 'version')
 
 
-def get_from_file(file_path: os.PathLike) -> ISISversion:
-    '''Read an ISIS version file and parse the contents.
+def get_from_string(s: str) -> ISISversion:
+    '''Read text and parse the contents for ISIS version information.
 
-       This should parse version files as far back as ISIS 3.5.2.0,
+       This should parse ISIS version text as far back as ISIS 3.5.2.0,
        but possibly earlier.  It will return None values for releaselevel
        and date if it cannot parse them.  It will raise a ValueError if it
        cannot parse a version number.
     '''
 
-    v_text = Path(file_path).read_text
-
-    match = version_re.search(v_text)
+    # Version Matching
+    match = version_re.search(s)
     if match:
-        version_parsed = match.groupdict()
+        v = match.groupdict()
     else:
-        raise ValueError('{} did not match version regex: {}'.format(v_text,
+        raise ValueError('{} did not match version regex: {}'.format(s,
                                                                      version_re.pattern))
 
-    d_match = date_re.search(v_text)
+    # Date Matching
+    d_match = date_re.search(s)
     if d_match:
         d = match.groupdict()
         date = datetime.date(d['year'], d['month'], d['day'])
     else:
         date = None
 
-    l_match = level_re.search(v_text)
+    # Level Matching
+    l_match = level_re.search(s)
     if l_match:
         level = l_match.group
     else:
         level = None
 
-    v = ISISversion(major=version_parsed['major'],
-                    minor=version_parsed['minor'],
-                    patch=version_parsed['patch'],
-                    releaselevel=level,
-                    date=date)
-    return v
+    version = ISISversion(major=v['major'],
+                          minor=v['minor'],
+                          patch=v['patch'],
+                          releaselevel=level,
+                          date=date)
+    return version
+
+
+def get_from_file(file_path: os.PathLike) -> ISISversion:
+    '''Read an ISIS version file and parse the contents.
+
+       This should parse version files as far back as ISIS 3.5.2.0,
+       but possibly earlier.
+    '''
+
+    v_text = Path(file_path).read_text
+    return get_from_string(v_text)
