@@ -94,5 +94,5 @@ def get_from_file(file_path: os.PathLike) -> ISISversion:
        but possibly earlier.
     '''
 
-    v_text = Path(file_path).read_text
+    v_text = Path(file_path).read_text()
     return get_from_string(v_text)
