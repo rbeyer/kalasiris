@@ -32,7 +32,7 @@ ISISversion = collections.namedtuple('ISISVersion', ['major', 'minor',
 
 version_re = re.compile(r"(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)")
 date_re = re.compile(r"(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})")
-date_yearlast_re = re.compile(r"(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})")
+date_yearlast_re = re.compile(r"(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})")  # noqa: E501
 level_re = re.compile(r"^alpha|beta|stable")
 
 
@@ -55,8 +55,8 @@ def get_from_string(s: str) -> ISISversion:
     if match:
         v = match.groupdict()
     else:
-        raise ValueError('{} did not match version regex: {}'.format(s,
-                                                                     version_re.pattern))
+        raise ValueError(f'{s} did not match version regex: '
+                         f'{version_re.pattern}')
 
     # Date Matching
     d = None
