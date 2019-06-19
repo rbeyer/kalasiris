@@ -50,3 +50,9 @@ stable       # release stage (alpha, beta, stable)''',
     def test_fail_from_string(self):
         s = 'No version here.'
         self.assertRaises(ValueError, version.get_from_string, s)
+
+    @unittest.skip("Not a robust test, only occaisional.")
+    def test_version_info(self):
+        # Who knows what version of ISIS will be loaded, this
+        # is just for occaisionally testing this functionality.
+        print(version.version_info())
