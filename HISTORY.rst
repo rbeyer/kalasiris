@@ -3,6 +3,14 @@ History
 =======
 
 
+1.1.0 (2019-06-19)
+------------------
+
+* Added the version module in order to query and retrieve ISIS version
+  information from the ISIS system.
+* Added TravisCI tests for ISIS 3.7.1
+
+
 1.0.0 (2019-04-24)
 ------------------
 
