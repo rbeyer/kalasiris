@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """These functions return information about the version of ISIS.
+
+    Most of the time, the only thing you'll probably need is the
+    version_info() function which returns an ISISversion tuple.
 """
 
 # Copyright 2019, Ross A. Beyer (rbeyer@seti.org)
@@ -25,10 +28,22 @@ from pathlib import Path
 
 from kalasiris import environ
 
-ISISversion = collections.namedtuple('ISISVersion', ['major', 'minor',
-                                                     'patch',
-                                                     'releaselevel',
-                                                     'date'])
+
+class ISISversion(collections.namedtuple('ISISversion',
+                                         ['major', 'minor',
+                                          'patch', 'releaselevel',
+                                          'date'])):
+    '''This is a custom collections.namedtuple() which can contain ISIS version
+       information.
+
+       The first three elements, major, minor, and patch should be
+       integers.  The fourth element, releaselevel, should be the
+       string 'alpha', 'beta', or 'stable' or None.  And the fifth
+       element, date, should be a datetime.date object or None.
+       That's what the functions in this module will return in an ISISversion
+       namedtuple.
+    '''
+
 
 version_re = re.compile(r"(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)")
 date_re = re.compile(r"(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})")
@@ -37,7 +52,10 @@ level_re = re.compile(r"^alpha|beta|stable")
 
 
 def version_info() -> ISISversion:
-    '''Returned named tuple of ISIS version information.'''
+    '''Returned named tuple of ISIS version information for the ISIS system
+    underlying kalasiris.  If you want to answer, "What version of ISIS is
+    being used?"  This is the function you're after.  It is modeled after
+    sys.version_info.'''
     return get_from_file(Path(environ['ISISROOT']) / 'version')
 
 

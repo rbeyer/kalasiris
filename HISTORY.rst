@@ -2,6 +2,10 @@
 History
 =======
 
+?.?.? (20??-??-??)
+------------------
+* Improved the documentation for the version module a little.
+
 
 1.1.0 (2019-06-19)
 ------------------
