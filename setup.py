@@ -21,7 +21,7 @@ setup(
     author="Ross A. Beyer",
     author_email='rbeyer@seti.org',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: Apache Software License',
