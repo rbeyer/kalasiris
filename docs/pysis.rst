@@ -89,5 +89,25 @@ the above could also be written::
     kalasiris.stats(cubefile)
 
 
+Which to use?
+-------------
+
+So, given all this, which should you use?  We can't really answer that in
+an unbiased way, so you probably should get a second opinion, but here goes:
+
+If you are already using pysis_ and your software is working, don't switch.
+
+If you are programming exclusively in Python 2, use pysis_ because
+kalasiris won't work under Python 2 (but really, start using Python
+3).
+
+If you are programming in Python 3, starting a new project, and
+you are trying to decide between pysis_ and kalasiris, give kalasiris
+a try.
+
+If there are some tricky things that you want to do that pysis_ doesn't
+quite support then maybe look into kalasiris, as our architecture might be
+more flexible for you.
+
 
 .. _pysis: https://github.com/wtolson/pysis

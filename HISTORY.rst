@@ -4,6 +4,7 @@ History
 
 ?.?.? (20??-??-??)
 ------------------
+* Added a documentation section to help guide a user to choose between pysis and kalasiris.
 * Improved the documentation for the version module a little.
 
 
