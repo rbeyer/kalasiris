@@ -92,3 +92,26 @@ def hist_k(*args, **kwargs) -> str:
     f.close()
 
     return contents
+
+
+def stats_k(*args, **kwargs) -> dict:
+    '''Returns the result of running ISIS stats as a Python Dictionary.
+
+       If there are TO=, FORMAT=, or APPEND= parameters, ``stats_k`` will
+       perform the file-based activities that ``stats`` normally would,
+       and also return the Python Dictionary.
+    '''
+    # We could use the pvl library to parse the returned text, but
+    # that would involve a dependency, and since the format is so
+    # simple, we'll just parse it directly here.
+
+    stats_text = isis.stats(*args, **kwargs).stdout
+
+    d = dict()
+    for line in filter(lambda x: '=' in x, stats_text.splitlines()):
+        (k, equals, v) = line.partition('=')
+        if 'Group' in k:
+            continue
+        d[k.strip()] = v.strip()
+
+    return d

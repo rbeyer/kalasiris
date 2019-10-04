@@ -2,10 +2,11 @@
 History
 =======
 
-?.?.? (20??-??-??)
+1.2.0 (2019-10-04)
 ------------------
 * Added a documentation section to help guide a user to choose between pysis and kalasiris.
 * Improved the documentation for the version module a little.
+* Added the stats_k() k_function.
 
 
 1.1.0 (2019-06-19)
