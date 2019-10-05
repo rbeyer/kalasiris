@@ -57,15 +57,18 @@ def hi2isis_k(*args, **kwargs):
        If the FROM file has the name ``foo.img``, then the output will
        be ``foo.cub``.
     '''
-    from_path = Path()
-    if len(args) > 0 and not str(args[0]).endswith('__'):
-        from_path = Path(args[0])
-    else:
-        for(k, v) in kwargs.items():
-            if 'from_' == k:
-                from_path = Path(v)
-    if 'to_' not in kwargs:
+    if not any(k.startswith('t') for k in kwargs.keys()):
+        from_path = Path()
+        if len(args) > 0 and not str(args[0]).endswith('__'):
+            from_path = Path(args[0])
+        else:
+            for(k, v) in kwargs.items():
+                if k.startswith('f'):
+                    from_path = Path(v)
+                    break
+
         kwargs.setdefault('to', from_path.with_suffix('.cub'))
+
     return(isis.hi2isis(*args, **kwargs))
 
 
