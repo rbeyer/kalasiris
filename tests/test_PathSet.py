@@ -24,6 +24,10 @@ from pathlib import Path
 import kalasiris as isis
 
 
+run_real_files = True
+run_real_files_reason = 'Tests on real files.'
+
+
 class TestPathSet(unittest.TestCase):
 
     def setUp(self):
@@ -53,6 +57,7 @@ class TestPathSet(unittest.TestCase):
         added_path = ps.add(path1)
         self.assertEqual(path1, added_path)
 
+    @unittest.skipUnless(run_real_files, run_real_files_reason)
     def test_unlink(self):
         ps = isis.PathSet(self.paths)
         for p in ps:

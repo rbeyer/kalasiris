@@ -26,11 +26,15 @@ import kalasiris.sweetened as isis
 from .utils import resource_check as rc
 
 
+run_real_files = True
+run_real_files_reason = 'Tests on real files, and runs ISIS.'
+
 # Hardcoding this, but I sure would like a better solution.
 HiRISE_img = Path('test-resources') / 'PSP_010502_2090_RED5_0.img'
 img = HiRISE_img
 
 
+@unittest.skipUnless(run_real_files, run_real_files_reason)
 class TestResources(unittest.TestCase):
     '''Establishes that the test image exists.'''
 
@@ -39,7 +43,8 @@ class TestResources(unittest.TestCase):
         self.assertEqual(truth, test)
 
 
-class Test_hi2isis(unittest.TestCase):
+@unittest.skipUnless(run_real_files, run_real_files_reason)
+class Test_hi2isis_filesystem(unittest.TestCase):
 
     def setUp(self):
         self.img = img
@@ -64,6 +69,7 @@ class Test_hi2isis(unittest.TestCase):
         sweet_img.unlink()
 
 
+@unittest.skipUnless(run_real_files, run_real_files_reason)
 class Test_getkey(unittest.TestCase):
 
     def setUp(self):

@@ -31,7 +31,7 @@ from .utils import resource_check as rc
 # Hardcoding these, but I sure would like a better solution.
 # IsisPreferences = os.path.join('test-resources', 'IsisPreferences')
 HiRISE_img = Path('test-resources') / 'PSP_010502_2090_RED5_0.img'
-run_real_files = False
+run_real_files = True
 run_real_files_reason = 'Tests on real files, and runs ISIS.'
 
 
@@ -77,7 +77,8 @@ class Test_hi2isis_k(unittest.TestCase):
     @patch('kalasiris.k_funcs.isis.hi2isis')
     def test_with_to(self, m_hi2i):
         isis.hi2isis_k('dummy.img', to='dummy.cub')
-        self.assertEqual(m_hi2i.call_args_list, [call('dummy.img', to='dummy.cub')])
+        self.assertEqual(m_hi2i.call_args_list,
+                         [call('dummy.img', to='dummy.cub')])
 
     @patch('kalasiris.k_funcs.isis.hi2isis')
     def test_without_to(self, m_hi2i):

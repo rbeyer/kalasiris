@@ -27,11 +27,15 @@ import kalasiris.kalasiris as isis
 from .utils import resource_check as rc
 
 
+run_real_files = True
+run_real_files_reason = 'Tests on real files, and runs ISIS.'
+
 # Hardcoding this, but I sure would like a better solution.
 HiRISE_img = Path('test-resources') / 'PSP_010502_2090_RED5_0.img'
 img = HiRISE_img
 
 
+@unittest.skipUnless(run_real_files, run_real_files_reason)
 class TestResources(unittest.TestCase):
     '''Establishes that the test image exists.'''
 
@@ -86,6 +90,7 @@ class TestParams(unittest.TestCase):
 
 class Test_get_isis_program_names(unittest.TestCase):
 
+    @unittest.skipUnless(run_real_files, run_real_files_reason)
     def test_get_names(self):
         # for n in gipn():
         #     print(n)
@@ -94,7 +99,7 @@ class Test_get_isis_program_names(unittest.TestCase):
         self.assertIn('cam2map', gipn())
 
 
-# @unittest.skip('Can take a while to run hi2isis.')
+@unittest.skipUnless(run_real_files, run_real_files_reason)
 class Test_hi2isis(unittest.TestCase):
 
     def setUp(self):
@@ -111,6 +116,7 @@ class Test_hi2isis(unittest.TestCase):
         tocube.unlink()
 
 
+@unittest.skipUnless(run_real_files, run_real_files_reason)
 class Test_getkey(unittest.TestCase):
 
     def setUp(self):
@@ -141,6 +147,7 @@ class Test_getkey(unittest.TestCase):
                           'Instrument', 'InstrumentId')
 
 
+@unittest.skipUnless(run_real_files, run_real_files_reason)
 class Test_histat(unittest.TestCase):
 
     def setUp(self):

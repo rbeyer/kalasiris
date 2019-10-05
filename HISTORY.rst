@@ -2,10 +2,12 @@
 History
 =======
 
-1.3.0 (2019-10-??)
+1.3.0 (2019-10-06)
 ------------------
 * Added the cubeit_k() k_function.
 * Added TravisCI tests for ISIS 3.8.1 and 3.9.0
+* Separated tests into those that can run in-memory with mocking, and those that
+  need the filesystem, and ISIS, etc.
 
 
 1.2.0 (2019-10-04)
