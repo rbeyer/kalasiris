@@ -2,6 +2,12 @@
 History
 =======
 
+1.3.0 (2019-10-??)
+------------------
+* Added the cubeit_k() k_function.
+* Added TravisCI tests for ISIS 3.8.1 and 3.9.0
+
+
 1.2.0 (2019-10-04)
 ------------------
 * Added a documentation section to help guide a user to choose between pysis and kalasiris.

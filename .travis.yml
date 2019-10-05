@@ -7,7 +7,8 @@ env:
     # ISISVER=3.6.0 the requirements line for libtiff results in an error
     - ISISVER=3.6.1
     - ISISVER=3.6.2
-    - ISISVER=3.7.1
+    - ISISVER=3.8.1
+    - ISISVER=3.9.0
 
 
 # Here we install Miniconda:
