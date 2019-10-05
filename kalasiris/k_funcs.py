@@ -37,6 +37,7 @@
 
 import tempfile
 import os
+import subprocess
 from pathlib import Path
 
 import kalasiris as isis
@@ -92,6 +93,28 @@ def hist_k(*args, **kwargs) -> str:
     f.close()
 
     return contents
+
+
+def cubeit_k(fromlist: list, **kwargs):
+    '''Takes a list of paths to cubes to operate cubeit on,
+       rather than having the user create a text list.
+    '''
+    list_f = tempfile.NamedTemporaryFile(mode='w', delete=False)
+    for path in fromlist:
+        print(str(path), file=list_f)
+    print('', file=list_f)
+    list_f.close()
+
+    kwargs['fromlist'] = list_f.name
+
+    try:
+        cp = isis.cubeit(**kwargs)
+        os.unlink(list_f.name)
+        return cp
+    except subprocess.CalledProcessError as err:
+        # Ensure clean-up of the temp file we made.
+        os.unlink(list_f.name)
+        raise err
 
 
 def stats_k(*args, **kwargs) -> dict:

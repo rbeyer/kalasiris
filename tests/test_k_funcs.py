@@ -18,9 +18,10 @@
 # limitations under the License.
 
 import contextlib
+import os
 import subprocess
 import unittest
-from unittest.mock import patch, Mock
+from unittest.mock import call, patch, Mock
 from pathlib import Path
 
 import kalasiris as isis
@@ -140,7 +141,7 @@ End_Group
             self.assertEqual(20, len(d))
             self.assertEqual(d['Average'], '6498.477293457')
 
-    @unittest.skip("Tests on a real file, time consuming.")
+    @unittest.skip("Tests on a real file.")
     def test_stats_k_file(self):
         cub = Path('test_stats_k.cub')
         isis.hi2isis(HiRISE_img, to=cub)
@@ -149,5 +150,44 @@ End_Group
         self.assertEqual(d['TotalPixels'], '2048000')
 
         cub.unlink()
+        with contextlib.suppress(FileNotFoundError):
+            Path('print.prt').unlink()
+
+
+class Test_cubeit_k(unittest.TestCase):
+
+    @patch('kalasiris.k_funcs.os.unlink')
+    @patch('kalasiris.k_funcs.isis.cubeit')
+    def test_cubeit_k(self, m_cubeit, m_unlink):
+        filelike = Mock()
+        filelike.name = 'fromlist.txt'
+        with patch('kalasiris.k_funcs.isis.tempfile.NamedTemporaryFile',
+                   return_value=filelike):
+            isis.cubeit_k(['a.cub', 'b.cub', 'c.cub'], to='stacked.cub')
+            self.assertEqual(filelike.mock_calls,
+                             [call.write('a.cub'),
+                              call.write('\n'),
+                              call.write('b.cub'),
+                              call.write('\n'),
+                              call.write('c.cub'),
+                              call.write('\n'),
+                              call.write(''),
+                              call.write('\n'),
+                              call.close()])
+            self.assertEqual(m_cubeit.call_args_list,
+                             [call(fromlist='fromlist.txt', to='stacked.cub')])
+
+    @unittest.skip("Tests on a real file.")
+    def test_cubeit_k_files(self):
+        a_cube = 'test_cubeit_a.cub'
+        isis.makecube(to=a_cube, value=1, samples=2, lines=2, bands=1)
+        b_cube = 'test_cubeit_b.cub'
+        isis.makecube(to=b_cube, value=1, samples=2, lines=2, bands=1)
+        c_cube = 'test_cubeit_c.cub'
+        isis.makecube(to=c_cube, value=1, samples=2, lines=2, bands=1)
+        s_cube = 'test_cubeit_stacked.cub'
+        isis.cubeit_k([a_cube, b_cube, c_cube], to=s_cube)
+        for f in (a_cube, b_cube, c_cube, s_cube):
+            os.unlink(f)
         with contextlib.suppress(FileNotFoundError):
             Path('print.prt').unlink()
