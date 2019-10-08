@@ -2,10 +2,11 @@
 """This module contains the PathSet Class.
 
    Working with ISIS can result in a lot of files to keep track of.
-   The PathSet Class is simply a mutable set that only takes Path
-   objects.  If you need to keep track of a bunch of files (typically
-   to delete them after a set of processing calls), you can use a
-   PathSet to keep track of them, and then delete them, like so::
+   The PathSet Class is simply a mutable set that only takes
+   :class:`pathlib.Path` objects.  If you need to keep track of a
+   bunch of files (typically to delete them after a set of processing
+   calls), you can use a :class:`.PathSet` to keep track of them, and then
+   delete them, like so::
 
     import kalasiris as isis
 
@@ -46,7 +47,7 @@ from pathlib import Path
 
 
 class PathSet(set):
-    """A class for containing a set of Path objects."""
+    """A class for containing a set of :class:`pathlib.Path` objects."""
 
     def __init__(self, iterable=None):
         if iterable:

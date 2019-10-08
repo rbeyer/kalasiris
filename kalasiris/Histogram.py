@@ -26,7 +26,7 @@ class Histogram(collections.abc.Sequence):
 
        The resulting Histogram object primarily behaves like a list, where
        that list represents the rows of the ISIS hist output.  Each of those
-       rows is a ``namedtuple`` which contains the elements of each row,
+       rows is a :func:`collections.namedtuple` which contains the elements of each row,
        referenced by their column names.
 
        The Histogram object also has some dictionary-like capabilities, in
@@ -94,7 +94,8 @@ class Histogram(collections.abc.Sequence):
            top of the file, the second element is a *list* of the
            of the fields that decorate the top of the histogram
            rows, and the third element is a *list* of HistRow
-           namedtuples that represent each row of the hist output.
+           :func:`collections.namedtuple` objects that represent each
+           row of the hist output.
 
            The contents of the file that results from ISIS ``hist``
            look like this::

@@ -2,9 +2,15 @@
 History
 =======
 
+1.?.0 (2019-??-??)
+------------------
+* Did some documentation formatting.
+
+
 1.4.0 (2019-10-08)
 ------------------
 * Added the fromlist module.
+
 
 1.3.0 (2019-10-06)
 ------------------

@@ -35,12 +35,12 @@ from pathlib import Path
 
 
 def print_fl(fromlist: list, file=sys.stdout):
-    '''Works like 'print()', but when given a list, will write out
+    '''Works like :func:`print`, but when given a list, will write out
        that list, one element per line, and then will print a
        final empty line.
 
        This is the format that many ISIS programs which take a
-       'FROMLIST=' parameter need.
+       ``FROMLIST=`` parameter need.
 
        Therefore, if you wanted to create a fromlist file, you
        could do::
@@ -50,8 +50,8 @@ def print_fl(fromlist: list, file=sys.stdout):
 
             isis.cubeit(fromlist='fromlist.txt', to='stacked.cub')
 
-       However, it is more likely that you would use 'fromlist.make()'
-       or the 'fromlist.open_fl()' context manager.
+       However, it is more likely that you would use :func:`.fromlist.make()`
+       or the :class:`.fromlist.open_fl()` context manager.
     '''
     for elem in fromlist:
         print(str(elem), file=file)
@@ -72,7 +72,7 @@ def make(fromlist: list, pathlike=None) -> Path:
            isis.cubeit(fromlist=fromlist_path, to='stacked.cub')
            fromlist_path.unlink()
 
-       However, using the 'fromlist.open_fl()' context manager might
+       However, using the :class:`.fromlist.open_fl()` context manager might
        be even more handy.
     '''
     filelike = None
@@ -89,7 +89,7 @@ def make(fromlist: list, pathlike=None) -> Path:
 
 
 class open_fl():
-    '''This is a context manager that works similarly to open(), but
+    '''This is a context manager that works similarly to :func:`open`, but
        for creating fromlist files.  Use it like this::
 
         with fromlist.open_fl(['a.cub', 'b.cub', 'c.cub']) as f:

@@ -33,15 +33,15 @@ class ISISversion(collections.namedtuple('ISISversion',
                                          ['major', 'minor',
                                           'patch', 'releaselevel',
                                           'date'])):
-    '''This is a custom collections.namedtuple() which can contain ISIS version
+    '''This is a custom :func:`collections.namedtuple` which can contain ISIS version
        information.
 
        The first three elements, major, minor, and patch should be
        integers.  The fourth element, releaselevel, should be the
-       string 'alpha', 'beta', or 'stable' or None.  And the fifth
-       element, date, should be a datetime.date object or None.
-       That's what the functions in this module will return in an ISISversion
-       namedtuple.
+       string 'alpha', 'beta', or 'stable' or *None*.  And the fifth
+       element, date, should be a :class:`datetime.date` object or *None*.
+       That's what the functions in this module will return in an
+       :class:`ISISversion` :func:`collections.namedtuple`.
     '''
 
 
@@ -52,10 +52,10 @@ level_re = re.compile(r"^alpha|beta|stable")
 
 
 def version_info() -> ISISversion:
-    '''Returned named tuple of ISIS version information for the ISIS system
-    underlying kalasiris.  If you want to answer, "What version of ISIS is
-    being used?"  This is the function you're after.  It is modeled after
-    sys.version_info.'''
+    '''Returned :func:`collections.namedtuple` of ISIS version information
+    for the ISIS system underlying kalasiris.  If you want to answer,
+    "What version of ISIS is being used?"  This is the function you're after.
+    It is modeled after :func:`sys.version_info`.'''
     return get_from_file(Path(environ['ISISROOT']) / 'version')
 
 
@@ -63,8 +63,8 @@ def get_from_string(s: str) -> ISISversion:
     '''Read text and parse the contents for ISIS version information.
 
        This should parse ISIS version text as far back as ISIS 3.5.2.0,
-       but possibly earlier.  It will return None values for releaselevel
-       and date if it cannot parse them.  It will raise a ValueError if it
+       but possibly earlier.  It will return *None* values for releaselevel
+       and date if it cannot parse them.  It will raise a :exc:`ValueError` if it
        cannot parse a version number.
     '''
 
