@@ -2,6 +2,10 @@
 History
 =======
 
+1.4.0 (2019-10-08)
+------------------
+* Added the fromlist module.
+
 1.3.0 (2019-10-06)
 ------------------
 * Added the cubeit_k() k_function.

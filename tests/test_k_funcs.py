@@ -21,7 +21,7 @@ import contextlib
 import os
 import subprocess
 import unittest
-from unittest.mock import call, patch, Mock
+from unittest.mock import call, mock_open, patch, Mock
 from pathlib import Path
 
 import kalasiris as isis
@@ -198,26 +198,15 @@ End_Group
 
 class Test_cubeit_k(unittest.TestCase):
 
-    @patch('kalasiris.k_funcs.os.unlink')
     @patch('kalasiris.k_funcs.isis.cubeit')
-    def test_cubeit_k(self, m_cubeit, m_unlink):
-        filelike = Mock()
-        filelike.name = 'fromlist.txt'
-        with patch('kalasiris.k_funcs.isis.tempfile.NamedTemporaryFile',
-                   return_value=filelike):
+    def test_cubeit_k(self, m_cubeit):
+        m_open = mock_open()
+        m_open().name = 'fromlist.txt'
+        with patch('kalasiris.k_funcs.isis.fromlist.open_fl', m_open):
             isis.cubeit_k(['a.cub', 'b.cub', 'c.cub'], to='stacked.cub')
-            self.assertEqual(filelike.mock_calls,
-                             [call.write('a.cub'),
-                              call.write('\n'),
-                              call.write('b.cub'),
-                              call.write('\n'),
-                              call.write('c.cub'),
-                              call.write('\n'),
-                              call.write(''),
-                              call.write('\n'),
-                              call.close()])
+            m_open.assert_called_with(['a.cub', 'b.cub', 'c.cub'])
             self.assertEqual(m_cubeit.call_args_list,
-                             [call(fromlist='fromlist.txt', to='stacked.cub')])
+                             [call(fromlist=m_open().name, to='stacked.cub')])
 
     @unittest.skipUnless(run_real_files, run_real_files_reason)
     def test_cubeit_k_files(self):
