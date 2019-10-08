@@ -24,7 +24,7 @@ from pathlib import Path
 # This file shall have *NO* non-Standard Library dependencies.
 
 # kalasiris library version:
-__version__ = '1.4.0-dev'
+__version__ = '1.4.0'
 
 # These definitions and the use of env= in the subprocess.run calls allow us to
 # run ISIS in a very lean environment.  Of course, users can override with
