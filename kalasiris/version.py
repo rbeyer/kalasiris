@@ -33,8 +33,8 @@ class ISISversion(collections.namedtuple('ISISversion',
                                          ['major', 'minor',
                                           'patch', 'releaselevel',
                                           'date'])):
-    '''This is a custom :func:`collections.namedtuple` which can contain ISIS version
-       information.
+    '''This is a custom :func:`collections.namedtuple` which can
+       contain ISIS version information.
 
        The first three elements, major, minor, and patch should be
        integers.  The fourth element, releaselevel, should be the
@@ -64,8 +64,8 @@ def get_from_string(s: str) -> ISISversion:
 
        This should parse ISIS version text as far back as ISIS 3.5.2.0,
        but possibly earlier.  It will return *None* values for releaselevel
-       and date if it cannot parse them.  It will raise a :exc:`ValueError` if it
-       cannot parse a version number.
+       and date if it cannot parse them.  It will raise a :exc:`ValueError`
+       if it cannot parse a version number.
     '''
 
     # Version Matching

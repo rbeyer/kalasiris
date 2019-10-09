@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 """The ISIS ``cubenorm`` program outputs plain text table information and
    also reads it in, but the format is a very specific fixed-width
-   table format.  A plain :func:`csv.reader` or :func:`csv.DictReader` using the
-   :class:`.cubenormfile.Dialect` object will be able to read the text output
-   of ``cubenorm``, but to write out a file that ``cubenorm`` will read in,
-   you will need to use the :class:`.cubenormfile.writer` or
+   table format.  A plain :func:`csv.reader` or :func:`csv.DictReader` using
+   the :class:`.cubenormfile.Dialect` object will be able to read the text
+   output of ``cubenorm``, but to write out a file that ``cubenorm`` will
+   read in, you will need to use the :class:`.cubenormfile.writer` or
    :class:`.cubenormfile.DictWriter` classes.
 """
 
@@ -39,7 +39,8 @@ fieldwidth['RowCol'] = 8
 
 
 class Dialect(csv.Dialect):
-    '''A :class:`csv.Dialect` for the output of the ISIS ``cubenorm`` program.'''
+    '''A :class:`csv.Dialect` for the output of the ISIS
+       ``cubenorm`` program.'''
     delimiter = ' '
     skipinitialspace = True
     quoting = csv.QUOTE_NONE
@@ -50,8 +51,8 @@ class Dialect(csv.Dialect):
 class writer:
     '''A class for writing out the fixed-width format required by ``cubenorm``.
 
-    The interface is similar to the :class:`csv.writer` class, but does not inheirit
-    from it.'''
+    The interface is similar to the :class:`csv.writer` class, but does not
+    inheirit from it.'''
 
     def __init__(self, f):
         self.file_object = f
