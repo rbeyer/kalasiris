@@ -101,8 +101,8 @@ def cubeit_k(fromlist: list, **kwargs):
     '''Takes a list of paths to cubes to operate cubeit on,
        rather than having the user create a text list.
     '''
-    with isis.fromlist.open_fl(fromlist) as f:
-        kwargs['fromlist'] = f.name
+    with isis.fromlist.temp(fromlist) as f:
+        kwargs['fromlist'] = f
         cp = isis.cubeit(**kwargs)
 
     return cp

@@ -21,7 +21,7 @@ import contextlib
 import os
 import subprocess
 import unittest
-from unittest.mock import call, mock_open, patch, Mock
+from unittest.mock import call, patch, MagicMock, Mock
 from pathlib import Path
 
 import kalasiris as isis
@@ -200,13 +200,15 @@ class Test_cubeit_k(unittest.TestCase):
 
     @patch('kalasiris.k_funcs.isis.cubeit')
     def test_cubeit_k(self, m_cubeit):
-        m_open = mock_open()
-        m_open().name = 'fromlist.txt'
-        with patch('kalasiris.k_funcs.isis.fromlist.open_fl', m_open):
+        from_name = 'temp_fromlist.txt'
+        m_context = Mock(__enter__=Mock(return_value=from_name),
+                         __exit__=Mock())
+        m_temp = MagicMock(return_value=m_context)
+        with patch('kalasiris.k_funcs.isis.fromlist.temp', m_temp):
             isis.cubeit_k(['a.cub', 'b.cub', 'c.cub'], to='stacked.cub')
-            m_open.assert_called_with(['a.cub', 'b.cub', 'c.cub'])
+            m_temp.assert_called_with(['a.cub', 'b.cub', 'c.cub'])
             self.assertEqual(m_cubeit.call_args_list,
-                             [call(fromlist=m_open().name, to='stacked.cub')])
+                             [call(fromlist=from_name, to='stacked.cub')])
 
     @unittest.skipUnless(run_real_files, run_real_files_reason)
     def test_cubeit_k_files(self):

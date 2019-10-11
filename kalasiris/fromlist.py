@@ -19,9 +19,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import builtins
 import os
 import tempfile
 import sys
+import warnings
 from pathlib import Path
 
 # with fromlist.open([file1, file2, file3]) as fl:
@@ -34,7 +36,7 @@ from pathlib import Path
 # fromlist_path = fromlist.make([file1, file2, file3], pathlike='foo')
 
 
-def print_fl(fromlist: list, file=sys.stdout):
+def print(fromlist: list, file=sys.stdout):
     '''Works like :func:`print`, but when given a list, will write out
        that list, one element per line, and then will print a
        final empty line.
@@ -46,16 +48,27 @@ def print_fl(fromlist: list, file=sys.stdout):
        could do::
 
             with open('fromlist.txt', 'w') as f:
-                fromlist.print_fl(['a.cub', 'b.cub', 'c.cub'], file=f)
+                fromlist.print(['a.cub', 'b.cub', 'c.cub'], file=f)
 
             isis.cubeit(fromlist='fromlist.txt', to='stacked.cub')
 
        However, it is more likely that you would use :func:`.fromlist.make()`
-       or the :class:`.fromlist.open_fl()` context manager.
+       or the :class:`.fromlist.temp()` context manager.
     '''
     for elem in fromlist:
-        print(str(elem), file=file)
-    print('', file=file)
+        builtins.print(str(elem), file=file)
+    builtins.print('', file=file)
+
+
+def print_fl(fromlist: list, file=sys.stdout):
+    '''Synonym for :func:`.fromlist.print()`
+
+       *This function is deprecated, and may be removed
+       at the next major patch.*
+    '''
+    warnings.warn('Original syntax, may be removed at next major patch. '
+                  'Use fromlist.print() instead.', DeprecationWarning)
+    print(fromlist, file)
 
 
 def make(fromlist: list, pathlike=None) -> Path:
@@ -72,7 +85,7 @@ def make(fromlist: list, pathlike=None) -> Path:
            isis.cubeit(fromlist=fromlist_path, to='stacked.cub')
            fromlist_path.unlink()
 
-       However, using the :class:`.fromlist.open_fl()` context manager might
+       However, using the :class:`.fromlist.temp()` context manager might
        be even more handy.
     '''
     filelike = None
@@ -82,7 +95,7 @@ def make(fromlist: list, pathlike=None) -> Path:
     else:
         filelike = open(pathlike, mode=mode)
 
-    print_fl(fromlist, file=filelike)
+    print(fromlist, file=filelike)
     filelike.close()
 
     return Path(filelike.name)
@@ -93,8 +106,15 @@ class open_fl():
        for creating fromlist files.  Use it like this::
 
         with fromlist.open_fl(['a.cub', 'b.cub', 'c.cub']) as f:
-            isis.cubeit(fromlist=f, to='stacked.cub')
+            isis.cubeit(fromlist=f.name, to='stacked.cub')
+
+        Its probably better to use :class:`.fromlist.temp(), however.
+
+        *This context manager is deprecated, and may be removed
+        at the next major patch.*`
     '''
+    warnings.warn('Original syntax, may be removed at next major patch. '
+                  'Use fromlist.temp() instead.', DeprecationWarning)
 
     def __init__(self, fromlist: list, pathlike=None):
         self.fromlist = fromlist
@@ -115,3 +135,25 @@ class open_fl():
             self.file.close()
         if self.temp:
             os.unlink(self.file.name)
+
+
+class temp():
+    '''This is a context manager that creates a temporary
+       fromlist file and then gets rid of it for you.
+       Use it like this::
+
+        with fromlist.temp(['a.cub', 'b.cub', 'c.cub']) as f:
+            isis.cubeit(fromlist=f, to='stacked.cub')
+
+        The object that is bound to the *as* clause of the with
+        statement is a :class:`pathlib.Path()`.
+    '''
+
+    def __init__(self, fromlist: list):
+        self.path = make(fromlist)
+
+    def __enter__(self) -> Path:
+        return self.path
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.path.unlink()

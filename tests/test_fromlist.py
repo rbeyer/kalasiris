@@ -35,8 +35,16 @@ class TestFromList(unittest.TestCase):
     def setUp(self):
         self.list = ['a.cub', 'b.cub', 'c.cub']
 
-    @patch('kalasiris.fromlist.print')
+    @patch('kalasiris.fromlist.builtins.print')
     def test_print(self, m_print):
+        isis.fromlist.print(self.list)
+        self.assertEqual(m_print.call_args_list[0][0][0], self.list[0])
+        self.assertEqual(m_print.call_args_list[1][0][0], self.list[1])
+        self.assertEqual(m_print.call_args_list[2][0][0], self.list[2])
+        self.assertEqual(m_print.call_args_list[3][0][0], '')
+
+    @patch('kalasiris.fromlist.builtins.print')
+    def test_print_fl(self, m_print):
         isis.fromlist.print_fl(self.list)
         self.assertEqual(m_print.call_args_list[0][0][0], self.list[0])
         self.assertEqual(m_print.call_args_list[1][0][0], self.list[1])
@@ -77,6 +85,12 @@ class TestFromList_filesystem(unittest.TestCase):
 
     def test_print(self):
         with open(self.path, 'w') as f:
+            isis.fromlist.print(self.list, f)
+        self.assertTrue(self.path.exists())
+        self.assertEqual(self.path.read_text(), self.text)
+
+    def test_print_fl(self):
+        with open(self.path, 'w') as f:
             isis.fromlist.print_fl(self.list, f)
         self.assertTrue(self.path.exists())
         self.assertEqual(self.path.read_text(), self.text)
@@ -102,3 +116,10 @@ class TestFromList_filesystem(unittest.TestCase):
         with isis.fromlist.open_fl(self.list, self.path) as f:
             self.assertEqual(f.read(), self.text)
         self.assertTrue(self.path.exists())
+
+    def test_temp(self):
+        with isis.fromlist.temp(self.list) as f:
+            self.assertEqual(f.read_text(), self.text)
+            filename = f
+            self.assertTrue(filename.exists())
+        self.assertFalse(filename.exists())
