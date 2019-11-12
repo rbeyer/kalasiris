@@ -2,10 +2,11 @@
 History
 =======
 
-1.?.0 (2019-??-??)
+1.5.0 (2019-??-??)
 ------------------
 * Did some documentation formatting.
 * Streamlined the fromlist module.
+* Put in a protection from accidentally adding a Path to a PathSet twice.
 
 
 1.4.0 (2019-10-08)

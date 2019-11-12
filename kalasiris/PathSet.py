@@ -62,6 +62,8 @@ class PathSet(set):
         '''This variation on add() returns the element.'''
         if not isinstance(elem, Path):
             raise TypeError('only accepts pathlib.Path objects')
+        if elem in self:
+            raise ValueError(f'The {elem} object is already a member of the PathSet.')
         super().add(elem)
         return elem
 

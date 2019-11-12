@@ -57,6 +57,13 @@ class TestPathSet(unittest.TestCase):
         added_path = ps.add(path1)
         self.assertEqual(path1, added_path)
 
+    def test_add_Error(self):
+        ps = isis.PathSet()
+        p0 = self.paths[0]
+        ps.add(p0)
+        self.assertRaises(TypeError, ps.add, 'not a Path')
+        self.assertRaises(ValueError, ps.add, p0)
+
     @unittest.skipUnless(run_real_files, run_real_files_reason)
     def test_unlink(self):
         ps = isis.PathSet(self.paths)
