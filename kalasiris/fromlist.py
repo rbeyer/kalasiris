@@ -38,8 +38,7 @@ from pathlib import Path
 
 def print(fromlist: list, file=sys.stdout):
     '''Works like :func:`print`, but when given a list, will write out
-       that list, one element per line, and then will print a
-       final empty line.
+       that list, one element per line.
 
        This is the format that many ISIS programs which take a
        ``FROMLIST=`` parameter need.
@@ -57,7 +56,6 @@ def print(fromlist: list, file=sys.stdout):
     '''
     for elem in fromlist:
         builtins.print(str(elem), file=file)
-    builtins.print('', file=file)
 
 
 def print_fl(fromlist: list, file=sys.stdout):

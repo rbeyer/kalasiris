@@ -41,7 +41,6 @@ class TestFromList(unittest.TestCase):
         self.assertEqual(m_print.call_args_list[0][0][0], self.list[0])
         self.assertEqual(m_print.call_args_list[1][0][0], self.list[1])
         self.assertEqual(m_print.call_args_list[2][0][0], self.list[2])
-        self.assertEqual(m_print.call_args_list[3][0][0], '')
 
     @patch('kalasiris.fromlist.builtins.print')
     def test_print_fl(self, m_print):
@@ -49,7 +48,6 @@ class TestFromList(unittest.TestCase):
         self.assertEqual(m_print.call_args_list[0][0][0], self.list[0])
         self.assertEqual(m_print.call_args_list[1][0][0], self.list[1])
         self.assertEqual(m_print.call_args_list[2][0][0], self.list[2])
-        self.assertEqual(m_print.call_args_list[3][0][0], '')
 
     @patch('kalasiris.fromlist.print_fl')
     def test_make(self, m_print_fl):
@@ -76,7 +74,7 @@ class TestFromList_filesystem(unittest.TestCase):
 
     def setUp(self):
         self.list = ['a.cub', 'b.cub', 'c.cub']
-        self.text = 'a.cub\nb.cub\nc.cub\n\n'
+        self.text = 'a.cub\nb.cub\nc.cub\n'
         self.path = Path('test_fromlist.txt')
 
     def tearDown(self):

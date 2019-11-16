@@ -2,7 +2,7 @@
 History
 =======
 
-1.5.0 (2019-??-??)
+1.5.0 (2019-11-16)
 ------------------
 * Did some documentation formatting.
 * Streamlined the fromlist module.
