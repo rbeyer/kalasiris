@@ -143,8 +143,8 @@ class temp():
         with fromlist.temp(['a.cub', 'b.cub', 'c.cub']) as f:
             isis.cubeit(fromlist=f, to='stacked.cub')
 
-        The object that is bound to the *as* clause of the with
-        statement is a :class:`pathlib.Path()`.
+       The object that is bound to the *as* clause of the with
+       statement is a :class:`pathlib.Path()`.
     '''
 
     def __init__(self, fromlist: list):
