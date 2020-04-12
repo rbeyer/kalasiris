@@ -1,19 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2019, Ross A. Beyer (rbeyer@seti.org)
+# Copyright 2019-2020, Ross A. Beyer (rbeyer@seti.org)
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Reuse is permitted under the terms of the license.
+# The AUTHORS file and the LICENSE file are at the
+# top level of this library.
 
 import collections
 import csv
@@ -24,14 +16,14 @@ from .k_funcs import hist_k
 class Histogram(collections.abc.Sequence):
     """Reads the output from ISIS hist and provides it as a sequence.
 
-       The resulting Histogram object primarily behaves like a list, where
-       that list represents the rows of the ISIS hist output.  Each of those
-       rows is a :func:`collections.namedtuple` which contains the elements
-       of each row, referenced by their column names.
+    The resulting Histogram object primarily behaves like a list, where
+    that list represents the rows of the ISIS hist output.  Each of those
+    rows is a :func:`collections.namedtuple` which contains the elements
+    of each row, referenced by their column names.
 
-       The Histogram object also has some dictionary-like capabilities, in
-       order to get at the values listed in the ISIS hist output in the
-       section before the numerical output.
+    The Histogram object also has some dictionary-like capabilities, in
+    order to get at the values listed in the ISIS hist output in the
+    section before the numerical output.
     """
 
     def __init__(self, histinfo):
@@ -74,74 +66,74 @@ class Histogram(collections.abc.Sequence):
             return(item in self.hist_list)
 
     def keys(self):
-        '''Gets the keys from the initial portion of the hist output file.
+        """Gets the keys from the initial portion of the hist output file.
 
            These will be items like 'Cube', 'Band', 'Average', etc.
-        '''
+        """
         return self.dictionary.keys()
 
     def values(self):
-        '''Gets the values from the initial portion of the hist output file.'''
+        """Gets the values from the initial portion of the hist output file."""
         return self.dictionary.values()
 
     @staticmethod
     def parse(histinfo: str) -> tuple:
-        '''Takes a string (expecting the output of ISIS ``hist``), and
-           parses the output.
+        """Takes a string (expecting the output of ISIS ``hist``), and
+        parses the output.
 
-           A three-element namedtuple is returned: the first element
-           is a *dictionary* of the name:value information at the
-           top of the file, the second element is a *list* of the
-           of the fields that decorate the top of the histogram
-           rows, and the third element is a *list* of HistRow
-           :func:`collections.namedtuple` objects that represent each
-           row of the hist output.
+        A three-element namedtuple is returned: the first element
+        is a *dictionary* of the name:value information at the
+        top of the file, the second element is a *list* of the
+        of the fields that decorate the top of the histogram
+        rows, and the third element is a *list* of HistRow
+        :func:`collections.namedtuple` objects that represent each
+        row of the hist output.
 
-           The contents of the file that results from ISIS ``hist``
-           look like this::
+        The contents of the file that results from ISIS ``hist``
+        look like this::
 
-                Cube:           PSP_010502_2090_RED5_0.EDR_Stats.cub
-                Band:           1
-                Average:        6490.68
-                [... other lines like this ...]
-                His Pixels:      0
-                Hrs Pixels:      0
-
-
-                DN,Pixels,CumulativePixels,Percent,CumulativePercent
-                3889,1,1,4.88281e-05,4.88281e-05
-                3924,1,2,4.88281e-05,9.76563e-05
-                3960,2,4,9.76563e-05,0.000195313
-                [... more comma-separated lines like above ...]
-
-           But this function sees it like this::
-
-                k: v
-                k: v
-                k: v
-                [... other lines like this ...]
-                k: v
-                k: v
+             Cube:           PSP_010502_2090_RED5_0.EDR_Stats.cub
+             Band:           1
+             Average:        6490.68
+             [... other lines like this ...]
+             His Pixels:      0
+             Hrs Pixels:      0
 
 
-                h,h,h,h,h
-                n,n,n,n,n
-                n,n,n,n,n
-                n,n,n,n,n
-                [... more comma-separated lines like above ...]
+             DN,Pixels,CumulativePixels,Percent,CumulativePercent
+             3889,1,1,4.88281e-05,4.88281e-05
+             3924,1,2,4.88281e-05,9.76563e-05
+             3960,2,4,9.76563e-05,0.000195313
+             [... more comma-separated lines like above ...]
 
-           Where each of the letters above is a string value that the parser
-           reads.
+        But this function sees it like this::
 
-           First, it takes all of the ``k`` and ``v`` elements and saves them
-           as the keys and values in the returned dictionary.
+             k: v
+             k: v
+             k: v
+             [... other lines like this ...]
+             k: v
+             k: v
 
-           Second, the ``h`` elements are returned them as the list of
-           fieldnames.
 
-           Third, it reads the lines with ``n`` and stores them as
-           ``namedtuples`` in the returned list.
-        '''
+             h,h,h,h,h
+             n,n,n,n,n
+             n,n,n,n,n
+             n,n,n,n,n
+             [... more comma-separated lines like above ...]
+
+        Where each of the letters above is a string value that the parser
+        reads.
+
+        First, it takes all of the ``k`` and ``v`` elements and saves them
+        as the keys and values in the returned dictionary.
+
+        Second, the ``h`` elements are returned them as the list of
+        fieldnames.
+
+        Third, it reads the lines with ``n`` and stores them as
+        ``namedtuples`` in the returned list.
+        """
         d = dict()
         fieldnames = []
         hist_rows = []

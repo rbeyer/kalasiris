@@ -28,7 +28,7 @@ functionality for the `Integrated Software for Imagers and Spectrometers
 (ISIS) <https://isis.astrogeology.usgs.gov>`_.
 
 
-* Free software: Apache Software License 2.0
+* Free software: BSD-3-Clause License
 * Documentation: https://kalasiris.readthedocs.io.
 
 
@@ -38,7 +38,7 @@ Features
 * Primarily a very lightweight wrapper around Python's subprocess
   module to allow easy calling of ISIS programs in the shell from
   within Python.
-* Calling compatibility with pysis_ (but not return types)
+* Calling compatibility with pysis_ (and emulation of return types)
 * Guaranteed to work with ISIS 3.6.0+, probably works with ISIS 3+
 * Only guaranteed to work with Python 3.6.0+
 

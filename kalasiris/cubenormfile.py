@@ -1,27 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """The ISIS ``cubenorm`` program outputs plain text table information and
-   also reads it in, but the format is a very specific fixed-width
-   table format.  A plain :func:`csv.reader` or :func:`csv.DictReader` using
-   the :class:`.cubenormfile.Dialect` object will be able to read the text
-   output of ``cubenorm``, but to write out a file that ``cubenorm`` will
-   read in, you will need to use the :class:`.cubenormfile.writer` or
-   :class:`.cubenormfile.DictWriter` classes.
+also reads it in, but the format is a very specific fixed-width
+table format.  A plain :func:`csv.reader` or :func:`csv.DictReader` using
+the :class:`.cubenormfile.Dialect` object will be able to read the text
+output of ``cubenorm``, but to write out a file that ``cubenorm`` will
+read in, you will need to use the :class:`.cubenormfile.writer` or
+:class:`.cubenormfile.DictWriter` classes.
 """
 
-# Copyright 2019, Ross A. Beyer (rbeyer@seti.org)
+# Copyright 2019-2020, Ross A. Beyer (rbeyer@seti.org)
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Reuse is permitted under the terms of the license.
+# The AUTHORS file and the LICENSE file are at the
+# top level of this library.
 
 import csv
 
@@ -39,8 +31,8 @@ fieldwidth['RowCol'] = 8
 
 
 class Dialect(csv.Dialect):
-    '''A :class:`csv.Dialect` for the output of the ISIS
-       ``cubenorm`` program.'''
+    """A :class:`csv.Dialect` for the output of the ISIS
+    ``cubenorm`` program."""
     delimiter = ' '
     skipinitialspace = True
     quoting = csv.QUOTE_NONE
@@ -49,10 +41,10 @@ class Dialect(csv.Dialect):
 
 
 class writer:
-    '''A class for writing out the fixed-width format required by ``cubenorm``.
+    """A class for writing out the fixed-width format required by ``cubenorm``.
 
     The interface is similar to the :class:`csv.writer` class, but does not
-    inheirit from it.'''
+    inheirit from it."""
 
     def __init__(self, f):
         self.file_object = f
@@ -70,12 +62,12 @@ class writer:
             self.writerow(r)
 
     def writeheader(self):
-        '''A convenence function, since the fieldnames are pre-defined.'''
+        """A convenence function, since the fieldnames are pre-defined."""
         self.writerow(fieldnames)
 
 
 class DictWriter(csv.DictWriter):
-    '''A DictWriter for ``cubenorm`` files.'''
+    """A DictWriter for ``cubenorm`` files."""
 
     def __init__(self, f, restval="", extrasaction="raise",
                  dialect=Dialect, *args, **kwds):

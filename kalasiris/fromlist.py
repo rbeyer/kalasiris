@@ -1,23 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Many ISIS programs require the creation of a fromlist file for input.
-   These functions and classes provide convenient mechanisms for
-   creating those files, or simply creating temporary versions.
+These functions and classes provide convenient mechanisms for
+creating those files, or simply creating temporary versions.
 """
 
-# Copyright 2019, Ross A. Beyer (rbeyer@seti.org)
+# Copyright 2019-2020, Ross A. Beyer (rbeyer@seti.org)
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Reuse is permitted under the terms of the license.
+# The AUTHORS file and the LICENSE file are at the
+# top level of this library.
 
 import builtins
 import os
@@ -37,55 +29,55 @@ from pathlib import Path
 
 
 def print(fromlist: list, file=sys.stdout):
-    '''Works like :func:`print`, but when given a list, will write out
-       that list, one element per line.
+    """Works like :func:`print`, but when given a list, will write out
+    that list, one element per line.
 
-       This is the format that many ISIS programs which take a
-       ``FROMLIST=`` parameter need.
+    This is the format that many ISIS programs which take a
+    ``FROMLIST=`` parameter need.
 
-       Therefore, if you wanted to create a fromlist file, you
-       could do::
+    Therefore, if you wanted to create a fromlist file, you
+    could do::
 
-            with open('fromlist.txt', 'w') as f:
-                fromlist.print(['a.cub', 'b.cub', 'c.cub'], file=f)
+         with open('fromlist.txt', 'w') as f:
+             fromlist.print(['a.cub', 'b.cub', 'c.cub'], file=f)
 
-            isis.cubeit(fromlist='fromlist.txt', to='stacked.cub')
+         isis.cubeit(fromlist='fromlist.txt', to='stacked.cub')
 
-       However, it is more likely that you would use :func:`.fromlist.make()`
-       or the :class:`.fromlist.temp()` context manager.
-    '''
+    However, it is more likely that you would use :func:`.fromlist.make()`
+    or the :class:`.fromlist.temp()` context manager.
+    """
     for elem in fromlist:
         builtins.print(str(elem), file=file)
 
 
 def print_fl(fromlist: list, file=sys.stdout):
-    '''Synonym for :func:`.fromlist.print()`
+    """Synonym for :func:`.fromlist.print()`
 
-       *This function is deprecated, and may be removed
-       at the next major patch.*
-    '''
+    *This function is deprecated, and may be removed
+    at the next major patch.*
+    """
     warnings.warn('Original syntax, may be removed at next major patch. '
                   'Use fromlist.print() instead.', DeprecationWarning)
     print(fromlist, file)
 
 
 def make(fromlist: list, pathlike=None) -> Path:
-    '''Creates a file with the fromlist elements one per line.
+    """Creates a file with the fromlist elements one per line.
 
-       If *pathlike* is given, that will be the path used, otherwise
-       create a temporary file and return its path.
+    If *pathlike* is given, that will be the path used, otherwise
+    create a temporary file and return its path.
 
-       You're responsible for deleting it after you're done.
+    You're responsible for deleting it after you're done.
 
-       You can use it like this::
+    You can use it like this::
 
-           fromlist_path = fromlist.make(['a.cub', 'b.cub', 'c.cub'])
-           isis.cubeit(fromlist=fromlist_path, to='stacked.cub')
-           fromlist_path.unlink()
+        fromlist_path = fromlist.make(['a.cub', 'b.cub', 'c.cub'])
+        isis.cubeit(fromlist=fromlist_path, to='stacked.cub')
+        fromlist_path.unlink()
 
-       However, using the :class:`.fromlist.temp()` context manager might
-       be even more handy.
-    '''
+    However, using the :class:`.fromlist.temp()` context manager might
+    be even more handy.
+    """
     filelike = None
     mode = 'wt'
     if pathlike is None:
@@ -100,19 +92,19 @@ def make(fromlist: list, pathlike=None) -> Path:
 
 
 class open_fl():
-    '''This is a context manager that works similarly to :func:`open`, but
-       for creating fromlist files.  Use it like this::
+    """This is a context manager that works similarly to :func:`open`, but
+    for creating fromlist files.  Use it like this::
 
-        with fromlist.open_fl(['a.cub', 'b.cub', 'c.cub']) as f:
-            isis.cubeit(fromlist=f.name, to='stacked.cub')
+     with fromlist.open_fl(['a.cub', 'b.cub', 'c.cub']) as f:
+         isis.cubeit(fromlist=f.name, to='stacked.cub')
 
-        Its probably better to use :class:`.fromlist.temp(), however.
+    Its probably better to use :class:`.fromlist.temp(), however.
 
-        *This context manager is deprecated, and may be removed
-        at the next major patch.*`
-    '''
-    warnings.warn('Original syntax, may be removed at next major patch. '
-                  'Use fromlist.temp() instead.', DeprecationWarning)
+    *This context manager is deprecated, and may be removed
+    at the next major patch.*`
+    """
+    warnings.warn("Original syntax, may be removed at next major patch. "
+                  "Use fromlist.temp() instead.", DeprecationWarning)
 
     def __init__(self, fromlist: list, pathlike=None):
         self.fromlist = fromlist
@@ -136,16 +128,16 @@ class open_fl():
 
 
 class temp():
-    '''This is a context manager that creates a temporary
-       fromlist file and then gets rid of it for you.
-       Use it like this::
+    """This is a context manager that creates a temporary
+    fromlist file and then gets rid of it for you.
+    Use it like this::
 
-        with fromlist.temp(['a.cub', 'b.cub', 'c.cub']) as f:
-            isis.cubeit(fromlist=f, to='stacked.cub')
+     with fromlist.temp(['a.cub', 'b.cub', 'c.cub']) as f:
+         isis.cubeit(fromlist=f, to='stacked.cub')
 
-       The object that is bound to the *as* clause of the with
-       statement is a :class:`pathlib.Path()`.
-    '''
+    The object that is bound to the *as* clause of the with
+    statement is a :class:`pathlib.Path()`.
+    """
 
     def __init__(self, fromlist: list):
         self.path = make(fromlist)

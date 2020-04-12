@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Tests for `sweetened` module."""
+"""Tests for the pysis emulation module."""
 
-# Copyright 2019-2020, Ross A. Beyer (rbeyer@seti.org)
+# Copyright 2020, Ross A. Beyer (rbeyer@seti.org)
 #
 # Reuse is permitted under the terms of the license.
 # The AUTHORS file and the LICENSE file are at the
 # top level of this library.
 
 import contextlib
-import shutil
+# import subprocess
 import unittest
 from pathlib import Path
 
-import kalasiris.sweetened as isis
+import kalasiris.pysis as pysis
 from .utils import resource_check as rc
 
 
@@ -35,8 +35,15 @@ class TestResources(unittest.TestCase):
         self.assertEqual(truth, test)
 
 
+class Test_get_isis_program_names(unittest.TestCase):
+
+    @unittest.skipUnless(run_real_files, run_real_files_reason)
+    def test_get_names(self):
+        self.assertIn('cam2map', dir(pysis))
+
+
 @unittest.skipUnless(run_real_files, run_real_files_reason)
-class Test_hi2isis_filesystem(unittest.TestCase):
+class Test_hi2isis(unittest.TestCase):
 
     def setUp(self):
         self.img = img
@@ -45,35 +52,39 @@ class Test_hi2isis_filesystem(unittest.TestCase):
         with contextlib.suppress(FileNotFoundError):
             Path('print.prt').unlink()
 
-    def test_hi2isis_with_to(self):
-        tocube = Path('test_sweetened_hi2isis.cub')
-        isis.hi2isis(self.img, to=tocube)
+    def test_hi2isis(self):
+        tocube = Path('test_hi2isis.cub')
+        pysis.hi2isis(self.img, to=tocube)
         self.assertTrue(tocube.is_file())
         tocube.unlink()
-
-    def test_hi2isis_without_to(self):
-        sweet_img = self.img.with_name('sweet.img')
-        shutil.copy(self.img, sweet_img)
-        tocube = sweet_img.with_suffix('.cub')
-        isis.hi2isis(sweet_img)
-        self.assertTrue(tocube.is_file())
-        tocube.unlink()
-        sweet_img.unlink()
 
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)
 class Test_getkey(unittest.TestCase):
 
     def setUp(self):
-        self.cub = Path('test_sweetened_getkey.cub')
-        isis.hi2isis(HiRISE_img, to=self.cub)
+        self.cub = Path('test_getkey.cub')
+        pysis.hi2isis(img, to=self.cub)
 
     def tearDown(self):
         self.cub.unlink()
         with contextlib.suppress(FileNotFoundError):
             Path('print.prt').unlink()
 
-    def test_getkey_k(self):
-        truth = 'HIRISE'
-        key = isis.getkey(self.cub, 'Instrument', 'InstrumentId')
+    def test_getkey(self):
+        truth = b'HIRISE\n'
+        key = pysis.getkey(self.cub, grpname='Instrument',
+                           keyword='InstrumentId')
         self.assertEqual(truth, key)
+
+    def test_getkey_fail(self):
+        # Pixels doesn't have InstrumentId, should fail
+        self.assertRaises(pysis.ProcessError,
+                          pysis.getkey, self.cub,
+                          grpname='Pixels', keyword='InstrumentId')
+
+    def test_getkey_k_fail(self):
+        # Calling getkey with getkey_k syntax will fail
+        self.assertRaises(IndexError,
+                          pysis.getkey, self.cub,
+                          'Instrument', 'InstrumentId')

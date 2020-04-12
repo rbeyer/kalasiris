@@ -2,6 +2,12 @@
 History
 =======
 
+1.6.0 (2020-4-12)
+------------------
+* Provided pysis return type and exception emulation.
+* Switched from Apache 2 to the BSD-3-Clause license.
+
+
 1.5.0 (2019-11-16)
 ------------------
 * Did some documentation formatting.

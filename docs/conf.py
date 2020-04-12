@@ -70,7 +70,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'kalasiris'
-copyright = u"2019, Ross A. Beyer"
+copyright = u"2019-2020, kalasiris developers"
 author = u"Ross A. Beyer"
 
 # The version info for the project you're documenting, acts as replacement

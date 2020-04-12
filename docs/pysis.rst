@@ -21,7 +21,8 @@ we call the kalasiris core) can fit in one Python file (of about
 very programmatically simple.  This makes it easy to build more
 complicated structures on top of.
 
-There is also some compatibility with pysis_ calling syntax, see below.
+There is also some compatibility with pysis_ calling syntax, and a
+way to 'emulate' pysis with kalasiris for older code you might have.
 
 
 Differences
@@ -88,14 +89,25 @@ the above could also be written::
 
     kalasiris.stats(cubefile)
 
+If you have some code that was written with pysis_ that you would
+like to slowly switch over to kalasiris, but just changing ``from
+pysis import isis`` to ``import kalasiris as isis`` resulted in a
+bunch of errors, then we have a crutch for you.  The kalasiris
+library has a pysis emulation module that emulates pysis return
+types and exceptions.  To give this a try, replace your ``from pysis
+import isis`` to ``import kalasiris.pysis as isis`` and see if that
+works for you.  This emulation is new, so may be buggy.
+
 
 Which to use?
 -------------
 
-So, given all this, which should you use?  We can't really answer that in
-an unbiased way, so you probably should get a second opinion, but here goes:
+Given all this, which should you use?  We can't really answer that
+in an unbiased way, so you probably should get a second opinion,
+but here goes:
 
-If you are already using pysis_ and your software is working, don't switch.
+If you are already using pysis_ and your software is working, don't
+switch.
 
 If you are programming exclusively in Python 2, use pysis_ because
 kalasiris won't work under Python 2 (but really, start using Python
