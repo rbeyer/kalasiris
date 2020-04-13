@@ -52,6 +52,15 @@ in your environment and how to use kalasiris with it, can be found
 in the documentation.
 
 
+Citing in your work
+-------------------
+
+Beyer, R. A. 2020. Kalasiris, a Python Library for Calling ISIS
+Programs. 51st Lunar and Planetary Science Conference, not held due
+to COVID-19, Abstract #2441. `ADS URL
+<https://ui.adsabs.harvard.edu/abs/2020LPI....51.2441B>`_
+
+
 Quickstart
 ----------
 
