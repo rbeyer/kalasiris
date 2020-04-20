@@ -2,7 +2,11 @@
 History
 =======
 
-1.6.0 (2020-4-12)
+1.7.0 (2020-04-??)
+------------------
+* Added some fucntions to read table data from cube files.
+
+1.6.0 (2020-04-12)
 ------------------
 * Provided pysis return type and exception emulation.
 * Switched from Apache 2 to the BSD-3-Clause license.
