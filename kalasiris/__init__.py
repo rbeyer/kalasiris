@@ -10,5 +10,6 @@ from .kalasiris import *                      # noqa: F401,F403
 from .k_funcs import *                        # noqa: F401,F403
 from .Histogram import Histogram              # noqa: F401
 from .PathSet import PathSet                  # noqa: F401
+import kalasiris.cube                         # noqa: F401
 import kalasiris.cubenormfile                 # noqa: F401
 import kalasiris.fromlist                     # noqa: F401

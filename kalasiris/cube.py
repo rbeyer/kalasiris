@@ -11,11 +11,22 @@ ISIS cube files.
 # top level of this library.
 
 import os
+import struct
+from collections import abc
+from warnings import warn
 
 from .kalasiris import getkey
 
+data_sizes = {'Integer': 4,
+              'Double': 8,
+              'Real': 4,
+              'Text': 1}
+data_formats = {'Integer': 'i',
+                'Double': 'd',
+                'Real': 'f'}
 
-def _get_start_size(d: dict) -> tuple(int, int):
+
+def _get_start_size(d: dict) -> tuple((int, int)):
     """Returns a tuple of ints that represent the true start byte and size
     based on the provided dict.
 
@@ -32,10 +43,73 @@ def _get_start_size(d: dict) -> tuple(int, int):
     return (start, size)
 
 
+def get_startsize_from(label=None, table_name=None,
+                       cube_path=None) -> tuple((int, int)):
+    """Returns a tuple of ints that represent the true start byte and size
+    based on the provided *label* or combination of *table_name* and
+    *cube_path*.
+
+    Either *label* or *table_name* and *cube_path* are needed.  If
+    neither a *label* nor a *table_name* is provided, then this
+    function will raise a ValueError.  If both are provided, *label*
+    will take precedence and *table_name* will be ignored.
+
+    *label* is a dict which must contain a *StartByte* key and a *Bytes*
+    key whose values can be converted to int (if not already).  These
+    values should be those in the cube file label for the table.
+
+    The name of the table as a string can be provided via *table_name*
+    and the ISIS getkey function will be applied to the file at
+    *cube_path* to extract the needed StartByte and Bytes values
+    from the label.  However, if there is more than one table in
+    the cube, getkey can only find the first, and a ValueError might
+    be returned.
+
+    If the pvl library is available, this function will use it to find
+    *all* of the tables in the *cube_path* labels and will find the one
+    named by *table_name* if it is present.
+    """
+    if label is None and table_name is None:
+        raise ValueError("Neither label nor table_name were provided.")
+
+    if label is not None:
+        return _get_start_size(label)
+    else:
+        try:
+            import pvl
+            label = pvl.load(cube_path)
+            for t in label.getlist('Table'):
+                if t['Name'] == table_name:
+                    return _get_start_size(t)
+            else:
+                raise KeyError(f"There is no table '{table_name}' in the "
+                               f"labels of {cube_path}")
+        except ImportError:
+            name = getkey(cube_path, objname='Table',
+                          keyword='Name').stdout.strip()
+            if table_name == name:
+                return _get_start_size(
+                    {'StartByte':
+                     getkey(cube_path, objname='Table',
+                            keyword='StartByte').stdout.strip(),
+                     'Bytes':
+                     getkey(cube_path, objname='Table',
+                            keyword='Bytes').stdout.strip()})
+            else:
+                raise KeyError(f"The first table in {cube_path} that "
+                               "ISIS getkey could find is not named "
+                               f"{table_name} it is {name}.  If your "
+                               "cube has more than one table, you can "
+                               "provide the info via the label dict "
+                               "instead of table_name, or if you install "
+                               "the pvl Python library then this function "
+                               "can use it to find all of the tables.")
+
+
 # This function is derived from this commit dated Sep 24, 2019:
 # https://github.com/USGS-Astrogeology/ale/commit/add5368ba46b2c911de9515afeaccc4d1c981000
 def read_table_data(cube_path: os.PathLike,
-                    label: None, table_name: None) -> bytes:
+                    label=None, table_name=None) -> bytes:
     """Returns a bytes object with the contents read from the file at
     *cube_path* based on the elements provided in the *label* or
     *table_name*.
@@ -56,43 +130,17 @@ def read_table_data(cube_path: os.PathLike,
     ValueError might be returned.
 
     If the pvl library is available, this function will use it to find
-    *all* of the tables in the *cube_path* labels.
+    *all* of the tables in the *cube_path* labels and will find the one
+    named by *table_name* if it is present.
     """
 
-    if label is None and table_name is None:
-        raise ValueError("Neither label nor table_name were provided.")
+    (start, size) = get_startsize_from(label, table_name, cube_path)
 
-    if label is not None:
-        start, size = _get_start_size(label)
-    else:
-        try:
-            import pvl
-            label = pvl.load(cube_path)
-            for t in label.getlist('Table'):
-                if t['Name'] == table_name:
-                    start, size = _get_start_size(t)
-                    break
-        except ImportError:
-            name = getkey(cube_path, objname='Table', keyword='Name')
-            if table_name == name:
-                start, size = _get_start_size(
-                    {'StartByte':
-                     getkey(cube_path, objname='Table', keyword='StartByte'),
-                     'Bytes':
-                     getkey(cube_path, objname='Table', keyword='Bytes')})
-            else:
-                raise ValueError(f"The first table in {cube_path} that "
-                                 "ISIS getkey could find is not named "
-                                 f"{table_name} it is {name}.  If your "
-                                 "cube has more than one table, you can "
-                                 "provide the info via the label dict "
-                                 "instead of table_name, or if you install "
-                                 "the pvl Python library then this function "
-                                 "can use it to find all of the tables.")
+    with open(cube_path, "rb") as cubehandle:
+        cubehandle.seek(start)
+        table = cubehandle.read(size)
 
-    cubehandle = open(cube, "rb")
-    cubehandle.seek(start)
-    return cubehandle.read(size)
+    return table
 
 
 # This function is derived from this commit dated Sep 24, 2019:
@@ -109,44 +157,34 @@ def parse_table(data: bytes, fields: list) -> dict:
     field, and 'Type' is a string that must be one of 'Integer',
     'Double', 'Real', or 'Text'.
 
-    The *records* count is also found in the table label.
-
     If you are using the pvl library, the get_table() function will
     be easier to use.
     """
 
     row_len = 0
     for f in fields:
-        row_len += data_sizes[f['Type']] * f['Size']
+        row_len += data_sizes[f['Type']] * int(f['Size'])
     if len(data) % row_len != 0:
         raise ValueError(f"The total sizes of each field ({row_len}) do not "
                          "evenly divide into the size of the data "
                          f"({len(data)}), so something is off.")
 
-    data_sizes = {'Integer': 4,
-                  'Double': 8,
-                  'Real': 4,
-                  'Text': 1}
-    data_formats = {'Integer': 'i',
-                    'Double': 'd',
-                    'Real': 'f'}
-
     # Parse the binary data
-    results = {field['Name']: [] for field in fields}
+    results = {f['Name']: [] for f in fields}
     offset = 0
     while offset < len(data):
         for f in fields:
             if f['Type'] == 'Text':
-                field_data = data[offset:offset + f['Size']].decode(
+                field_data = data[offset:offset + int(f['Size'])].decode(
                     encoding='latin_1')
             else:
-                data_fmt = data_formats[f['Type']] * f['Size']
+                data_fmt = data_formats[f['Type']] * int(f['Size'])
                 field_data = struct.unpack_from(data_fmt, data, offset)
                 if len(field_data) == 1:
                     field_data = field_data[0]
 
             results[f['Name']].append(field_data)
-            offset += data_sizes[f['Type']] * f['Size']
+            offset += data_sizes[f['Type']] * int(f['Size'])
 
     return results
 
@@ -169,7 +207,7 @@ def get_table(cube_path: os.PathLike, table_name: str) -> dict:
                 table_label = t
                 break
 
-        table_data = read_table_data(cube, table_label)
+        table_data = read_table_data(cube_path, table_label)
         results = parse_table(table_data, table_label.getlist('Field'))
 
         # Add the keywords from the label
@@ -182,3 +220,141 @@ def get_table(cube_path: os.PathLike, table_name: str) -> dict:
     except ImportError:
         warn("The pvl library is not present, so get_table() cannot be used. "
              "The parse_table() function might work for you.", ImportWarning)
+        raise
+
+
+def overwrite_table_data(cube_path: os.PathLike, data: bytes,
+                         label=None, table_name=None):
+    """The file at *cube_path* will be modified by overwriting the
+    data in the specfied table name with the contents of *data*.
+
+    Either *label* or *table_name* is needed.  If neither a *label*
+    dict (which must contain a 'Name' key) nor a *table_name* is
+    provided, then this function will raise a ValueError.  If both
+    are provided, *label* will take precedence and *table_name*
+    will be ignored.
+
+    *label* is a dict which must contain *Name*, *StartByte*, and
+    *Bytes* keys (*StartByte* and *Bytes* must be convertable to
+    int if not already).  These values will be used to locate where
+    in the file to write the new *data*.
+
+    The name of the table as a string can be provided via *table_name*
+    and the ISIS getkey function will be applied to extract the needed
+    StartByte and Bytes values from the label.  However, if there is more
+    than one table in the cube, getkey can only find the first, and a
+    ValueError might be returned, even thought there is a table of that
+    name in the file.
+
+    If the pvl library is available, this function will use it to find
+    *all* of the tables in the *cube_path* labels and will find the one
+    named by *table_name* if it is present.
+    """
+
+    (start, size) = get_startsize_from(label, table_name, cube_path)
+
+    if size != len(data):
+        raise ValueError(f"The size of the table ({size}) to be overwritten "
+                         f"from the file  ({cube_path}) is different from "
+                         f"size of the data provided ({len(data)}).")
+
+    with open(cube_path, "r+b") as cubehandle:
+        cubehandle.seek(start)
+        cubehandle.write(data)
+
+    return
+
+
+def encode_table(table: dict, fields: list) -> bytes:
+    """Return a bytes object created from the *table* dict.
+
+    The *table* dict must contain lists of equal length as values.
+    If they are not of equal length, an IndexError will be raised.
+
+    The *fields* list must be a list of dicts, each of which must
+    contain the following keys: 'Name', 'Type', and 'Size'.  The
+    'Name' key can be any string, but must match the keys in the
+    *table* dict.  'Size' is the size in bytes of the field, and
+    'Type' is a string that must be one of 'Integer', 'Double',
+    'Real', or 'Text'.
+
+    If a field's 'Size' value is more than 1, then the list which
+    is the value of the *table* with that key name must be a list of
+    length 'Size'.
+
+    If you are using the pvl library, the overwrite_table() function will
+    be easier to use.
+    """
+
+    field_lengths = dict()
+    for k, v in table.items():
+        field_lengths[k] = len(v)
+
+    field_set = set(field_lengths.values())
+
+    if not len(field_set) == 1:
+        raise IndexError("At least one of the lists in the table has "
+                         f"a different length than the rest: {field_set}")
+
+    data = bytes()
+    for row in range(field_set.pop()):
+        for f in fields:
+            obj = table[f['Name']][row]
+            size = int(f['Size'])
+            if f['Type'] == 'Text':
+                if len(obj) > size:
+                    raise IndexError(f"The length of {obj} ({len(obj)}) is "
+                                     "larger than the allowable Size of the "
+                                     f"field ({size})")
+                else:
+                    data += obj.ljust(size).encode(encoding="latin_1")
+            else:
+                data_fmt = data_formats[f['Type']] * size
+                if isinstance(obj, abc.Sequence):
+                    if len(obj) == size:
+                        data += struct.pack(data_fmt, *obj)
+                    else:
+                        raise IndexError(f"The length of {obj} ({len(obj)}) "
+                                         " is different than the Size of the "
+                                         f"field ({size})")
+                elif size == 1:
+                    data += struct.pack(data_fmt, obj)
+                else:
+                    raise ValueError(f"There is only a single value ({obj}) "
+                                     "but the field indicates there should "
+                                     f"be {int(f['Size'])}.")
+
+    return data
+
+
+def overwrite_table(cube_path: os.PathLike, table_name: str, table: dict):
+    """The file at *cube_path* will be modified by overwriting the
+    data in the specfied table name with the contents of *table*.
+
+    The *table* dict must contain lists of equal length as values.
+    If they are not of equal length, an IndexError will be raised.
+    The *table* dict must also contain, as keys, all of the Field names
+    from *table_name* in the *cube_path*.
+
+    This function requires the pvl Python library.
+    """
+
+    try:
+        import pvl
+        label = pvl.load(cube_path)
+        table_label = None
+        for t in label.getlist('Table'):
+            if t['Name'] == table_name:
+                table_label = t
+                break
+
+        data = encode_table(table, table_label.getlist('Field'))
+        overwrite_table_data(cube_path, data, table_label)
+
+        return
+
+    except ImportError:
+        warn("The pvl library is not present, so overwrite_table() cannot be "
+             "used. The overwrite_table_data() function might work for you.",
+             ImportWarning)
+        raise

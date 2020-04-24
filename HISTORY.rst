@@ -4,7 +4,8 @@ History
 
 1.7.0 (2020-04-??)
 ------------------
-* Added some fucntions to read table data from cube files.
+* Added some functions to read table data from cube files.
+* Enabled Python 3.7 and 3.8 tests for tox.
 
 1.6.0 (2020-04-12)
 ------------------
