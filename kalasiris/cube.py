@@ -191,9 +191,15 @@ def parse_table(data: bytes, fields: list) -> dict:
 
 # This function is derived from this commit dated Sep 24, 2019:
 # https://github.com/USGS-Astrogeology/ale/commit/add5368ba46b2c911de9515afeaccc4d1c981000
-def get_table(cube_path: os.PathLike, table_name: str) -> dict:
+def get_table(cube_path: os.PathLike, table_name: str,
+              file_object=None) -> dict:
     """Return a Python dictionary created from the named table in
     the ISIS cube.
+
+    If the optional *file_object* is given, it should be the result
+    of opening *cube_path* which is readable.  This simply allows
+    a caller to provide an already-opened file object.  Otherwise,
+    this function will open and then close the file at *cube_path*.
 
     This function requires the pvl Python library.
     """
@@ -207,7 +213,12 @@ def get_table(cube_path: os.PathLike, table_name: str) -> dict:
                 table_label = t
                 break
 
-        table_data = read_table_data(cube_path, table_label)
+        if file_object is not None:
+            (start, size) = _get_start_size(table_label)
+            file_object.seek(start)
+            table_data = file_object.read(size)
+        else:
+            table_data = read_table_data(cube_path, table_label)
         results = parse_table(table_data, table_label.getlist('Field'))
 
         # Add the keywords from the label
