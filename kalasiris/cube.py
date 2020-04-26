@@ -150,6 +150,10 @@ def parse_table(data: bytes, fields: list) -> dict:
     an ISIS cube table (presumably extracted via read_table_data()),
     and described by the *fields* list and *records*.
 
+    Please be aware that this does not perform masking of the ISIS
+    special pixels that may be present in the table, and simply
+    returns them as the appropriate int or float values.
+
     The *fields* list must be a list of dicts, each of which must
     contain the following keys: 'Name', 'Type', and 'Size'.  The
     'Name' key can be any string (and these will end up being the
@@ -200,6 +204,10 @@ def get_table(cube_path: os.PathLike, table_name: str,
     of opening *cube_path* which is readable.  This simply allows
     a caller to provide an already-opened file object.  Otherwise,
     this function will open and then close the file at *cube_path*.
+
+    Please be aware that this does not perform masking of the ISIS
+    special pixels that may be present in the table, and simply
+    returns them as the appropriate int or float values.
 
     This function requires the pvl Python library.
     """
