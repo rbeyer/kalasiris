@@ -2,6 +2,10 @@
 History
 =======
 
+1.7.1 (2020-05-05)
+------------------
+* Corrected a readthedocs failure.
+
 1.7.0 (2020-05-05)
 ------------------
 * Added some functions to read table data from cube files.

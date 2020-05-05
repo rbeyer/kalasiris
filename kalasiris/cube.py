@@ -39,7 +39,7 @@ import struct
 from collections import abc
 from warnings import warn
 
-from .kalasiris import getkey
+import kalasiris as isis
 
 data_sizes = {'Integer': 4,
               'Double': 8,
@@ -109,16 +109,16 @@ def get_startsize_from(label=None, table_name=None,
                 raise KeyError(f"There is no table '{table_name}' in the "
                                f"labels of {cube_path}")
         except ImportError:
-            name = getkey(cube_path, objname='Table',
-                          keyword='Name').stdout.strip()
+            name = isis.getkey(cube_path, objname='Table',
+                               keyword='Name').stdout.strip()
             if table_name == name:
                 return _get_start_size(
                     {'StartByte':
-                     getkey(cube_path, objname='Table',
-                            keyword='StartByte').stdout.strip(),
+                     isis.getkey(cube_path, objname='Table',
+                                 keyword='StartByte').stdout.strip(),
                      'Bytes':
-                     getkey(cube_path, objname='Table',
-                            keyword='Bytes').stdout.strip()})
+                     isis.getkey(cube_path, objname='Table',
+                                 keyword='Bytes').stdout.strip()})
             else:
                 raise KeyError(f"The first table in {cube_path} that "
                                "ISIS getkey could find is not named "
