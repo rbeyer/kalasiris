@@ -101,7 +101,7 @@ def get_startsize_from(label=None, table_name=None,
     else:
         try:
             import pvl
-            label = pvl.load(cube_path)
+            label = pvl.load(str(cube_path))
             for t in label.getlist('Table'):
                 if t['Name'] == table_name:
                     return _get_start_size(t)
@@ -241,7 +241,7 @@ def get_table(cube_path: os.PathLike, table_name: str) -> dict:
 
     try:
         import pvl
-        label = pvl.load(cube_path)
+        label = pvl.load(str(cube_path))
         table_label = None
         for t in label.getlist('Table'):
             if t['Name'] == table_name:
@@ -391,7 +391,7 @@ def overwrite_table(cube_path: os.PathLike, table_name: str, table: dict):
 
     try:
         import pvl
-        label = pvl.load(cube_path)
+        label = pvl.load(str(cube_path))
         table_label = None
         for t in label.getlist('Table'):
             if t['Name'] == table_name:
