@@ -1,7 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """These functions provide some mechanisms for dealing with
-ISIS cube files.
+ISIS cube files.  These functions are not comprehensive, and only
+seek to provide functionality that does not exist elsewhere.
+
+For example, there is already a GDAL driver for ISIS cubes, and
+access to the primary bands and such can already be accomplished
+via GDAL, and in order to get the image pixels as a numpy array::
+
+    import numpy as np
+    from osgeo import gdal_array
+
+    cube = 'some.cub'
+    img_arr = gdal_array.LoadFile(cube)
+
+If you want to make sure to mask out all of the special pixels
+in the image you've read into img_arr above, you can do this::
+
+    import pvl
+    import kalasiris as isis
+
+    label = pvl.load(cube)
+    specialpix = getattr(isis.specialpixels,
+                         label['IsisCube']['Core']['Pixels']['Type'])
+    masked_img_arr = np.ma.masked_outside(img_arr,
+                                          specialpix.Min, specialpix.Max)
+
 """
 
 # Copyright 2020, Ross A. Beyer (rbeyer@seti.org)
@@ -183,9 +207,11 @@ def parse_table(data: bytes, fields: list) -> dict:
                     encoding='latin_1')
             else:
                 data_fmt = data_formats[f['Type']] * int(f['Size'])
-                field_data = struct.unpack_from(data_fmt, data, offset)
-                if len(field_data) == 1:
-                    field_data = field_data[0]
+                f_data = struct.unpack_from(data_fmt, data, offset)
+                if len(f_data) == 1:
+                    field_data = f_data[0]
+                else:
+                    field_data = list(f_data)
 
             results[f['Name']].append(field_data)
             offset += data_sizes[f['Type']] * int(f['Size'])
@@ -195,22 +221,23 @@ def parse_table(data: bytes, fields: list) -> dict:
 
 # This function is derived from this commit dated Sep 24, 2019:
 # https://github.com/USGS-Astrogeology/ale/commit/add5368ba46b2c911de9515afeaccc4d1c981000
-def get_table(cube_path: os.PathLike, table_name: str,
-              file_object=None) -> dict:
+def get_table(cube_path: os.PathLike, table_name: str) -> dict:
     """Return a Python dictionary created from the named table in
     the ISIS cube.
 
-    If the optional *file_object* is given, it should be the result
-    of opening *cube_path* which is readable.  This simply allows
-    a caller to provide an already-opened file object.  Otherwise,
-    this function will open and then close the file at *cube_path*.
-
-    Please be aware that this does not perform masking of the ISIS
-    special pixels that may be present in the table, and simply
-    returns them as the appropriate int or float values.
-
     This function requires the pvl Python library.
     """
+    # Toyed with allowing a file_object=None argument, docstring would have
+    # been:
+    #
+    # If the optional *file_object* is given, it should be the result
+    # of opening *cube_path* which is readable.  This simply allows
+    # a caller to provide an already-opened file object.  Otherwise,
+    # this function will open and then close the file at *cube_path*.
+    #
+    # Decided against it, the potential to pass a file_object that was
+    # *different* from an opened *cube_path* had the potential for much
+    # mayhem without a tremendous amount of gain.
 
     try:
         import pvl
@@ -221,20 +248,26 @@ def get_table(cube_path: os.PathLike, table_name: str,
                 table_label = t
                 break
 
-        if file_object is not None:
-            (start, size) = _get_start_size(table_label)
-            file_object.seek(start)
-            table_data = file_object.read(size)
-        else:
-            table_data = read_table_data(cube_path, table_label)
-        results = parse_table(table_data, table_label.getlist('Field'))
+        # if file_object is not None:
+        #     (start, size) = _get_start_size(table_label)
+        #     file_object.seek(start)
+        #     table_data = file_object.read(size)
+        # else:
+        table_data = read_table_data(cube_path, table_label)
+        return parse_table(table_data, table_label.getlist('Field'))
 
-        # Add the keywords from the label
-        results.update({
-            key: value for key, value in table_label.items() if not isinstance(
-                value, pvl._collections.PVLGroup)})
-
-        return results
+        # The original ale function added the keywords into the returned
+        # table, but that doesn't seem like a great idea, since that means
+        # that those keys are 'special' meta-data keys, whereas the other
+        # keys in the returned dict are 'regular' field keys, and once
+        # returned, there's no way to know which is which.
+        # # Add the keywords from the label
+        # results.update({
+        #     key: value for key,
+        #                    value in table_label.items() if not isinstance(
+        #         value, pvl._collections.PVLGroup)})
+        #
+        # return results
 
     except ImportError:
         warn("The pvl library is not present, so get_table() cannot be used. "
@@ -305,18 +338,16 @@ def encode_table(table: dict, fields: list) -> bytes:
     be easier to use.
     """
 
-    field_lengths = dict()
-    for k, v in table.items():
-        field_lengths[k] = len(v)
+    field_lengths = set()
+    for v in table.values():
+        field_lengths.add(len(v))
 
-    field_set = set(field_lengths.values())
-
-    if not len(field_set) == 1:
+    if not len(field_lengths) == 1:
         raise IndexError("At least one of the lists in the table has "
-                         f"a different length than the rest: {field_set}")
+                         f"a different length than the rest: {field_lengths}")
 
     data = bytes()
-    for row in range(field_set.pop()):
+    for row in range(field_lengths.pop()):
         for f in fields:
             obj = table[f['Name']][row]
             size = int(f['Size'])

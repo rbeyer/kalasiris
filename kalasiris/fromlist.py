@@ -98,10 +98,10 @@ class open_fl():
      with fromlist.open_fl(['a.cub', 'b.cub', 'c.cub']) as f:
          isis.cubeit(fromlist=f.name, to='stacked.cub')
 
-    Its probably better to use :class:`.fromlist.temp(), however.
+    Its probably better to use :class:`.fromlist.temp()`, however.
 
     *This context manager is deprecated, and may be removed
-    at the next major patch.*`
+    at the next major patch.*
     """
     warnings.warn("Original syntax, may be removed at next major patch. "
                   "Use fromlist.temp() instead.", DeprecationWarning)

@@ -13,3 +13,4 @@ from .PathSet import PathSet                  # noqa: F401
 import kalasiris.cube                         # noqa: F401
 import kalasiris.cubenormfile                 # noqa: F401
 import kalasiris.fromlist                     # noqa: F401
+import kalasiris.specialpixels                # noqa: F401

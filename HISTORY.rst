@@ -2,7 +2,7 @@
 History
 =======
 
-1.7.0 (2020-04-??)
+1.7.0 (2020-05-05)
 ------------------
 * Added some functions to read table data from cube files.
 * Added special pixel values via specialpixels.py (implemented

@@ -8,25 +8,25 @@ unch of files (typically to delete them after a set of processing
 alls), you can use a :class:`.PathSet` to keep track of them, and then
 elete them, like so::
 
-import kalasiris as isis
+    import kalasiris as isis
 
-to_delete = isis.PathSet()
+    to_delete = isis.PathSet()
 
-input_p = Path('some.fits')
-output_p = input_p.with_suffix('.done.cub')
+    input_p = Path('some.fits')
+    output_p = input_p.with_suffix('.done.cub')
 
-isis_cub = to_delete.add(input_p.with_suffix('.cub'))
-isis.lorri2isis(input_fits, to= isis_cub)
+    isis_cub = to_delete.add(input_p.with_suffix('.cub'))
+    isis.lorri2isis(input_fits, to= isis_cub)
 
-first = to_delete.add(input_p..with_suffix('.1.cub'))
-isis.some_progeram(isis_cub, to=first)
+    first = to_delete.add(input_p..with_suffix('.1.cub'))
+    isis.some_progeram(isis_cub, to=first)
 
-second = to_delete.add(input_p..with_suffix('.2.cub'))
-isis.some_program(first, to=second)
+    second = to_delete.add(input_p..with_suffix('.2.cub'))
+    isis.some_program(first, to=second)
 
-isis.final_step(second, to=output_p)
+    isis.final_step(second, to=output_p)
 
-to_delete.unlink()
+    to_delete.unlink()
 """
 
 # Copyright 2019-2020, Ross A. Beyer (rbeyer@seti.org)

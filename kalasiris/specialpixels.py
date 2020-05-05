@@ -43,7 +43,7 @@ Min
 
 Max
     The maximum valid value for a pixel.
-"""
+"""  # noqa
 
 # Copyright 2015, William Trevor Olson
 # Copyright 2020, Ross A. Beyer (rbeyer@seti.org)
@@ -77,11 +77,17 @@ SignedWord = SpecialPixels(Min=-32752, Null=-32768,
                            His=-32765, Hrs=-32764, Max=32767)
 
 # 4-byte unsigned special pixel values from SpecialPixel.h
-UnsignedByte = SpecialPixels(Min=3, Null=0, Lrs=1, Lis=2,
-                             His=4294967294, Hrs=4294967295,
-                             Max=4294967282)
+# This deals with unsigned long int values.  Not sure why there
+# is so much space between 'Max' and the 'His' and 'Hrs' values, but
+# that's what's in SpecialPixel.h.
+UnsignedInteger = SpecialPixels(Min=3, Null=0, Lrs=1, Lis=2,
+                                His=4294967294, Hrs=4294967295,
+                                Max=4294967282)
 
 # This was in the original pysis, but I don't see it in SpecialPixel.h?
+# The 'Max' value indicates that it is like a long int, but the 'Min'
+# and other negative values are far from the possible representation
+# minimum of a long int, so not sure what's going on here.
 SignedInteger = SpecialPixels(Min=-8388614, Null=-8388613,
                               Lrs=-8388612, Lis=-8388611,
                               His=-8388610, Hrs=-8388609, Max=2147483647)
@@ -94,7 +100,7 @@ Real = SpecialPixels(
     Lis=struct.unpack('>f', bytes.fromhex('FF7FFFFD'))[0],
     His=struct.unpack('>f', bytes.fromhex('FF7FFFFE'))[0],
     Hrs=struct.unpack('>f', bytes.fromhex('FF7FFFFF'))[0],
-    Max=sys.float.max)
+    Max=sys.float_info.max)
 
 # 8-byte special pixel values for IEEE floating point from SpecialPixel.h
 Double = SpecialPixels(
@@ -104,4 +110,4 @@ Double = SpecialPixels(
     Lis=struct.unpack('>d', bytes.fromhex('FFEFFFFF FFFFFFFD'))[0],
     His=struct.unpack('>d', bytes.fromhex('FFEFFFFF FFFFFFFE'))[0],
     Hrs=struct.unpack('>d', bytes.fromhex('FFEFFFFF FFFFFFFF'))[0],
-    Max=sys.float.max)
+    Max=sys.float_info.max)

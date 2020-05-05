@@ -97,21 +97,6 @@ class TestTable(unittest.TestCase):
             self.assertRaises(ImportError, isis.cube.get_table, self.cube,
                               'HiRISE Calibration Ancillary')
 
-    def test_get_table_w_open(self):
-        try:
-            with open(self.cube, "rb") as opened:
-                table = isis.cube.get_table(self.cube,
-                                            'HiRISE Calibration Ancillary',
-                                            file_object=opened)
-                self.assertEqual(255, table['GapFlag'][0])
-                self.assertEqual(9, table['LineNumber'][9])
-                self.assertEqual(1359, table['BufferPixels'][0][0])
-                self.assertEqual(1290, table['DarkPixels'][0][9])
-
-        except ImportError:
-            # This just means pvl isn't available, this is tested above.
-            pass
-
     def test_overwrite_table_data(self):
         data = bytes(10)
         self.assertRaises(ValueError,
