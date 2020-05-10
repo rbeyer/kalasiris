@@ -37,13 +37,13 @@ environ = {'ISISROOT':  _isisroot,
 
 # These are the names of the reserved parameters that can be given
 # as arguments to any ISIS program, prefixed by a dash (-).
-_res_param_no_vals = set(['webhelp', 'last', 'gui', 'nogui', 'verbose'])
-_res_param_maybe = set(['help', 'log', 'info', 'save'])
+_res_param_no_vals = {'webhelp', 'last', 'gui', 'nogui', 'verbose'}
+_res_param_maybe = {'help', 'log', 'info', 'save'}
 
 # The ISIS programs in this list do not follow the 'normal' argument
 # patters for most ISIS programs, they just consume everything you
 # give them, so we need to treat them differently.
-_pass_through_programs = set(['cneteditor', 'qmos', 'qnet', 'qtie', 'qview'])
+_pass_through_programs = {'cneteditor', 'qmos', 'qnet', 'qtie', 'qview'}
 
 
 def param_fmt(key: str, value: str) -> str:
@@ -114,7 +114,7 @@ def _build_isis_fn(fn_name: str):
                          'not sure what to do with ' + a)
                     raise IndexError(e)
             cmd.extend(map(param_fmt, kwargs.keys(), kwargs.values()))
-        return(_run_isis_program(cmd))
+        return _run_isis_program(cmd)
 
     # Then add it, by name to the enclosing module.
     setattr(sys.modules[__name__], fn_name, isis_fn)

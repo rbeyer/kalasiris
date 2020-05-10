@@ -37,6 +37,7 @@ in the image you've read into img_arr above, you can do this::
 import os
 import struct
 from collections import abc
+from typing import Tuple
 from warnings import warn
 
 import kalasiris as isis
@@ -50,7 +51,7 @@ data_formats = {'Integer': 'i',
                 'Real': 'f'}
 
 
-def _get_start_size(d: dict) -> tuple((int, int)):
+def _get_start_size(d: dict) -> Tuple[int, int]:
     """Returns a tuple of ints that represent the true start byte and size
     based on the provided dict.
 
@@ -64,11 +65,11 @@ def _get_start_size(d: dict) -> tuple((int, int)):
     """
     start = int(d['StartByte']) - 1
     size = int(d['Bytes'])
-    return (start, size)
+    return start, size
 
 
 def get_startsize_from(label=None, table_name=None,
-                       cube_path=None) -> tuple((int, int)):
+                       cube_path=None) -> Tuple[int, int]:
     """Returns a tuple of ints that represent the true start byte and size
     based on the provided *label* or combination of *table_name* and
     *cube_path*.

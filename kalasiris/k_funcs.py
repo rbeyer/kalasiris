@@ -39,7 +39,7 @@ def getkey_k(cube: os.PathLike, group: str, key: str) -> str:
 
     No default parameters are needed, and it directly returns a string.
     """
-    return(isis.getkey(cube, grpname=group, keyword=key).stdout.strip())
+    return isis.getkey(cube, grpname=group, keyword=key).stdout.strip()
 
 
 def hi2isis_k(*args, **kwargs):
@@ -60,7 +60,7 @@ def hi2isis_k(*args, **kwargs):
 
         kwargs.setdefault('to', from_path.with_suffix('.cub'))
 
-    return(isis.hi2isis(*args, **kwargs))
+    return isis.hi2isis(*args, **kwargs)
 
 
 def hist_k(*args, **kwargs) -> str:

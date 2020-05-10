@@ -70,7 +70,7 @@ def _build_pysis_fn(fn_name: str):
 
         try:
             kala_fn = getattr(kala, fn_name)
-            return(kala_fn(*args, **kwargs).stdout.encode())
+            return kala_fn(*args, **kwargs).stdout.encode()
         except subprocess.CalledProcessError as err:
             raise ProcessError(err.returncode, err.cmd, err.stdout, err.stderr)
 

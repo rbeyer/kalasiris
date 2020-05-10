@@ -78,7 +78,6 @@ def make(fromlist: list, pathlike=None) -> Path:
     However, using the :class:`.fromlist.temp()` context manager might
     be even more handy.
     """
-    filelike = None
     mode = 'wt'
     if pathlike is None:
         filelike = tempfile.NamedTemporaryFile(mode=mode, delete=False)
@@ -91,7 +90,7 @@ def make(fromlist: list, pathlike=None) -> Path:
     return Path(filelike.name)
 
 
-class open_fl():
+class open_fl:
     """This is a context manager that works similarly to :func:`open`, but
     for creating fromlist files.  Use it like this::
 
@@ -127,7 +126,7 @@ class open_fl():
             os.unlink(self.file.name)
 
 
-class temp():
+class temp:
     """This is a context manager that creates a temporary
     fromlist file and then gets rid of it for you.
     Use it like this::

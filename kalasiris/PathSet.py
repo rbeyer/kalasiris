@@ -50,7 +50,7 @@ class PathSet(set):
         else:
             super().__init__()
 
-    def add(self, elem):
+    def add(self, elem) -> Path:
         """This variation on add() returns the element."""
         if not isinstance(elem, Path):
             raise TypeError('only accepts pathlib.Path objects')

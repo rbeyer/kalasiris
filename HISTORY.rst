@@ -2,6 +2,10 @@
 History
 =======
 
+1.8.0 (2020-??-??)
+------------------
+* Minor spelling and formatting improvements.
+
 1.7.1 (2020-05-05)
 ------------------
 * Corrected a readthedocs failure.

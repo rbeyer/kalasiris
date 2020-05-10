@@ -44,7 +44,7 @@ class writer:
     """A class for writing out the fixed-width format required by ``cubenorm``.
 
     The interface is similar to the :class:`csv.writer` class, but does not
-    inheirit from it."""
+    inherit from it."""
 
     def __init__(self, f):
         self.file_object = f
@@ -62,7 +62,7 @@ class writer:
             self.writerow(r)
 
     def writeheader(self):
-        """A convenence function, since the fieldnames are pre-defined."""
+        """A convenience function, since the fieldnames are pre-defined."""
         self.writerow(fieldnames)
 
 

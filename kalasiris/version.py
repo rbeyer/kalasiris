@@ -39,7 +39,8 @@ class ISISversion(collections.namedtuple('ISISversion',
 
 version_re = re.compile(r"(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)")
 date_re = re.compile(r"(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})")
-date_yearlast_re = re.compile(r"(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})")  # noqa: E501
+date_yearlast_re = re.compile(
+    r"(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})")
 level_re = re.compile(r"^alpha|beta|stable")
 
 

@@ -30,22 +30,22 @@ class Histogram(collections.abc.Sequence):
         self.histinfo = histinfo
 
         try:
-            (self.dictionary, self.headers, self.hist_list) \
-                = self.parse(histinfo)
+            (self.dictionary, self.headers,
+             self.hist_list) = self.parse(histinfo)
         except StopIteration:
             try:
-                (self.dictionary, self.headers, self.hist_list) \
-                    = self.parse(hist_k(histinfo))
+                (self.dictionary, self.headers,
+                 self.hist_list) = self.parse(hist_k(histinfo))
             except subprocess.CalledProcessError:
                 with open(histinfo, 'r') as f:
-                    (self.dictionary, self.headers, self.hist_list) \
-                        = self.parse(f.read())
+                    (self.dictionary, self.headers,
+                     self.hist_list) = self.parse(f.read())
 
     def __str__(self):
-        return(str(self.dictionary))
+        return str(self.dictionary)
 
     def __repr__(self):
-        return (f'{self.__class__.__name__}(\'{self.histfile}\')')
+        return f'{self.__class__.__name__}(\'{self.histinfo}\')'
 
     def __len__(self):
         return len(self.hist_list)
@@ -63,7 +63,7 @@ class Histogram(collections.abc.Sequence):
         if item in self.dictionary:
             return True
         else:
-            return(item in self.hist_list)
+            return item in self.hist_list
 
     def keys(self):
         """Gets the keys from the initial portion of the hist output file.
@@ -135,7 +135,6 @@ class Histogram(collections.abc.Sequence):
         ``namedtuples`` in the returned list.
         """
         d = dict()
-        fieldnames = []
         hist_rows = []
         for line in filter(lambda x: ':' in x, str(histinfo).splitlines()):
             (k, v) = line.split(':')
@@ -152,4 +151,4 @@ class Histogram(collections.abc.Sequence):
 
         HistParsed = collections.namedtuple('HistParsed',
                                             ['info', 'fieldnames', 'data'])
-        return(HistParsed(d, fieldnames, hist_rows))
+        return HistParsed(d, fieldnames, hist_rows)
