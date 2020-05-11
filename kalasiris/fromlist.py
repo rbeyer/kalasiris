@@ -56,8 +56,11 @@ def print_fl(fromlist: list, file=sys.stdout):
     *This function is deprecated, and may be removed
     at the next major patch.*
     """
-    warnings.warn('Original syntax, may be removed at next major patch. '
-                  'Use fromlist.print() instead.', DeprecationWarning)
+    warnings.warn(
+        "Original syntax, may be removed at next major patch. "
+        "Use fromlist.print() instead.",
+        DeprecationWarning,
+    )
     print(fromlist, file)
 
 
@@ -78,7 +81,7 @@ def make(fromlist: list, pathlike=None) -> Path:
     However, using the :class:`.fromlist.temp()` context manager might
     be even more handy.
     """
-    mode = 'wt'
+    mode = "wt"
     if pathlike is None:
         filelike = tempfile.NamedTemporaryFile(mode=mode, delete=False)
     else:
@@ -102,8 +105,12 @@ class open_fl:
     *This context manager is deprecated, and may be removed
     at the next major patch.*
     """
-    warnings.warn("Original syntax, may be removed at next major patch. "
-                  "Use fromlist.temp() instead.", DeprecationWarning)
+
+    warnings.warn(
+        "Original syntax, may be removed at next major patch. "
+        "Use fromlist.temp() instead.",
+        DeprecationWarning,
+    )
 
     def __init__(self, fromlist: list, pathlike=None):
         self.fromlist = fromlist
@@ -116,7 +123,7 @@ class open_fl:
 
     def __enter__(self):
         p = make(self.fromlist, self.name)
-        self.file = open(p, mode='r')
+        self.file = open(p, mode="r")
         return self.file
 
     def __exit__(self, exc_type, exc_val, exc_tb):

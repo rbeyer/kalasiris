@@ -53,8 +53,10 @@ class ProcessError(IsisException):
         self.stdout = stdout
         self.stderr = stderr
 
-        msg = (f'Command {self.cmd} returned non-zero '
-               f'exit status {self.returncode}')
+        msg = (
+            f"Command {self.cmd} returned non-zero exit "
+            f"status {self.returncode}."
+        )
         super(ProcessError, self).__init__(msg)
 
 
@@ -65,8 +67,8 @@ def _build_pysis_fn(fn_name: str):
 
     # Define the structure:
     def pysis_fn(*args, **kwargs):
-        __name__ = fn_name                # noqa: F841
-        __doc__ = f'Runs ISIS {fn_name}'  # noqa: F841
+        __name__ = fn_name  # noqa: F841
+        __doc__ = f"Runs ISIS {fn_name}"  # noqa: F841
 
         try:
             kala_fn = getattr(kala, fn_name)

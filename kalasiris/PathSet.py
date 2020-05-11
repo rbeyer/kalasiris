@@ -45,7 +45,7 @@ class PathSet(set):
         if iterable:
             for value in iterable:
                 if not isinstance(value, Path):
-                    raise TypeError('only accepts pathlib.Path objects')
+                    raise TypeError("only accepts pathlib.Path objects")
             super().__init__(iterable)
         else:
             super().__init__()
@@ -53,10 +53,11 @@ class PathSet(set):
     def add(self, elem) -> Path:
         """This variation on add() returns the element."""
         if not isinstance(elem, Path):
-            raise TypeError('only accepts pathlib.Path objects')
+            raise TypeError("only accepts pathlib.Path objects")
         if elem in self:
-            raise ValueError(f'The {elem} object is already a '
-                             'member of the PathSet.')
+            raise ValueError(
+                f"The {elem} object is already a member of the PathSet."
+            )
         super().add(elem)
         return elem
 

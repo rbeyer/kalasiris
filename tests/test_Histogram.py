@@ -18,16 +18,16 @@ from .utils import resource_check as rc
 
 
 run_real_files = True
-run_real_files_reason = 'Tests on real files, and runs ISIS.'
+run_real_files_reason = "Tests on real files, and runs ISIS."
 
 # Hardcoding this, but I sure would like a better solution.
-HiRISE_img = Path('test-resources') / 'PSP_010502_2090_RED5_0.img'
+HiRISE_img = Path("test-resources") / "PSP_010502_2090_RED5_0.img"
 img = HiRISE_img
 
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)
 class TestResources(unittest.TestCase):
-    '''Establishes that the test image exists.'''
+    """Establishes that the test image exists."""
 
     def test_resources(self):
         (truth, test) = rc(img)
@@ -35,9 +35,9 @@ class TestResources(unittest.TestCase):
 
 
 class TestHistogram(unittest.TestCase):
-
     def setUp(self):
-        self.h = isis.Histogram('''Cube:           foo.cub
+        self.h = isis.Histogram(
+            """Cube:           foo.cub
 Band:           1
 Average:        6490.68
 Std Deviation:  166.739
@@ -164,19 +164,20 @@ DN,Pixels,CumulativePixels,Percent,CumulativePercent
 8028,21,2047974,0.00102539,99.9987
 8095,12,2047986,0.000585937,99.9993
 8163,12,2047998,0.000585937,99.9999
-8230,2,2048000,9.76563e-05,100''')
+8230,2,2048000,9.76563e-05,100"""
+        )
 
     def test_init_str(self):
         self.assertIsInstance(self.h, isis.Histogram)
 
     def test_dictlike(self):
-        self.assertEqual(self.h['Cube'], 'foo.cub')
+        self.assertEqual(self.h["Cube"], "foo.cub")
 
     def test_listlike(self):
         self.assertEqual(5, len(self.h[0]))
 
     def test_contains(self):
-        self.assertTrue('Std Deviation' in self.h)
+        self.assertTrue("Std Deviation" in self.h)
 
     def test_len(self):
         self.assertEqual(107, len(self.h))
@@ -184,16 +185,15 @@ DN,Pixels,CumulativePixels,Percent,CumulativePercent
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)
 class TestHistogram_filesystem(unittest.TestCase):
-
     def setUp(self):
-        self.cube = Path('test_Histogram.cub')
-        self.histfile = Path('test_Histogram.hist')
+        self.cube = Path("test_Histogram.cub")
+        self.histfile = Path("test_Histogram.hist")
         isis.hi2isis(img, to=self.cube)
         isis.hist(self.cube, to=self.histfile)
 
     def tearDown(self):
         with contextlib.suppress(FileNotFoundError):
-            Path('print.prt').unlink()
+            Path("print.prt").unlink()
         self.cube.unlink()
         self.histfile.unlink()
 
@@ -211,7 +211,7 @@ class TestHistogram_filesystem(unittest.TestCase):
 
     def test_dictlike(self):
         h = isis.Histogram(self.histfile)
-        self.assertEqual(self.cube.name, h['Cube'])
+        self.assertEqual(self.cube.name, h["Cube"])
 
     def test_listlike(self):
         h = isis.Histogram(self.histfile)
@@ -219,7 +219,7 @@ class TestHistogram_filesystem(unittest.TestCase):
 
     def test_contains(self):
         h = isis.Histogram(self.histfile)
-        self.assertTrue('Std Deviation' in h)
+        self.assertTrue("Std Deviation" in h)
 
     def test_len(self):
         h = isis.Histogram(self.histfile)

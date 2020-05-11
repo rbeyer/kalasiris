@@ -48,17 +48,17 @@ def hi2isis_k(*args, **kwargs):
     If the FROM file has the name ``foo.img``, then the output will
     be ``foo.cub``.
     """
-    if not any(k.startswith('t') for k in kwargs.keys()):
+    if not any(k.startswith("t") for k in kwargs.keys()):
         from_path = Path()
-        if len(args) > 0 and not str(args[0]).endswith('__'):
+        if len(args) > 0 and not str(args[0]).endswith("__"):
             from_path = Path(args[0])
         else:
-            for(k, v) in kwargs.items():
-                if k.startswith('f'):
+            for (k, v) in kwargs.items():
+                if k.startswith("f"):
                     from_path = Path(v)
                     break
 
-        kwargs.setdefault('to', from_path.with_suffix('.cub'))
+        kwargs.setdefault("to", from_path.with_suffix(".cub"))
 
     return isis.hi2isis(*args, **kwargs)
 
@@ -71,18 +71,18 @@ def hist_k(*args, **kwargs) -> str:
     """
     to_pathlike = None
     for (k, v) in kwargs.items():
-        if 'to' == k or 'to_' == k:
+        if "to" == k or "to_" == k:
             to_pathlike = v
 
     f = None
     if not to_pathlike:
-        f = tempfile.NamedTemporaryFile(mode='w+')
-        kwargs['to'] = f.name
+        f = tempfile.NamedTemporaryFile(mode="w+")
+        kwargs["to"] = f.name
 
     isis.hist(*args, **kwargs)
 
     if not f:
-        f = open(to_pathlike, 'r')
+        f = open(to_pathlike, "r")
     contents = f.read()
     f.close()
 
@@ -94,7 +94,7 @@ def cubeit_k(fromlist: list, **kwargs):
     rather than having the user create a text list.
     """
     with isis.fromlist.temp(fromlist) as f:
-        kwargs['fromlist'] = f
+        kwargs["fromlist"] = f
         cp = isis.cubeit(**kwargs)
 
     return cp
@@ -114,9 +114,9 @@ def stats_k(*args, **kwargs) -> dict:
     stats_text = isis.stats(*args, **kwargs).stdout
 
     d = dict()
-    for line in filter(lambda x: '=' in x, stats_text.splitlines()):
-        (k, equals, v) = line.partition('=')
-        if 'Group' in k:
+    for line in filter(lambda x: "=" in x, stats_text.splitlines()):
+        (k, equals, v) = line.partition("=")
+        if "Group" in k:
             continue
         d[k.strip()] = v.strip()
 

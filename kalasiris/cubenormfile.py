@@ -18,26 +18,35 @@ read in, you will need to use the :class:`.cubenormfile.writer` or
 import csv
 
 # Establish the allowable cubenorm fieldnames and their character widths.
-fieldnames = ('Band', 'RowCol', 'ValidPoints', 'Average',
-              'Median', 'StdDev', 'Minimum', 'Maximum')
+fieldnames = (
+    "Band",
+    "RowCol",
+    "ValidPoints",
+    "Average",
+    "Median",
+    "StdDev",
+    "Minimum",
+    "Maximum",
+)
 
 # These widths are extremely fragile, and if cubenorm changes,
 # then these will need to be changed, too.
 fieldwidth = dict()
 for n in fieldnames:
     fieldwidth.setdefault(n, 15)
-fieldwidth['Band'] = 8
-fieldwidth['RowCol'] = 8
+fieldwidth["Band"] = 8
+fieldwidth["RowCol"] = 8
 
 
 class Dialect(csv.Dialect):
     """A :class:`csv.Dialect` for the output of the ISIS
     ``cubenorm`` program."""
-    delimiter = ' '
+
+    delimiter = " "
     skipinitialspace = True
     quoting = csv.QUOTE_NONE
-    escapechar = ''
-    lineterminator = '\n'
+    escapechar = ""
+    lineterminator = "\n"
 
 
 class writer:
@@ -50,12 +59,12 @@ class writer:
         self.file_object = f
 
     def writerow(self, row):
-        line = ''
+        line = ""
         for name, elem in zip(fieldnames, row):
-            right_aligned = '{:>' + str(fieldwidth[name]) + '}'
+            right_aligned = "{:>" + str(fieldwidth[name]) + "}"
             line += right_aligned.format(elem)
 
-        self.file_object.write(line + '\n')
+        self.file_object.write(line + "\n")
 
     def writerows(self, rows):
         for r in rows:
@@ -69,12 +78,20 @@ class writer:
 class DictWriter(csv.DictWriter):
     """A DictWriter for ``cubenorm`` files."""
 
-    def __init__(self, f, restval="", extrasaction="raise",
-                 dialect=Dialect, *args, **kwds):
+    def __init__(
+        self,
+        f,
+        restval="",
+        extrasaction="raise",
+        dialect=Dialect,
+        *args,
+        **kwds
+    ):
         self.fieldnames = fieldnames
         self.restval = restval
         if extrasaction.lower() not in ("raise", "ignore"):
-            raise ValueError("extrasaction (%s) must be 'raise' or 'ignore'"
-                             % extrasaction)
+            raise ValueError(
+                f"extrasaction ({extrasaction}) must be 'raise' or 'ignore'"
+            )
         self.extrasaction = extrasaction
         self.writer = writer(f)

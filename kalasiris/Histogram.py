@@ -30,22 +30,27 @@ class Histogram(collections.abc.Sequence):
         self.histinfo = histinfo
 
         try:
-            (self.dictionary, self.headers,
-             self.hist_list) = self.parse(histinfo)
+            (self.dictionary, self.headers, self.hist_list) = self.parse(
+                histinfo
+            )
         except StopIteration:
             try:
-                (self.dictionary, self.headers,
-                 self.hist_list) = self.parse(hist_k(histinfo))
+                (self.dictionary, self.headers, self.hist_list) = self.parse(
+                    hist_k(histinfo)
+                )
             except subprocess.CalledProcessError:
-                with open(histinfo, 'r') as f:
-                    (self.dictionary, self.headers,
-                     self.hist_list) = self.parse(f.read())
+                with open(histinfo, "r") as f:
+                    (
+                        self.dictionary,
+                        self.headers,
+                        self.hist_list,
+                    ) = self.parse(f.read())
 
     def __str__(self):
         return str(self.dictionary)
 
     def __repr__(self):
-        return f'{self.__class__.__name__}(\'{self.histinfo}\')'
+        return f"{self.__class__.__name__}('{self.histinfo}')"
 
     def __len__(self):
         return len(self.hist_list)
@@ -136,19 +141,21 @@ class Histogram(collections.abc.Sequence):
         """
         d = dict()
         hist_rows = []
-        for line in filter(lambda x: ':' in x, str(histinfo).splitlines()):
-            (k, v) = line.split(':')
+        for line in filter(lambda x: ":" in x, str(histinfo).splitlines()):
+            (k, v) = line.split(":")
             # d[k.strip()] = v.strip()
             d.setdefault(k.strip(), v.strip())
 
-        reader = csv.reader(filter(lambda x: ',' in x,
-                                   str(histinfo).splitlines()))
+        reader = csv.reader(
+            filter(lambda x: "," in x, str(histinfo).splitlines())
+        )
         fieldnames = next(reader)
 
-        HistRow = collections.namedtuple('HistRow', fieldnames)
+        HistRow = collections.namedtuple("HistRow", fieldnames)
         for row in map(HistRow._make, reader):
             hist_rows.append(row)
 
-        HistParsed = collections.namedtuple('HistParsed',
-                                            ['info', 'fieldnames', 'data'])
+        HistParsed = collections.namedtuple(
+            "HistParsed", ["info", "fieldnames", "data"]
+        )
         return HistParsed(d, fieldnames, hist_rows)

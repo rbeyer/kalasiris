@@ -14,17 +14,16 @@ from pathlib import Path
 
 
 def resource_check(*args):
-    '''Checks to see if the files exist. And returns a tuple.
+    """Checks to see if the files exist. And returns a tuple.
 
        Using the first element as the truth value and the second
        as the test value in a ``self.assertEqual(truth, test)``
        provides a much more useful failure message than a bunch
        of ``self.assertTrue(os.path.isfile(filename))``
-    '''
-    CheckReturn =  \
-        collections.namedtuple('CheckReturn', ['truth', 'test'])
+    """
+    CheckReturn = collections.namedtuple("CheckReturn", ["truth", "test"])
 
-    truth = 'Missing Resources:'
+    truth = "Missing Resources:"
     test = truth
 
     the_missing = []
@@ -32,7 +31,7 @@ def resource_check(*args):
         if not path.is_file():
             the_missing.append(path)
     if len(the_missing) > 0:
-        test = '\n'.join(map(lambda x: '    ' + str(x), the_missing))
+        test = "\n".join(map(lambda x: "    " + str(x), the_missing))
         test += "\n probably just need to 'make test-resources'"
 
     return CheckReturn(truth, test)

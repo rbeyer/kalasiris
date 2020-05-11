@@ -60,6 +60,6 @@ from .__init__ import *  # noqa F401,F403
 from kalasiris import k_funcs
 
 for k_func in dir(k_funcs):
-    if k_func.endswith('_k'):
-        reg_func = k_func.rsplit('_', maxsplit=1)[0]
+    if k_func.endswith("_k"):
+        reg_func = k_func.rsplit("_", maxsplit=1)[0]
         setattr(modules[__name__], reg_func, getattr(k_funcs, k_func))

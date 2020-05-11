@@ -21,10 +21,11 @@ from pathlib import Path
 from kalasiris import environ
 
 
-class ISISversion(collections.namedtuple('ISISversion',
-                                         ['major', 'minor',
-                                          'patch', 'releaselevel',
-                                          'date'])):
+class ISISversion(
+    collections.namedtuple(
+        "ISISversion", ["major", "minor", "patch", "releaselevel", "date"]
+    )
+):
     """This is a custom :func:`collections.namedtuple` which can
     contain ISIS version information.
 
@@ -40,7 +41,8 @@ class ISISversion(collections.namedtuple('ISISversion',
 version_re = re.compile(r"(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)")
 date_re = re.compile(r"(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})")
 date_yearlast_re = re.compile(
-    r"(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})")
+    r"(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})"
+)
 level_re = re.compile(r"^alpha|beta|stable")
 
 
@@ -49,7 +51,7 @@ def version_info() -> ISISversion:
     for the ISIS system underlying kalasiris.  If you want to answer,
     "What version of ISIS is being used?"  This is the function you're after.
     It is modeled after :func:`sys.version_info`."""
-    return get_from_file(Path(environ['ISISROOT']) / 'version')
+    return get_from_file(Path(environ["ISISROOT"]) / "version")
 
 
 def get_from_string(s: str) -> ISISversion:
@@ -66,8 +68,9 @@ def get_from_string(s: str) -> ISISversion:
     if match:
         v = match.groupdict()
     else:
-        raise ValueError(f"{s} did not match version regex: "
-                         f"{version_re.pattern}")
+        raise ValueError(
+            f"{s} did not match version regex: " f"{version_re.pattern}"
+        )
 
     # Date Matching
     d = None
@@ -80,7 +83,7 @@ def get_from_string(s: str) -> ISISversion:
             d = d_match.groupdict()
 
     if d is not None:
-        date = datetime.date(int(d['year']), int(d['month']), int(d['day']))
+        date = datetime.date(int(d["year"]), int(d["month"]), int(d["day"]))
     else:
         date = None
 
@@ -90,11 +93,13 @@ def get_from_string(s: str) -> ISISversion:
     if l_match:
         level = l_match.group()
 
-    version = ISISversion(major=int(v['major']),
-                          minor=int(v['minor']),
-                          patch=int(v['patch']),
-                          releaselevel=level,
-                          date=date)
+    version = ISISversion(
+        major=int(v["major"]),
+        minor=int(v["minor"]),
+        patch=int(v["patch"]),
+        releaselevel=level,
+        date=date,
+    )
     return version
 
 

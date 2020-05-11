@@ -42,13 +42,8 @@ from warnings import warn
 
 import kalasiris as isis
 
-data_sizes = {'Integer': 4,
-              'Double': 8,
-              'Real': 4,
-              'Text': 1}
-data_formats = {'Integer': 'i',
-                'Double': 'd',
-                'Real': 'f'}
+data_sizes = {"Integer": 4, "Double": 8, "Real": 4, "Text": 1}
+data_formats = {"Integer": "i", "Double": "d", "Real": "f"}
 
 
 def _get_start_size(d: dict) -> Tuple[int, int]:
@@ -63,13 +58,14 @@ def _get_start_size(d: dict) -> Tuple[int, int]:
     to a byte count for Python's read() functions, you must subtract one
     from the listed StartByte, which this function does.
     """
-    start = int(d['StartByte']) - 1
-    size = int(d['Bytes'])
+    start = int(d["StartByte"]) - 1
+    size = int(d["Bytes"])
     return start, size
 
 
-def get_startsize_from(label=None, table_name=None,
-                       cube_path=None) -> Tuple[int, int]:
+def get_startsize_from(
+    label=None, table_name=None, cube_path=None
+) -> Tuple[int, int]:
     """Returns a tuple of ints that represent the true start byte and size
     based on the provided *label* or combination of *table_name* and
     *cube_path*.
@@ -102,39 +98,47 @@ def get_startsize_from(label=None, table_name=None,
     else:
         try:
             import pvl
+
             label = pvl.load(str(cube_path))
-            for t in label.getlist('Table'):
-                if t['Name'] == table_name:
+            for t in label.getlist("Table"):
+                if t["Name"] == table_name:
                     return _get_start_size(t)
             else:
-                raise KeyError(f"There is no table '{table_name}' in the "
-                               f"labels of {cube_path}")
+                raise KeyError(
+                    f"There is no table '{table_name}' in the "
+                    f"labels of {cube_path}."
+                )
         except ImportError:
-            name = isis.getkey(cube_path, objname='Table',
-                               keyword='Name').stdout.strip()
+            name = isis.getkey(
+                cube_path, objname="Table", keyword="Name"
+            ).stdout.strip()
             if table_name == name:
                 return _get_start_size(
-                    {'StartByte':
-                     isis.getkey(cube_path, objname='Table',
-                                 keyword='StartByte').stdout.strip(),
-                     'Bytes':
-                     isis.getkey(cube_path, objname='Table',
-                                 keyword='Bytes').stdout.strip()})
+                    {
+                        "StartByte": isis.getkey(
+                            cube_path, objname="Table", keyword="StartByte"
+                        ).stdout.strip(),
+                        "Bytes": isis.getkey(
+                            cube_path, objname="Table", keyword="Bytes"
+                        ).stdout.strip(),
+                    }
+                )
             else:
-                raise KeyError(f"The first table in {cube_path} that "
-                               "ISIS getkey could find is not named "
-                               f"{table_name} it is {name}.  If your "
-                               "cube has more than one table, you can "
-                               "provide the info via the label dict "
-                               "instead of table_name, or if you install "
-                               "the pvl Python library then this function "
-                               "can use it to find all of the tables.")
+                raise KeyError(
+                    f"The first table in {cube_path} that ISIS getkey could "
+                    f"find is not named {table_name} it is {name}.  If your "
+                    "cube has more than one table, you can provide the info "
+                    "via the label dict instead of table_name, or if you "
+                    "install the pvl Python library then this function can "
+                    "use it to find all of the tables."
+                )
 
 
 # This function is derived from this commit dated Sep 24, 2019:
 # https://github.com/USGS-Astrogeology/ale/commit/add5368ba46b2c911de9515afeaccc4d1c981000
-def read_table_data(cube_path: os.PathLike,
-                    label=None, table_name=None) -> bytes:
+def read_table_data(
+    cube_path: os.PathLike, label=None, table_name=None
+) -> bytes:
     """Returns a bytes object with the contents read from the file at
     *cube_path* based on the elements provided in the *label* or
     *table_name*.
@@ -192,30 +196,32 @@ def parse_table(data: bytes, fields: list) -> dict:
 
     row_len = 0
     for f in fields:
-        row_len += data_sizes[f['Type']] * int(f['Size'])
+        row_len += data_sizes[f["Type"]] * int(f["Size"])
     if len(data) % row_len != 0:
-        raise ValueError(f"The total sizes of each field ({row_len}) do not "
-                         "evenly divide into the size of the data "
-                         f"({len(data)}), so something is off.")
+        raise ValueError(
+            f"The total sizes of each field ({row_len}) do not evenly divide "
+            f"into the size of the data ({len(data)}), so something is off."
+        )
 
     # Parse the binary data
-    results = {f['Name']: [] for f in fields}
+    results = {f["Name"]: [] for f in fields}
     offset = 0
     while offset < len(data):
         for f in fields:
-            if f['Type'] == 'Text':
-                field_data = data[offset:offset + int(f['Size'])].decode(
-                    encoding='latin_1')
+            if f["Type"] == "Text":
+                field_data = data[offset : offset + int(f["Size"])].decode(
+                    encoding="latin_1"
+                )
             else:
-                data_fmt = data_formats[f['Type']] * int(f['Size'])
+                data_fmt = data_formats[f["Type"]] * int(f["Size"])
                 f_data = struct.unpack_from(data_fmt, data, offset)
                 if len(f_data) == 1:
                     field_data = f_data[0]
                 else:
                     field_data = list(f_data)
 
-            results[f['Name']].append(field_data)
-            offset += data_sizes[f['Type']] * int(f['Size'])
+            results[f["Name"]].append(field_data)
+            offset += data_sizes[f["Type"]] * int(f["Size"])
 
     return results
 
@@ -223,8 +229,7 @@ def parse_table(data: bytes, fields: list) -> dict:
 # This function is derived from this commit dated Sep 24, 2019:
 # https://github.com/USGS-Astrogeology/ale/commit/add5368ba46b2c911de9515afeaccc4d1c981000
 def get_table(cube_path: os.PathLike, table_name: str) -> dict:
-    """Return a Python dictionary created from the named table in
-    the ISIS cube.
+    """Return a Python dictionary created from the named table in the ISIS cube.
 
     This function requires the pvl Python library.
     """
@@ -242,10 +247,11 @@ def get_table(cube_path: os.PathLike, table_name: str) -> dict:
 
     try:
         import pvl
+
         label = pvl.load(str(cube_path))
         table_label = None
-        for t in label.getlist('Table'):
-            if t['Name'] == table_name:
+        for t in label.getlist("Table"):
+            if t["Name"] == table_name:
                 table_label = t
                 break
 
@@ -255,7 +261,7 @@ def get_table(cube_path: os.PathLike, table_name: str) -> dict:
         #     table_data = file_object.read(size)
         # else:
         table_data = read_table_data(cube_path, table_label)
-        return parse_table(table_data, table_label.getlist('Field'))
+        return parse_table(table_data, table_label.getlist("Field"))
 
         # The original ale function added the keywords into the returned
         # table, but that doesn't seem like a great idea, since that means
@@ -271,13 +277,17 @@ def get_table(cube_path: os.PathLike, table_name: str) -> dict:
         # return results
 
     except ImportError:
-        warn("The pvl library is not present, so get_table() cannot be used. "
-             "The parse_table() function might work for you.", ImportWarning)
+        warn(
+            "The pvl library is not present, so get_table() cannot be used. "
+            "The parse_table() function might work for you.",
+            ImportWarning,
+        )
         raise
 
 
-def overwrite_table_data(cube_path: os.PathLike, data: bytes,
-                         label=None, table_name=None):
+def overwrite_table_data(
+    cube_path: os.PathLike, data: bytes, label=None, table_name=None
+):
     """The file at *cube_path* will be modified by overwriting the
     data in the specfied table name with the contents of *data*.
 
@@ -307,9 +317,11 @@ def overwrite_table_data(cube_path: os.PathLike, data: bytes,
     (start, size) = get_startsize_from(label, table_name, cube_path)
 
     if size != len(data):
-        raise ValueError(f"The size of the table ({size}) to be overwritten "
-                         f"from the file  ({cube_path}) is different from "
-                         f"size of the data provided ({len(data)}).")
+        raise ValueError(
+            f"The size of the table ({size}) to be overwritten from the file "
+            f"({cube_path}) is different from size of the data provided "
+            f"({len(data)})."
+        )
 
     with open(cube_path, "r+b") as cubehandle:
         cubehandle.seek(start)
@@ -344,36 +356,42 @@ def encode_table(table: dict, fields: list) -> bytes:
         field_lengths.add(len(v))
 
     if not len(field_lengths) == 1:
-        raise IndexError("At least one of the lists in the table has "
-                         f"a different length than the rest: {field_lengths}")
+        raise IndexError(
+            "At least one of the lists in the table has "
+            f"a different length than the rest: {field_lengths}"
+        )
 
     data = bytes()
     for row in range(field_lengths.pop()):
         for f in fields:
-            obj = table[f['Name']][row]
-            size = int(f['Size'])
-            if f['Type'] == 'Text':
+            obj = table[f["Name"]][row]
+            size = int(f["Size"])
+            if f["Type"] == "Text":
                 if len(obj) > size:
-                    raise IndexError(f"The length of {obj} ({len(obj)}) is "
-                                     "larger than the allowable Size of the "
-                                     f"field ({size})")
+                    raise IndexError(
+                        f"The length of {obj} ({len(obj)}) is "
+                        "larger than the allowable Size of the "
+                        f"field ({size})"
+                    )
                 else:
                     data += obj.ljust(size).encode(encoding="latin_1")
             else:
-                data_fmt = data_formats[f['Type']] * size
+                data_fmt = data_formats[f["Type"]] * size
                 if isinstance(obj, abc.Sequence):
                     if len(obj) == size:
                         data += struct.pack(data_fmt, *obj)
                     else:
-                        raise IndexError(f"The length of {obj} ({len(obj)}) "
-                                         " is different than the Size of the "
-                                         f"field ({size})")
+                        raise IndexError(
+                            f"The length of {obj} ({len(obj)}) is different "
+                            f"than the Size of the field ({size})."
+                        )
                 elif size == 1:
                     data += struct.pack(data_fmt, obj)
                 else:
-                    raise ValueError(f"There is only a single value ({obj}) "
-                                     "but the field indicates there should "
-                                     f"be {int(f['Size'])}.")
+                    raise ValueError(
+                        f"There is only a single value ({obj}) but the field "
+                        f"indicates there should be {int(f['Size'])}."
+                    )
 
     return data
 
@@ -392,20 +410,23 @@ def overwrite_table(cube_path: os.PathLike, table_name: str, table: dict):
 
     try:
         import pvl
+
         label = pvl.load(str(cube_path))
         table_label = None
-        for t in label.getlist('Table'):
-            if t['Name'] == table_name:
+        for t in label.getlist("Table"):
+            if t["Name"] == table_name:
                 table_label = t
                 break
 
-        data = encode_table(table, table_label.getlist('Field'))
+        data = encode_table(table, table_label.getlist("Field"))
         overwrite_table_data(cube_path, data, table_label)
 
         return
 
     except ImportError:
-        warn("The pvl library is not present, so overwrite_table() cannot be "
-             "used. The overwrite_table_data() function might work for you.",
-             ImportWarning)
+        warn(
+            "The pvl library is not present, so overwrite_table() cannot be "
+            "used. The overwrite_table_data() function might work for you.",
+            ImportWarning,
+        )
         raise

@@ -16,10 +16,10 @@ import kalasiris.kalasiris
 
 
 class TestHOME(unittest.TestCase):
-    '''Not all platforms have a $HOME environment variable.'''
+    """Not all platforms have a $HOME environment variable."""
 
     def test_HOME(self):
-        if 'HOME' in os.environ:
-            del os.environ['HOME']
+        if "HOME" in os.environ:
+            del os.environ["HOME"]
 
         self.assertTrue(importlib.reload(kalasiris.kalasiris))

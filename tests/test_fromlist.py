@@ -19,43 +19,44 @@ import kalasiris as isis
 
 
 run_real_files = True
-run_real_files_reason = 'Tests on real files.'
+run_real_files_reason = "Tests on real files."
 
 
 class TestFromList(unittest.TestCase):
-
     def setUp(self):
-        self.list = ['a.cub', 'b.cub', 'c.cub']
+        self.list = ["a.cub", "b.cub", "c.cub"]
 
-    @patch('kalasiris.fromlist.builtins.print')
+    @patch("kalasiris.fromlist.builtins.print")
     def test_print(self, m_print):
         isis.fromlist.print(self.list)
         self.assertEqual(m_print.call_args_list[0][0][0], self.list[0])
         self.assertEqual(m_print.call_args_list[1][0][0], self.list[1])
         self.assertEqual(m_print.call_args_list[2][0][0], self.list[2])
 
-    @patch('kalasiris.fromlist.builtins.print')
+    @patch("kalasiris.fromlist.builtins.print")
     def test_print_fl(self, m_print):
         isis.fromlist.print_fl(self.list)
         self.assertEqual(m_print.call_args_list[0][0][0], self.list[0])
         self.assertEqual(m_print.call_args_list[1][0][0], self.list[1])
         self.assertEqual(m_print.call_args_list[2][0][0], self.list[2])
 
-    @patch('kalasiris.fromlist.print_fl')
+    @patch("kalasiris.fromlist.print_fl")
     def test_make(self, m_print_fl):
         m_filelike = Mock()
-        m_filelike.name = 'dummy.txt'
-        with patch('kalasiris.fromlist.tempfile.NamedTemporaryFile',
-                   return_value=m_filelike):
+        m_filelike.name = "dummy.txt"
+        with patch(
+            "kalasiris.fromlist.tempfile.NamedTemporaryFile",
+            return_value=m_filelike,
+        ):
             temp_file = isis.fromlist.make(self.list)
             self.assertEqual(temp_file, Path(m_filelike.name))
             m_print_fl.called_once_with(self.list, file=m_filelike)
 
-    @patch('kalasiris.fromlist.print_fl')
+    @patch("kalasiris.fromlist.print_fl")
     def test_make_wfile(self, m_print_fl):
         m_filelike = Mock()
-        m_filelike.name = 'dummy.txt'
-        with patch('kalasiris.fromlist.open', return_value=m_filelike):
+        m_filelike.name = "dummy.txt"
+        with patch("kalasiris.fromlist.open", return_value=m_filelike):
             temp_file = isis.fromlist.make(self.list, m_filelike.name)
             self.assertEqual(temp_file, Path(m_filelike.name))
             m_print_fl.called_once_with(self.list, file=m_filelike)
@@ -63,24 +64,23 @@ class TestFromList(unittest.TestCase):
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)
 class TestFromList_filesystem(unittest.TestCase):
-
     def setUp(self):
-        self.list = ['a.cub', 'b.cub', 'c.cub']
-        self.text = 'a.cub\nb.cub\nc.cub\n'
-        self.path = Path('test_fromlist.txt')
+        self.list = ["a.cub", "b.cub", "c.cub"]
+        self.text = "a.cub\nb.cub\nc.cub\n"
+        self.path = Path("test_fromlist.txt")
 
     def tearDown(self):
         with contextlib.suppress(FileNotFoundError):
             self.path.unlink()
 
     def test_print(self):
-        with open(self.path, 'w') as f:
+        with open(self.path, "w") as f:
             isis.fromlist.print(self.list, f)
         self.assertTrue(self.path.exists())
         self.assertEqual(self.path.read_text(), self.text)
 
     def test_print_fl(self):
-        with open(self.path, 'w') as f:
+        with open(self.path, "w") as f:
             isis.fromlist.print_fl(self.list, f)
         self.assertTrue(self.path.exists())
         self.assertEqual(self.path.read_text(), self.text)

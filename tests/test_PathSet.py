@@ -17,15 +17,16 @@ import kalasiris as isis
 
 
 run_real_files = True
-run_real_files_reason = 'Tests on real files.'
+run_real_files_reason = "Tests on real files."
 
 
 class TestPathSet(unittest.TestCase):
-
     def setUp(self):
-        self.paths = (Path('test_PathSet_1.cub'),
-                      Path('test_PathSet_2.txt'),
-                      Path('test_PathSet_3.foo'))
+        self.paths = (
+            Path("test_PathSet_1.cub"),
+            Path("test_PathSet_2.txt"),
+            Path("test_PathSet_3.foo"),
+        )
 
     def tearDown(self):
         with contextlib.suppress(FileNotFoundError):
@@ -41,7 +42,7 @@ class TestPathSet(unittest.TestCase):
         self.assertEqual(3, len(ps))
 
     def test_init_fail(self):
-        self.assertRaises(TypeError, isis.PathSet, 'a string')
+        self.assertRaises(TypeError, isis.PathSet, "a string")
 
     def test_add(self):
         ps = isis.PathSet()
@@ -53,7 +54,7 @@ class TestPathSet(unittest.TestCase):
         ps = isis.PathSet()
         p0 = self.paths[0]
         ps.add(p0)
-        self.assertRaises(TypeError, ps.add, 'not a Path')
+        self.assertRaises(TypeError, ps.add, "not a Path")
         self.assertRaises(ValueError, ps.add, p0)
 
     @unittest.skipUnless(run_real_files, run_real_files_reason)
