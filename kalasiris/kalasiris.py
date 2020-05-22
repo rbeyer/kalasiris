@@ -9,6 +9,7 @@
 # top level of this library.
 
 # Thou shalt only import from the Python Standard Library.
+import logging
 import os
 import subprocess
 import sys
@@ -21,6 +22,10 @@ __version__ = "1.8.0-dev"
 
 # Set a logger:
 logger = logging.getLogger(__name__)
+
+# Set a logger:
+logger = logging.getLogger(__name__)
+
 
 # These definitions and the use of env= in the subprocess.run calls allow us to
 # run ISIS in a very lean environment.  Of course, users can override with
@@ -87,7 +92,11 @@ def param_fmt(key: str, value: str) -> str:
 
 
 def _run_isis_program(cmd: list) -> subprocess.CompletedProcess:
-    """Wrapper for subprocess.run()"""
+    """Wrapper for subprocess.run().
+
+    Also logs the elements of *cmd* to the logger at level INFO.
+    """
+    logger.info(" ".join(cmd))
     return subprocess.run(
         cmd,
         env=environ,

@@ -91,6 +91,33 @@ set to 5, where you could fiddle with controls, hit the run button,
 and when you closed the window, your Python program would start
 right back up where it left off.
 
+Logging
+~~~~~~~
+
+The kalasiris library uses the Logging Facility API provided by the
+Python standard library.  When you run any of the ISIS "functions"
+with kalasiris, what would be entered on the command line (the ISIS
+program name, the arguments, etc.) are logged with a log level of
+INFO.
+
+So if you wanted to have your program write out information about
+the ISIS programs that are being called, you just need to set up a
+basic logger in your program like so::
+
+    import logging
+    import kalasiris as isis
+    logging.basicConfig(level=logging.INFO)
+    isis.spiceinit("my.cub")
+
+Without importing the logging module and calling the basicConfig
+method, nothing would be printed to the console, but my.cub would
+be spiceinit'ed.  With those in place, you'd get this::
+
+    spiceinit from=my.cub
+
+Maybe by default, you'd set your logger to only log at logging.WARNING,
+but if someone gave your program the -v flag or something, you'd set it
+to logging.INFO.
 
 kalasiris as wrapper
 ~~~~~~~~~~~~~~~~~~~~

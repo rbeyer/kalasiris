@@ -4,6 +4,8 @@ History
 
 1.8.0 (2020-??-??)
 ------------------
+* The ISIS functions now automatically log with a level of INFO.
+* Adopted Black formatting.
 * Minor spelling and formatting improvements.
 
 1.7.1 (2020-05-05)
