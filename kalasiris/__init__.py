@@ -3,8 +3,8 @@
 """Top-level package for kalasiris."""
 
 __author__ = """Ross A. Beyer"""
-__email__ = 'rbeyer@seti.org'
-__version__ = '1.7.1'
+__email__ = "rbeyer@seti.org"
+__version__ = "1.8.0-dev"
 
 from .kalasiris import *                      # noqa: F401,F403
 from .k_funcs import *                        # noqa: F401,F403
