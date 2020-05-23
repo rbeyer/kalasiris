@@ -13,11 +13,10 @@ import contextlib
 import subprocess
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
-from kalasiris.kalasiris import _get_isis_program_names as gipn
 import kalasiris.kalasiris as isis
 from .utils import resource_check as rc
-
 
 run_real_files = True
 run_real_files_reason = "Tests on real files, and runs ISIS."
@@ -78,14 +77,31 @@ class TestParams(unittest.TestCase):
         self.assertEqual("FROM", cp[0])
 
 
-class Test_get_isis_program_names(unittest.TestCase):
-    @unittest.skipUnless(run_real_files, run_real_files_reason)
-    def test_get_names(self):
-        # for n in gipn():
-        #     print(n)
-        # s = sum(1 for _ in gipn())
-        # print(f'How many programs: {s}')
-        self.assertIn("cam2map", gipn())
+class Test_Mocks(unittest.TestCase):
+    def setUp(self) -> None:
+        self.subp_defs = dict(
+            check=True,
+            env=isis.environ,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+
+    @patch("kalasiris.kalasiris.subprocess.run")
+    def test_subprocess_change_default(self, subp):
+        isis.spiceinit("foo.cub", _check=False)
+        self.subp_defs["check"] = False
+        subp.assert_called_once_with(
+            ["spiceinit", "from=foo.cub"], **self.subp_defs
+        )
+
+    @patch("kalasiris.kalasiris.subprocess.run")
+    def test_subprocess_add(self, subp):
+        isis.cam2map("from.cub", to="to.cub", _cwd="foo")
+        self.subp_defs.update({"cwd": "foo"})
+        subp.assert_called_once_with(
+            ["cam2map", "from=from.cub", "to=to.cub"], **self.subp_defs
+        )
 
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)

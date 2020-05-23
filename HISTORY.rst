@@ -4,7 +4,9 @@ History
 
 1.8.0 (2020-??-??)
 ------------------
+* Added the ability to pass arguments to ``subprocess.run()`` for each ISIS program.
 * The ISIS functions now automatically log with a level of INFO.
+* Adopted Conventional Commits pattern (https://www.conventionalcommits.org/en/v1.0.0) for commit messages.
 * Adopted Black formatting.
 * Minor spelling and formatting improvements.
 

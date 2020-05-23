@@ -91,20 +91,24 @@ def param_fmt(key: str, value: str) -> str:
         return "{}={}".format(key.rstrip("_"), value)
 
 
-def _run_isis_program(cmd: list) -> subprocess.CompletedProcess:
+def _run_isis_program(
+    cmd: list, subprocess_kwargs: dict = None
+) -> subprocess.CompletedProcess:
     """Wrapper for subprocess.run().
 
     Also logs the elements of *cmd* to the logger at level INFO.
     """
+    if subprocess_kwargs is None:
+        subprocess_kwargs = dict()
+    # Set some reasonable defaults, if they aren't already set:
+    subprocess_kwargs.setdefault("env", environ)
+    subprocess_kwargs.setdefault("check", True)
+    subprocess_kwargs.setdefault("stdout", subprocess.PIPE)
+    subprocess_kwargs.setdefault("stderr", subprocess.PIPE)
+    subprocess_kwargs.setdefault("universal_newlines", True)
+
     logger.info(" ".join(cmd))
-    return subprocess.run(
-        cmd,
-        env=environ,
-        check=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-    )
+    return subprocess.run(cmd, **subprocess_kwargs)
 
 
 def _build_isis_fn(fn_name: str):
@@ -113,8 +117,24 @@ def _build_isis_fn(fn_name: str):
     # Define the structure of the generic function, isis_fn:
     def isis_fn(*args, **kwargs) -> subprocess.CompletedProcess:
         __name__ = fn_name  # noqa: F841
-        __doc__ = f"Runs ISIS3 {fn_name}"  # noqa: F841
+        __doc__ = f"""Runs ISIS3 {fn_name}"""
+        __doc__ += """
+
+Any keyword arguments that begin with an underscore (_) will
+have their leading underscore removed and passed on to
+subprocess.run(), please see its documentation to see what is
+allowed.
+"""
         cmd = [fn_name]
+        # Extract any keyword arguments for subprocess.run:
+        subprocess_kwargs = dict()
+        isis_kwargs = dict()
+        for k, v in kwargs.items():
+            if k.startswith("_"):
+                subprocess_kwargs[k[1:]] = v
+            else:
+                isis_kwargs[k] = v
+
         if fn_name in _pass_through_programs:
             cmd.extend(args)
         else:
@@ -133,8 +153,10 @@ def _build_isis_fn(fn_name: str):
                         "not sure what to do with " + a
                     )
                     raise IndexError(e)
-            cmd.extend(map(param_fmt, kwargs.keys(), kwargs.values()))
-        return _run_isis_program(cmd)
+            cmd.extend(
+                map(param_fmt, isis_kwargs.keys(), isis_kwargs.values())
+            )
+        return _run_isis_program(cmd, subprocess_kwargs)
 
     # Then add it, by name to the enclosing module.
     setattr(sys.modules[__name__], fn_name, isis_fn)
