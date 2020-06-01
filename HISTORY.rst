@@ -2,7 +2,7 @@
 History
 =======
 
-1.8.0 (2020-??-??)
+1.8.0 (2020-06-01)
 ------------------
 * Added the ability to pass arguments to ``subprocess.run()`` for each ISIS program.
 * The ISIS functions now automatically log with a level of INFO.

@@ -109,15 +109,20 @@ basic logger in your program like so::
     logging.basicConfig(level=logging.INFO)
     isis.spiceinit("my.cub")
 
-Without importing the logging module and calling the basicConfig
-method, nothing would be printed to the console, but my.cub would
-be spiceinit'ed.  With those in place, you'd get this::
+Then on stderr, you'd get this message::
 
     spiceinit from=my.cub
 
+Without importing the logging module and calling the basicConfig
+method, nothing would be printed to stderr, but my.cub would
+still be spiceinit'ed.  This logging functionality is meant to stay
+out of your way when you don't want it, but easier to use than
+having to format this yourself every time you want to see what's going on.
+
 Maybe by default, you'd set your logger to only log at logging.WARNING,
 but if someone gave your program the -v flag or something, you'd set it
-to logging.INFO.
+to logging.INFO so they could see everything.
+
 
 kalasiris as wrapper
 ~~~~~~~~~~~~~~~~~~~~
@@ -161,7 +166,7 @@ want to consider running them wrapped in a try-block that looks like this::
         print(err.stderr)
         raise err
 
-If you don't cath the ``subprocess.CalledProcessError`` like this
+If you don't catch the ``subprocess.CalledProcessError`` like this
 and print out all of its elements, you won't have good visibility
 into the problem that ISIS had.  You'll see the error Python had
 ("this subprocess failed") but not the error ISIS had ("this ISIS
@@ -170,6 +175,29 @@ also prints out the actual command that was given to ISIS, so you
 can copy this from the printed error message and paste it to your
 own command line to run directly, which can help diagnose the
 problem.
+
+Finally, the Python subprocess.run() command also has arguments that
+you might want to take advantage of, and you can do so by passing arguments
+to your kalasiris ISIS function with "leading" underbars, like so::
+
+    import kalasiris as isis
+    working_dir = Path("to/some/other/directory")
+    edr = Path("/some/hirise.IMG")
+    cube = Path("/output/hirise.cub")
+    isis.hi2isis(edr, to=cube, _cwd=working_dir)
+
+In this case, the first argument is used as 'FROM=' for ISIS, and the ``cube``
+variable is the 'TO=" parameter for hi2isis, but the ``_cwd`` is stripped out
+and its value (``working_dir``) is given to the ``subprocess.run()``
+as the ``cwd`` argument.  This means that ``subprocess.run()`` will change to
+that directory and run there, (so you'll probably end up with a ``print.prt``
+file there.  That may not seem very important, and it is unlikely you will
+need this often, but if you are trying to run some ISIS programs in parallel,
+and they all need to write to the same file, then being able to create a
+set of different working directories and having them each rooted in their own,
+so they don't clash, can be helpful.  Surely, there are lots of other handy
+uses for arguments to ``subprocess.run()``, and you have access to all of them.
+
 
 
 What do kalasiris ISIS functions return?
