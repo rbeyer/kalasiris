@@ -1,46 +1,51 @@
-### Description
+<!--- Provide a general summary of your changes in the Title above -->
 
-Describe the changes that you are proposing.
+## Description
+<!--- Describe your changes in detail -->
 
-### Related Issue
+## Related Issue
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
 
-If this PR is in response to an open Issue, please link to it here
-([Referencing issues and pull requests](https://help.github.com/en/articles/basic-writing-and-formatting-syntax#referencing-issues-and-pull-requests)).
+## Motivation and Context
+<!--- Why is this change required? What problem does it solve? -->
+<!--- If it fixes an open issue, please link to the issue here. -->
 
-### Types of proposed changes
-- [ ] Bug fix (backwards compatible fixes)
-- [ ] New feature (backwards compatible change which adds functionality)
-- [ ] Breaking change (backwards incompatible changes)
-- [ ] Documentation change (update to the documentation; no code change)
+## How Has This Been Tested?
+<!--- Please describe in detail how you tested your changes. -->
+<!--- Include details of your testing environment, and the tests you ran to -->
+<!--- see how your change affects other areas of the code, etc. -->
+<!--- If any of the tests below were *not* run, please delete the line -->
+- make lint
+- make docs
+- make test-all
 
-### Checklist
+## Types of changes
+<!--- What types of changes does your code introduce? Remove lines that do not apply: -->
+- Bug fix (non-breaking change which fixes an issue)
+- New feature (non-breaking change which adds functionality)
+- Breaking change (fix or feature that would cause existing functionality to change)
 
-Please make sure to read the
-[CONTRIBUTING document](https://github.com/rbeyer/kalasiris/blob/master/CONTRIBUTING.rst),
-but at a minimum you should have:
+## Checklist:
+<!--- Go over all the following points, and remove lines that do not apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- My change requires a change to the documentation.
+- I have updated the documentation accordingly.
+- I have read the [**CONTRIBUTING** document](https://github.com/rbeyer/kalasiris/blob/master/CONTRIBUTING.rst).
+- I have added tests to cover my changes.
+- All new and existing tests passed.
 
-- written new tests related to the change
-- `make lint` should pass
-- `make test` should pass
+## Licensing:
 
-### Licensing
+This project is released under the [LICENSE](https://github.com/rbeyer/kalasiris/blob/master/LICENSE).
 
-This project is released under the Apache Software License 2.0.
+<!-- Remove the statement that does not apply. -->
+- I claim copyrights on my contributions in this pull request, and I provide those contributions via this pull request under the same license terms that the pvl project uses.
+- I dedicate any and all copyright interest in my contributions in this pull request to the public domain.  I make this dedication for the benefit of the public at large and to the detriment of my heirs and successors. I intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this contribution under copyright law.
 
-Minor contributions can be made by simply adding your name to the
-[AUTHORS file](https://github.com/rbeyer/kalasiris/blob/master/AUTHORS.rst)
-in your Pull Request, and by submitting this Pull Request, you
-acknowledge that--if incorporated--your changes will be released
-under that license.
+<!-- No matter how you contributed, please make sure you add your name to the
+[AUTHORS](https://github.com/rbeyer/kalasiris/blob/master/AUTHORS.rst) file,
+if you haven't already. -->
 
-Major contributions can be made by adding your own copyright line
-to the files that constitute that major contribution, and adding
-your name as above.  It is unlikely that contributions submitted
-under a license that isn't the Apache Software License 2.0 will be
-accepted (but if you have a strong reason, let's discuss in an
-issue).
-
-Those individuals who wish to provide a contribution under the
-public domain are welcome to note that in their commit messages,
-but if the contribution is merged, it will then be placed under the
-Apache Software License 2.0 when released with this software.
+<!-- Thanks for contributing to kalasiris! -->
