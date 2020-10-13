@@ -41,6 +41,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/rbeyer/kalasiris',
-    version='1.9.0-dev',
+    version='1.9.0',
     zip_safe=False,
 )
