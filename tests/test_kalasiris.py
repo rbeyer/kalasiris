@@ -72,7 +72,14 @@ class TestParams(unittest.TestCase):
         self.assertEqual(truth, cmd)
 
     def test_reserved_nokey(self):
-        cp = isis.getkey("help__").stdout.split()
+        try:
+            cp = isis.getkey("help__").stdout.split()
+        except subprocess.CalledProcessError as err:
+            print("Had an ISIS error:")
+            print(" ".join(err.cmd))
+            print(err.stdout)
+            print(err.stderr)
+            raise err
 
         self.assertEqual("FROM", cp[0])
 
