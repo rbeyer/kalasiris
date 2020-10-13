@@ -1,67 +1,22 @@
 # Config file for automatic testing at travis-ci.org
 
 language: python
+python:
+    - 3.6
+    - 3.7
+    - 3.8
+env: ISISVER=3.6.1 CONDANAME=isis3 VARINIT=isis3VarInit.py
 jobs:
-    - &isis361
-        name: "ISIS 3.6.1 Python 3.6"
-        python: 3.6
-        env: ISISVER=3.6.1 CONDANAME=isis3 VARINIT=isis3VarInit.py
-    - <<: *isis361
-        name: "ISIS 3.6.1 Python 3.7"
-        python: 3.7
-    - <<: *isis361
-        name: "ISIS 3.6.1 Python 3.8"
-        python: 3.8
-    - &isis38
-        name: "ISIS 3.8.1 Python 3.6"
-        python: 3.6
+    - name: "ISIS 3.8.1"
         env: ISISVER=3.8.1 CONDANAME=isis3 VARINIT=isis3VarInit.py
-    - <<: *isis38
-        name: "ISIS 3.8.1 Python 3.7"
-        python: 3.7
-    - <<: *isis38
-        name: "ISIS 3.8.1 Python 3.8"
-        python: 3.8
-    - &isis39
-        name: "ISIS 3.9.0 Python 3.6"
-        python: 3.6
+    - name: "ISIS 3.9.0"
         env: ISISVER=3.9.0 CONDANAME=isis3 VARINIT=isis3VarInit.py
-    - <<: *isis39
-        name: "ISIS 3.9.0 Python 3.7"
-        python: 3.7
-    - <<: *isis39
-          name: "ISIS 3.9.0 Python 3.8"
-          python: 3.8
-    - &isis40
-        name: "ISIS 4.0.0 Python 3.6"
-        python: 3.6
+    - name: "ISIS 4.0.0"
         env: ISISVER=4.0.0 CONDANAME=isis VARINIT=isis3VarInit.py
-    - <<: *isis40
-        name: "ISIS 4.0.0 Python 3.7"
-        python: 3.7
-    - <<: *isis40
-          name: "ISIS 4.0.0 Python 3.8"
-          python: 3.8
-    - &isis41
-        name: "ISIS 4.1.0 Python 3.6"
-        python: 3.6
+    - name: "ISIS 4.1.0"
         env: ISISVER=4.1.0 CONDANAME=isis VARINIT=isis3VarInit.py
-    - <<: *isis41
-        name: "ISIS 4.1.0 Python 3.7"
-        python: 3.7
-    - <<: *isis41
-          name: "ISIS 4.1.0 Python 3.8"
-          python: 3.8
-    - &isis42
-        name: "ISIS 4.2.0 Python 3.6"
-        python 3.6
+    - name: "ISIS 4.2.0"
         env: ISISVER=4.2.0 CONDANAME=isis VARINIT=isis3VarInit.py
-    - <<: *isis42
-        name: "ISIS 4.2.0 Python 3.7"
-        python 3.7
-    - <<: *isis42
-          name: "ISIS 4.2.0 Python 3.8"
-          python 3.8
 # - <<: *base
 #   name: "ISIS 4.3.0"
 #   env: ISISVER=4.3.0 CONDANAME=isis VARINIT=isisVarInit.py
