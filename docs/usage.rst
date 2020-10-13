@@ -234,8 +234,8 @@ ISIS Interaction
 ----------------
 
 When you import kalasiris, it looks for the ``ISISROOT`` and
-``ISIS3DATA`` environment variables, so that it knows where to
-find those programs on your system.
+``ISISDATA`` (also accepts ``ISIS3DATA``) environment variables,
+so that it knows where to find those programs and resources on your system.
 
 In the post ISIS 3.6.0 era, ISIS is installed via conda.  So you
 have a *base* environment, and perhaps an *isis* environment.
@@ -274,7 +274,7 @@ your *isis* environment, these are the values of the ISIS environment
 variables::
 
     ISISROOT=$HOME/anaconda3/envs/isis
-    ISIS3DATA=$HOME/anaconda3/envs/isis/data
+    ISISDATA=$HOME/anaconda3/envs/isis/data
 
 Where ``$HOME`` is your home directory.
 
@@ -306,7 +306,7 @@ You have at least three options:
         my_isisroot = os.path.join(os.eviron['HOME'],
                                    'anaconda3','envs','isis')
         os.environ['ISISROOT'] = my_isisroot
-        os.environ['ISIS3DATA'] = os.path.join(my_isisroot, 'data')
+        os.environ['ISISDATA'] = os.path.join(my_isisroot, 'data')
 
         import kalasiris
 

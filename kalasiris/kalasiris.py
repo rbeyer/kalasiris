@@ -31,14 +31,19 @@ logger = logging.getLogger(__name__)
 # run ISIS in a very lean environment.  Of course, users can override with
 # their complete environment by making kalasiris.environ = os.environ
 # before any calls to ISIS programs.
-_isisroot = os.environ["ISISROOT"]
-_isis3data = os.environ["ISIS3DATA"]
 environ = {
-    "ISISROOT": _isisroot,
-    "ISIS3DATA": _isis3data,
-    "PATH": str(Path(_isisroot) / "bin"),
+    "ISISROOT": os.environ["ISISROOT"],
+    "PATH": str(Path(os.environ["ISISROOT"]) / "bin"),
     "HOME": os.path.expanduser("~"),
 }
+try:
+    environ["ISISDATA"] = os.environ["ISISDATA"]
+except KeyError:
+    try:
+        environ["ISIS3DATA"] = os.environ["ISIS3DATA"]
+    except KeyError:
+        raise KeyError("Neither ISISDATA nor ISIS3DATA are in os.environ.")
+
 # If we don't also set $HOME, ISIS tries to make a local ./\$HOME dir
 # Can't just use os.environ['HOME'] because not all platforms have
 # that environment variable set (Windows uses something different).

@@ -2,13 +2,28 @@
 
 language: python
 python:
-  - 3.6
-env:
+    - 3.6
+    - 3.7
+    - 3.8
+jobs:
     # ISISVER=3.6.0 the requirements line for libtiff results in an error
-    - ISISVER=3.6.1
-    - ISISVER=3.6.2
-    - ISISVER=3.8.1
-    - ISISVER=3.9.0
+    - name: "ISIS 3.6.1"
+      env: ISISVER=3.6.1 CONDANAME=isis3 VARINIT=isis3VarInit.py
+    - name: "ISIS 3.6.2"
+      env: ISISVER=3.6.2 CONDANAME=isis3 VARINIT=isis3VarInit.py
+    - name: "ISIS 3.8.1"
+      env: ISISVER=3.8.1 CONDANAME=isis3 VARINIT=isis3VarInit.py
+    - name: "ISIS 3.9.0"
+      env: ISISVER=3.9.0 CONDANAME=isis3 VARINIT=isis3VarInit.py
+    - name: "ISIS 4.0.0"
+      env: ISISVER=4.0.0 CONDANAME=isis VARINIT=isis3VarInit.py
+    - name: "ISIS 4.1.0"
+      env: ISISVER=4.1.0 CONDANAME=isis VARINIT=isis3VarInit.py
+    - name: "ISIS 4.2.0"
+      env: ISISVER=4.2.0 CONDANAME=isis VARINIT=isis3VarInit.py
+    - name: "ISIS 4.3.0"
+      env: ISISVER=4.3.0 CONDANAME=isis VARINIT=isisVarInit.py
+
 
 
 # Here we install Miniconda:
@@ -28,9 +43,9 @@ before_install:
 install:
     # Install and activate ISIS:
     - conda create -q -n test python=$TRAVIS_PYTHON_VERSION
-    - conda install -q -n test -c usgs-astrogeology isis3=$ISISVER
+    - conda install -q -n test -c usgs-astrogeology $CONDANAME=$ISISVER
     - source activate test
-    - python $CONDA_PREFIX/scripts/isis3VarInit.py --data-dir="$TRAVIS_BUILD_DIR/test-ISIS3DATA"
+    - python $CONDA_PREFIX/scripts/$VARINIT --data-dir="$TRAVIS_BUILD_DIR/test-ISIS3DATA"
     - source activate test
     - conda info -a
     - python --version

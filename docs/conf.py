@@ -26,12 +26,12 @@ try:
     import kalasiris
 except KeyError as err:
     # print(err)
-    if("'ISISROOT'" == str(err) or "'ISIS3DATA'" == str(err)):
+    if "'ISISROOT'" == str(err):
         print('Not running in an ISIS enabled environment.')
         print('Using fakeISISROOT/ to build the docs.')
         # Use the fake ISISROOT
         os.environ['ISISROOT'] = 'fakeISISROOT'
-        os.environ['ISIS3DATA'] = 'fakeISISROOT'
+        os.environ['ISISDATA'] = 'fakeISISROOT'
         # Since we aren't actually going to run the programs in
         # this case, the code should never need ISIS3DATA, so it
         # shouldn't matter what it is set to.
