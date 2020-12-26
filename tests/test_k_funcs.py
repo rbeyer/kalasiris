@@ -18,13 +18,15 @@ from pathlib import Path
 
 import kalasiris as isis
 from .utils import resource_check as rc
-
+from .utils import (
+    resource_check as rc,
+    real_files as run_real_files,
+    real_files_reason as run_real_files_reason
+)
 
 # Hardcoding these, but I sure would like a better solution.
 # IsisPreferences = os.path.join('test-resources', 'IsisPreferences')
 HiRISE_img = Path("test-resources") / "PSP_010502_2090_RED5_0.img"
-run_real_files = True
-run_real_files_reason = "Tests on real files, and runs ISIS."
 
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)

@@ -26,7 +26,11 @@ and the release date, in year-month-day format (see examples below).
 
 Unreleased
 ----------
-Nothing yet.
+
+Changed
++++++++
+* Testing now defaults to only running on mocks.
+* Consolidated boolean that controls testing on "real files" to single place.
 
 
 1.9.0 (2020-10-13)

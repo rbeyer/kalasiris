@@ -16,10 +16,10 @@ from unittest.mock import Mock, patch
 from pathlib import Path
 
 import kalasiris as isis
-
-
-run_real_files = True
-run_real_files_reason = "Tests on real files."
+from .utils import (
+    real_files as run_real_files,
+    real_files_reason as run_real_files_reason
+)
 
 
 class TestFromList(unittest.TestCase):

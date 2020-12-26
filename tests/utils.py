@@ -12,6 +12,8 @@
 import collections
 from pathlib import Path
 
+real_files = False
+real_files_reason = "Tests on real files, and runs ISIS."
 
 def resource_check(*args):
     """Checks to see if the files exist. And returns a tuple.

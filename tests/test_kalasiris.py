@@ -16,10 +16,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 import kalasiris.kalasiris as isis
-from .utils import resource_check as rc
+from .utils import (
+    resource_check as rc,
+    real_files as run_real_files,
+    real_files_reason as run_real_files_reason
+)
 
-run_real_files = True
-run_real_files_reason = "Tests on real files, and runs ISIS."
 
 # Hardcoding this, but I sure would like a better solution.
 HiRISE_img = Path("test-resources") / "PSP_010502_2090_RED5_0.img"
