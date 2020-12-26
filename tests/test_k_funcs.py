@@ -17,7 +17,6 @@ from unittest.mock import call, patch, MagicMock, Mock
 from pathlib import Path
 
 import kalasiris as isis
-from .utils import resource_check as rc
 from .utils import (
     resource_check as rc,
     real_files as run_real_files,
