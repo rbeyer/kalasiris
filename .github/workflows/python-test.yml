@@ -1,0 +1,75 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python Testing
+
+on: [push, pull_request]
+
+env:
+  python-version: 3.6
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      matrix:
+        # python-version: [3.6, 3.7, 3.8, 3.9]
+        # ISIS 3.6 and 3.8 are pinned to Python 3.6
+        # ISIS 3.9, 4.0.1, 4.1.1, 4.2.0, and 4.3.0
+        # give an UnsatisfiableError if not Python 3.6
+        # So just using the single env.python-version variable above.
+        isis-version: [4.0.0, 4.1.1]
+        # ISIS 4.0.1 has a libgsl version problem detailed
+        #   in the following issue for 4.2.0, but we get the same error:
+        # - https://github.com/USGS-Astrogeology/ISIS3/issues/3969
+        #   but 4.0.0 doesn't have that problem.
+        # ISIS 4.2.0 has a libarmadillo problem,
+        # - https://github.com/USGS-Astrogeology/ISIS3/issues/4165
+        conda-name: [isis]
+        var-init: [isis3VarInit.py]
+        include:
+          - isis-version: 3.6.1
+            conda-name: isis3
+            var-init: isis3VarInit.py
+          - isis-version: 3.8.1
+            conda-name: isis3
+            var-init: isis3VarInit.py
+          - isis-version: 3.9.0
+            conda-name: isis3
+            var-init: isis3VarInit.py
+          - isis-version: 4.3.0
+            conda-name: isis
+            var-init: isisVarInit.py
+
+    steps:
+    - name: Conda setup
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ env.python-version }}
+        channels: usgs-astrogeology, conda-forge
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Install ISIS
+      run: |
+        conda install -q -y -c usgs-astrogeology ${{ matrix.conda-name }}=${{ matrix.isis-version }}
+    - name: ISIS varinit
+      run: |
+        python $CONDA_PREFIX/scripts/${{ matrix.var-init }} --data-dir="$GITHUB_WORKSPACE/test-ISIS3DATA"
+    - name: Lint with flake8
+      run: |
+        conda install flake8
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 kalasiris tests --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 kalasiris tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test Install
+      run: python -m pip install -e .
+    - name: Test with pytest
+      run: |
+        conda install pytest
+        pytest
