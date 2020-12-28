@@ -31,6 +31,7 @@ Changed
 +++++++
 * Testing now defaults to only running on mocks.
 * Consolidated boolean that controls testing on "real files" to single place.
+* Enabled GitHub Workflows for testing.
 
 
 1.9.0 (2020-10-13)
