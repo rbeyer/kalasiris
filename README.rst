@@ -64,18 +64,12 @@ to COVID-19, Abstract #2441. `ADS URL
 Quickstart
 ----------
 
-Are you new to Python?  Or you just don't want to mess with
-sophisticated Python installation procedures?  Or you don't want
-to commit to installing something when you don't know if it will
-be worth it?  Or you just want to write something 'real quick' in
-Python and need to call some ISIS programs **now**?
+Are you new to Python? Do you just want to write something 'real quick'
+in Python and need to call some ISIS programs **now**?
 
 We've got you covered.
 
-Just go into the ``kalasiris`` directory, and copy the ``kalasiris.py``
-file into the same directory where your program is.  It doesn't
-depend on anything that isn't already part of Python, so you can
-just use it like so::
+Need to run an ISIS program like ``cam2map``::
 
     from kalasiris import cam2map
 
@@ -84,21 +78,12 @@ just use it like so::
     cam2map(fromcube, to=mapfile)
 
 Easy! Assuming you have a ``something.cub`` file that can be
-map-projected.
+map-projected.  The first positional argument will be assumed to be
+the "from" parameter, but you could also explicitly use ``from=fromcube``
+here.
 
-Just grabbing this one file gets you the ability to call ISIS
-programs from your Python programs.  There are other parts of this
-package that provide helper functions (like ``cubenormfile.writer``),
-classes (like ``Histogram``), and syntactic sugar (the *_k functions*).
-You don't get them by just grabbing ``kalasiris.py`` as described
-above.
-
-If you want *all* of the kalasiris library, but still don't want to
-go through some formal installation process, you can clone this repo,
-and then move (or copy) the whole ``kalasiris/`` directory (instead
-of just the ``kalasiris.py`` file inside of it) to your project, and
-then do the same thing as above, but now you can do more fun things
-like this::
+In addition to just calling *all* ISIS programs this way, you can do
+other fun things like this::
 
     import kalasiris as isis
 
@@ -131,7 +116,7 @@ like this::
     # both of the above print 4.88281e-05
 
 
-You can see that you now have access to things like the Histogram class,
+You can see that there are things like the Histogram class,
 the ``getkey_k()`` *_k function*, and much more.
 
 Read the documentation for more: https://kalasiris.readthedocs.io
@@ -167,6 +152,31 @@ It is possible to list all of the versions of ``kalasiris`` available on your pl
 
     conda search kalasiris --channel conda-forge
 
+
+If for some reason you don't want to use conda or pip, you could do one of these
+two things (but really, just use conda or pip):
+
+The core functionality is contained in a single file.  Just go into the
+``kalasiris`` directory, and copy the ``kalasiris.py``
+file into the same directory where your own program is.  It doesn't
+depend on anything that isn't already part of Python, so you can
+just use it.
+
+Just grabbing this one file gets you the ability to call ISIS
+programs from your Python programs.  There are other parts of this
+package that provide helper functions (like ``cubenormfile.writer``),
+classes (like ``Histogram``), and syntactic sugar (the *_k functions*).
+You don't get them by just grabbing ``kalasiris.py`` as described
+above.
+
+If you want *all* of the kalasiris library, but still don't want to
+go through some formal installation process, you can clone this repo,
+and then move (or copy) the whole ``kalasiris/`` directory (instead
+of just the ``kalasiris.py`` file inside of it) to your project, and
+then do the same thing as above, but now you can do more fun things.
+
+However, installation via pip or conda is so easy, and you're installing
+ISIS via conda already.
 
 -------
 
