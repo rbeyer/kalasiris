@@ -12,8 +12,8 @@ kalasiris
 .. image:: https://img.shields.io/conda/vn/conda-forge/kalasiris.svg
         :target: https://anaconda.org/conda-forge/kalasiris
 
-.. image:: https://travis-ci.com/rbeyer/kalasiris.svg?branch=master
-        :target: https://travis-ci.com/rbeyer/kalasiris
+.. image:: https://github.com/rbeyer/kalasiris/workflows/Python%20Testing/badge.svg
+        :target: https://github.com/rbeyer/kalasiris/actions
 
 .. image:: https://img.shields.io/circleci/project/github/conda-forge/kalasiris-feedstock/master.svg?label=noarch
         :target: https://circleci.com/gh/conda-forge/kalasiris-feedstock
