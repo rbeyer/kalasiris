@@ -23,6 +23,12 @@ kalasiris
         :alt: Documentation Status
 
 
+.. image:: https://codecov.io/gh/rbeyer/kalasiris/branch/main/graph/badge.svg?token=TL5UZUQHRC
+        :target: https://codecov.io/gh/rbeyer/kalasiris
+        :alt: Codecov Status
+
+
+
 The *kalasiris* library is a Python library to wrap functions and
 functionality for the `Integrated Software for Imagers and Spectrometers
 (ISIS) <https://isis.astrogeology.usgs.gov>`_.
