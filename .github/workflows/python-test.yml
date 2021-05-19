@@ -43,6 +43,9 @@ jobs:
           - isis-version: 4.3.0
             conda-name: isis
             var-init: isisVarInit.py
+          - isis-version: 5.0.0
+            conda-name: isis
+            var-init: isisVarInit.py
 
     steps:
     - name: Conda setup
