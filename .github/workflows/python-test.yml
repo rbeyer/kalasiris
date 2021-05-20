@@ -7,35 +7,35 @@ on: [push, pull_request]
 
 env:
   python-version: 3.6
-  isis-data: $GITHUB_WORKSPACE/test-resources/ISISDATA/
+  isis-data: test-resources/ISISDATA/
 
 jobs:
-  # resources:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Setup test-resources/
-  #     run: |
-  #       mkdir test-resources/
-  #       mkdir test-resources/ISISDATA/
-  #   - name: Download IMG
-  #     run: curl "https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG" -o test-resources/PSP_010502_2090_RED5_0.img
-  #   - name: Download mini-ISISDATA
-  #     run: |
-  #         rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/translations/pdsImage.trn ${{ env.isis-data }}
-  #         rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/templates/labels/CubeFormatTemplate.pft ${{ env.isis-data }}
-  #         rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseInstrument.trn ${{ env.isis-data }}
-  #         rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseBandBin.trn ${{ env.isis-data }}
-  #         rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseArchive.trn ${{ env.isis-data }}
-  #   - name: Tar file
-  #     run: tar -cvf img.tar test-resources/PSP_010502_2090_RED5_0.img
-  #   - name: Upload img artifact
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: img-artifact
-  #       path: img.tar
-  #       retention-days: 3
+  resources:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup test-resources/
+      run: |
+        mkdir test-resources/
+        mkdir ${{ env.isis-data }}
+    - name: Download IMG
+      run: curl "https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG" -o test-resources/PSP_010502_2090_RED5_0.img
+    - name: Download mini-ISISDATA
+      run: |
+          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/translations/pdsImage.trn ${{ env.isis-data }}
+          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/templates/labels/CubeFormatTemplate.pft ${{ env.isis-data }}
+          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseInstrument.trn ${{ env.isis-data }}
+          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseBandBin.trn ${{ env.isis-data }}
+          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseArchive.trn ${{ env.isis-data }}
+    - name: Tar file
+      run: tar -cvf img.tar test-resources/
+    - name: Upload img artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: img-artifact
+        path: img.tar
+        retention-days: 3
   build:
-    # needs: resources
+    needs: resources
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -83,14 +83,14 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: ${{ github.event.pull_request.head.sha }}
-    # - name: Download IMG & ISISDATA artifact
-    #   uses: actions/download-artifact@v2
-    #   with:
-    #     name: img-artifact
-    # - name: Unpack Tar
-    #   run: |
-    #     tar -xvf img.tar
-    #     ls -R
+    - name: Download IMG & ISISDATA artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: img-artifact
+    - name: Unpack Tar
+      run: |
+        tar -xvf img.tar
+        ls -R
     - name: Install ISIS
       run: |
         conda install -q -y -c usgs-astrogeology ${{ matrix.conda-name }}=${{ matrix.isis-version }}
