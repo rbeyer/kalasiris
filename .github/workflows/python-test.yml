@@ -88,7 +88,9 @@ jobs:
       with:
         name: img-artifact
     - name: Unpack Tar
-      run: tar -xvf img.tar
+      run: |
+        tar -xvf img.tar
+        ls -R
     - name: Install ISIS
       run: |
         conda install -q -y -c usgs-astrogeology ${{ matrix.conda-name }}=${{ matrix.isis-version }}

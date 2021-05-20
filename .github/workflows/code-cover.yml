@@ -39,6 +39,7 @@ jobs:
         rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseInstrument.trn ${{ env.isis-data }}
         rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseBandBin.trn ${{ env.isis-data }}
         rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseArchive.trn ${{ env.isis-data }}
+        ls -R
     - name: ISIS varinit
       run: |
         python $CONDA_PREFIX/scripts/isisVarInit.py --data-dir="${{ env.isis-data }}"
