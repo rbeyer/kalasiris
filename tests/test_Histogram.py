@@ -215,7 +215,7 @@ class TestHistogram_filesystem(unittest.TestCase):
 
     def test_listlike(self):
         h = isis.Histogram(self.histfile)
-        self.assertEqual(5, len(h[0]))
+        self.assertEqual(6, len(h[0]))
 
     def test_contains(self):
         h = isis.Histogram(self.histfile)
