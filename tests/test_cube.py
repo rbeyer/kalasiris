@@ -35,9 +35,14 @@ class TestResources(unittest.TestCase):
 
 
 class TestBasic(unittest.TestCase):
+    def setUp(self):
+        self.d = {"StartByte": "10", "Bytes": "20"}
+
     def test_get_start_size(self):
-        d = {"StartByte": "10", "Bytes": "20"}
-        self.assertEqual((9, 20), isis.cube._get_start_size(d))
+        self.assertEqual((9, 20), isis.cube._get_start_size(self.d))
+
+    def test_get_startsize_from(self):
+        self.assertEqual((9, 20), isis.cube.get_startsize_from(self.d))
 
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)
@@ -50,6 +55,11 @@ class TestTable(unittest.TestCase):
         with contextlib.suppress(FileNotFoundError):
             Path("print.prt").unlink()
         self.cube.unlink()
+
+    def test_get_startsize_from(self):
+        self.assertEqual((4162038, 7440), isis.cube.get_startsize_from(
+            table_name="HiRISE Calibration Ancillary", cube_path=self.cube
+        ))
 
     def test_read_table_data(self):
         self.assertRaises(ValueError, isis.cube.read_table_data, self.cube)
