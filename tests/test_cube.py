@@ -57,9 +57,11 @@ class TestTable(unittest.TestCase):
         self.cube.unlink()
 
     def test_get_startsize_from(self):
-        self.assertEqual((4162038, 7440), isis.cube.get_startsize_from(
+        (start, size) = isis.cube.get_startsize_from(
             table_name="HiRISE Calibration Ancillary", cube_path=self.cube
-        ))
+        )
+        self.assertEqual(7440, size)
+        self.assertAlmostEqual(4162038, start, delta=8)
 
     def test_read_table_data(self):
         self.assertRaises(ValueError, isis.cube.read_table_data, self.cube)
