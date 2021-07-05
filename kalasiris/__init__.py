@@ -4,7 +4,7 @@
 
 __author__ = """Ross A. Beyer"""
 __email__ = "rbeyer@seti.org"
-__version__ = "1.9.1-dev"
+__version__ = "1.9.1"
 
 from .kalasiris import *  # noqa: F401,F403
 from .k_funcs import *  # noqa: F401,F403
