@@ -18,7 +18,7 @@ from pathlib import Path
 # This file shall have *NO* non-Standard Library dependencies.
 
 # kalasiris library version:
-__version__ = "1.9.0"
+__version__ = "1.9.1-dev"
 
 # Set a logger:
 logger = logging.getLogger(__name__)
