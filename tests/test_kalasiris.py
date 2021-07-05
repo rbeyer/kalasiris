@@ -73,6 +73,12 @@ class TestParams(unittest.TestCase):
         cmd.extend(map(isis.param_fmt, p.keys(), p.values()))
         self.assertEqual(truth, cmd)
 
+        p2 = {"restore__": "parameter"}
+        cmd2 = [t]
+        truth2 = [t, "-restore=parameter"]
+        cmd2.extend(map(isis.param_fmt, p2.keys(), p2.values()))
+        self.assertEqual(truth2, cmd2)
+
     def test_reserved_nokey(self):
         cp = isis.getkey("help__").stdout.split()
 
