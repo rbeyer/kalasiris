@@ -27,6 +27,10 @@ and the release date, in year-month-day format (see examples below).
 Unreleased
 ----------
 
+
+1.9.1 (2021-07-04)
+------------------
+
 Changed
 +++++++
 * Testing now defaults to only running on mocks.
@@ -35,6 +39,10 @@ Changed
 
 Fixed
 +++++
+* Bug in reserved parameter handling, such that only some reserved parameters
+  that were given with two trailing underbars (_) would be converted to their
+  appropriate "-key=value" form for ISIS.  This was true for "restore" for example,
+  which was embarrassingly given in the documentation, but not tested!
 * PathSet module documentation was missing the first letters of several words.
 
 

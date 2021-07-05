@@ -90,7 +90,7 @@ def param_fmt(key: str, value: str) -> str:
     # The logic for dealing with a single parameter, like
     # isis.getkey('help__') # is down in the _build_isis_fn() factory
     # method.
-    if key.endswith("__") and key.rstrip("_") in _res_param_maybe:
+    if key.endswith("__"):
         return "-{}={}".format(key.rstrip("_"), value)
     else:
         return "{}={}".format(key.rstrip("_"), value)
