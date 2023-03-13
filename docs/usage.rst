@@ -33,7 +33,7 @@ Of course, you could use variables instead of strings::
     from_cube = 'some.cub'
     pvl_file = 'some.pvl'
 
-    isis.catlab(from_cub, to=pvl_file)
+    isis.catlab(from_cube, to=pvl_file)
 
 Or with ``pathlib.Path`` objects::
 
@@ -54,7 +54,7 @@ Most ISIS programs have a ``FROM=`` parameter, and so all kalasiris
 versions of them will assume that the first item in the argument
 signature is what should be assigned to the ``FROM=`` parameter if
 you were typing the ISIS program at the command line, that's one
-of the reasons why in the above aren't written ``isis.catlab(from=from_cub,
+of the reasons why in the above examples aren't written like ``isis.catlab(from=from_cub,
 to=pvl_file)`` but they could be.  If you do this, your syntax-aware
 editor might highlight or complain that ``from`` is a reserved word
 in Python, and you think maybe it shouldn't be used as a named
