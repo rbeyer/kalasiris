@@ -111,6 +111,25 @@ class Test_Mocks(unittest.TestCase):
             ["cam2map", "from=from.cub", "to=to.cub"], **self.subp_defs
         )
 
+    @patch("kalasiris.kalasiris.subprocess.run")
+    def test_preference_set(self, subp):
+        s = "foo"
+        p = Path(s)
+        isis.set_persistent_preferences(p)
+        isis.spiceinit("foo.cub", _check=False)
+        self.subp_defs["check"] = False
+        subp.assert_called_once_with(
+            ["spiceinit", "from=foo.cub", f"-pref={s}"], **self.subp_defs
+        )
+        subp.reset_mock()
+
+        isis.spiceinit("foo.cub", _check=False, pref__="override")
+        subp.assert_called_once_with(
+            ["spiceinit", "from=foo.cub", "-pref=override"], **self.subp_defs
+        )
+
+        isis.set_persistent_preferences(None)
+
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)
 class Test_hi2isis(unittest.TestCase):
