@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Provides the ability to call ISIS functions."""
 
-# Copyright 2019-2020, Ross A. Beyer (rbeyer@seti.org)
+# Copyright 2019-2023, Ross A. Beyer (rbeyer@seti.org)
 #
 # Reuse is permitted under the terms of the license.
 # The AUTHORS file and the LICENSE file are at the
@@ -22,10 +22,6 @@ __version__ = "1.10.0-dev"
 
 # Set a logger:
 logger = logging.getLogger(__name__)
-
-# Set a logger:
-logger = logging.getLogger(__name__)
-
 
 # These definitions and the use of env= in the subprocess.run calls allow us to
 # run ISIS in a very lean environment.  Of course, users can override with
@@ -57,6 +53,34 @@ _res_param_maybe = {"help", "log", "info", "save"}
 # patters for most ISIS programs, they just consume everything you
 # give them, so we need to treat them differently.
 _pass_through_programs = {"cneteditor", "qmos", "qnet", "qtie", "qview"}
+
+# This is a private "global" to the kalasiris module:
+_preferences_path = None
+
+
+def set_persistent_preferences(path: Path):
+    """
+    Sets a persistent preferences file for each ISIS command.
+
+    Using this function will cause the kalasiris library to include a
+    "pref=path/to/pref/file" argument to each ISIS program you ask it to run.
+    This is a convenience function such that if you always want to have ISIS
+    programs that kalasiris runs given the same preferences file, you don't
+    have to manually provide it to each ISIS function that you call with
+    kalasiris, you can just do it once for the program you are writing.
+
+    Giving None to this argument resets the library to the default of not
+    adding a "pref=" argument.
+
+    A user can always specify a pref__="path/to/pref/file" to any kalasiris
+    ISIS function to manually insert a "pref=path/to/pref/file" argument for
+    that call.  If there is a persistent path set, then providing a pref__
+    argument will temporarily override this persistent setting for that call.
+    """
+    global _preferences_path
+    if path is not None and not isinstance(path, Path):
+        path = Path(path)
+    _preferences_path = path
 
 
 def param_fmt(key: str, value: str) -> str:
@@ -140,6 +164,9 @@ allowed.
             else:
                 isis_kwargs[k] = v
 
+        if _preferences_path is not None and "pref__" not in isis_kwargs:
+            isis_kwargs["pref__"] = _preferences_path
+
         if fn_name in _pass_through_programs:
             cmd.extend(args)
         else:
@@ -196,5 +223,5 @@ def _get_isis_program_names():
 
 # Now use the builder function to automatically create functions
 # with these names:
-for p in _get_isis_program_names():
-    _build_isis_fn(p)
+for _p in _get_isis_program_names():
+    _build_isis_fn(_p)

@@ -27,6 +27,12 @@ and the release date, in year-month-day format (see examples below).
 Unreleased
 ----------
 
+Added
++++++
+* Added set_persistent_preferences() functionality so that a library user can set
+  a persistent preferences path rather than having to enter it with each kalasiris
+  function run.
+
 
 1.9.1 (2021-07-04)
 ------------------
