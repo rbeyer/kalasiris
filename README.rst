@@ -99,7 +99,7 @@ other fun things like this::
 
     isis.hi2isis(img, to=hicube)
 
-    InsID = isis.getkey_k(hicub, 'Instrument', 'InstrumentId')
+    InsID = isis.getkey_k(hicube, 'Instrument', 'InstrumentId')
     print(InsID)
     # prints HIRISE
 
@@ -123,7 +123,7 @@ other fun things like this::
 
 
 You can see that there are things like the Histogram class,
-the ``getkey_k()`` *_k function*, and much more.
+the ``getkey_k()`` function which is part of the *_k function* collection, and much more.
 
 Read the documentation for more: https://kalasiris.readthedocs.io
 
@@ -174,12 +174,6 @@ package that provide helper functions (like ``cubenormfile.writer``),
 classes (like ``Histogram``), and syntactic sugar (the *_k functions*).
 You don't get them by just grabbing ``kalasiris.py`` as described
 above.
-
-If you want *all* of the kalasiris library, but still don't want to
-go through some formal installation process, you can clone this repo,
-and then move (or copy) the whole ``kalasiris/`` directory (instead
-of just the ``kalasiris.py`` file inside of it) to your project, and
-then do the same thing as above, but now you can do more fun things.
 
 However, installation via pip or conda is so easy, and you're installing
 ISIS via conda already.
