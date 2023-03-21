@@ -81,7 +81,7 @@ Need to run an ISIS program like ``cam2map``::
 
     fromcube = 'something.cub'
     tocube = 'something_mapped.cub'
-    cam2map(fromcube, to=mapfile)
+    cam2map(fromcube, to=tocube)
 
 Easy! Assuming you have a ``something.cub`` file that can be
 map-projected.  The first positional argument will be assumed to be

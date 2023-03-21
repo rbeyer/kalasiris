@@ -29,9 +29,12 @@ Unreleased
 
 Added
 +++++
-* Added set_persistent_preferences() functionality so that a library user can set
+* New kalasiris.set_persistent_preferences() functionality so that a library user can set
   a persistent preferences path rather than having to enter it with each kalasiris
-  function run.
+  function run.  Addresses Issue #11.
+* Can now also pass parameters that do not take an argument to ISIS in a manner similar
+  to how you'd write them on the command line (e.g. `getkey("-help")`) in addition to
+  the "old" way (e.g. `getkey("help__")`).
 
 
 1.9.1 (2021-07-04)

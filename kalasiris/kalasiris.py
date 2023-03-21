@@ -171,13 +171,19 @@ allowed.
             cmd.extend(args)
         else:
             args_list = list(args)
-            if len(args) > 0 and not str(args[0]).endswith("__"):
+            if len(args) > 0 and not (
+                str(args[0]).endswith("__") or str(args[0]).startswith("-")
+            ):
                 cmd.append(param_fmt("from", args_list.pop(0)))
             for a in args_list:
-                if a.endswith("__") and a.rstrip(
-                    "_"
-                ) in _res_param_no_vals.union(_res_param_maybe):
+                if a.endswith("__") and a.rstrip("_") in _res_param_no_vals.union(
+                    _res_param_maybe
+                ):
                     cmd.append("-{}".format(a.rstrip("_")))
+                elif a.startswith("-") and a.lstrip("-") in _res_param_no_vals.union(
+                    _res_param_maybe
+                ):
+                    cmd.append(a)
                 else:
                     e = (
                         "only accepts 1 non-keyword argument "
@@ -185,9 +191,7 @@ allowed.
                         "not sure what to do with " + a
                     )
                     raise IndexError(e)
-            cmd.extend(
-                map(param_fmt, isis_kwargs.keys(), isis_kwargs.values())
-            )
+            cmd.extend(map(param_fmt, isis_kwargs.keys(), isis_kwargs.values()))
         return _run_isis_program(cmd, subprocess_kwargs)
 
     # Then add it, by name to the enclosing module.
