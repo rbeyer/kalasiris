@@ -80,16 +80,30 @@ Trailing underbars can be handy.  In addition to the parameters
 that each ISIS program has (like ``FROM=``, ``TO=``, etc.), ISIS
 programs can also take what ISIS calls 'reserved parameters' which
 are things like ``-restore=file`` or ``-log``. In order to use those
-kinds of parameters from kalasiris, just append them with two
-underbars (``_``) like so::
+kinds of parameters from kalasiris, either add them with their leading
+dash or with two underbars (``_``) as string parameters, the following two lines are
+identical::
 
-    isis.hist('some.cub', min_=5, gui__)
+    isis.hist('some.cub', "gui__", min_=5)
+    isis.hist('some.cub', "-gui", min_=5)
 
 Which, when called in your Python program, would actually fire up
 the GUI window for ISIS hist, with a default value for ``MINIMUM``
 set to 5, where you could fiddle with controls, hit the run button,
 and when you closed the window, your Python program would start
 right back up where it left off.
+
+The reserved parmeters that take an argument must use the form with
+trailing underbars since those are passed as keys with Python variable names, like so::
+
+    isis.spiceinit('some.cub', restore__=Path("to/some/file"))
+
+
+If you are a user of preference files with ISIS, you might find yourself constantly
+passing the `pref__` parameter to all of your kalasiris calls in a program file.  As
+a convenience, we provide `kalasiris.set_persistent_preferences()` so that you can
+set this once, and the "-pref" argument with that path will be added to every
+kalasiris call you make.
 
 Logging
 ~~~~~~~
@@ -283,7 +297,7 @@ You have at least three options:
 1. Use conda stacking:
     First ``conda activate isis`` and then ``conda activate --stack other-env``
     which enables these enviroments like nested dolls, so that you'll end up
-    in a situation with the ISIS environment variables set correctlly for
+    in a situation with the ISIS environment variables set correctly for
     kalasiris to find, and your other-env with kalasiris and whatever else
     you need.
 

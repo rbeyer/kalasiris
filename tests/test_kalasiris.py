@@ -19,7 +19,7 @@ import kalasiris.kalasiris as isis
 from .utils import (
     resource_check as rc,
     real_files as run_real_files,
-    real_files_reason as run_real_files_reason
+    real_files_reason as run_real_files_reason,
 )
 
 
@@ -84,6 +84,9 @@ class TestParams(unittest.TestCase):
 
         self.assertEqual("FROM", cp[0])
 
+        cp2 = isis.getkey("-help").stdout.split()
+        self.assertEqual("FROM", cp2[0])
+
 
 class Test_Mocks(unittest.TestCase):
     def setUp(self) -> None:
@@ -99,9 +102,7 @@ class Test_Mocks(unittest.TestCase):
     def test_subprocess_change_default(self, subp):
         isis.spiceinit("foo.cub", _check=False)
         self.subp_defs["check"] = False
-        subp.assert_called_once_with(
-            ["spiceinit", "from=foo.cub"], **self.subp_defs
-        )
+        subp.assert_called_once_with(["spiceinit", "from=foo.cub"], **self.subp_defs)
 
     @patch("kalasiris.kalasiris.subprocess.run")
     def test_subprocess_add(self, subp):
