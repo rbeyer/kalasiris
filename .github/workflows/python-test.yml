@@ -23,6 +23,7 @@ jobs:
         path: img.tar
         retention-days: 3
   build:
+    needs: resources
     runs-on: ubuntu-latest
     strategy:
       matrix:
