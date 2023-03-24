@@ -33,6 +33,7 @@ jobs:
       uses: mamba-org/provision-with-micromamba@main
       with:
         environment-file: false
+        environment-name: isis
         channel-priority: flexible
     - name: Checkout
       uses: actions/checkout@v3
