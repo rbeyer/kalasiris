@@ -33,7 +33,6 @@ jobs:
       uses: mamba-org/provision-with-micromamba@main
       with:
         environment-file: false
-        environment-name: isis
         channel-priority: flexible
     - name: Checkout
       uses: actions/checkout@v3
@@ -48,7 +47,10 @@ jobs:
         tar -xvf img.tar
         ls -R
     - name: Install ISIS
+      shell: bash -l {0}
       run: |
+        micromamba create --name isis
+        micromamba activate isis
         micromamba install -q -y -c usgs-astrogeology -c conda-forge isis=${{ matrix.isis-version }}
     - name: Set env vars
       run: |
