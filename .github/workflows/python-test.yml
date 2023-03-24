@@ -5,10 +5,6 @@ name: Python Testing
 
 on: [push, pull_request]
 
-env:
-  python-version: 3.6
-  isis-data: test-resources/ISISDATA/
-
 jobs:
   resources:
     runs-on: ubuntu-latest
@@ -16,16 +12,8 @@ jobs:
     - name: Setup test-resources/
       run: |
         mkdir test-resources/
-        mkdir ${{ env.isis-data }}
     - name: Download IMG
       run: curl "https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG" -o test-resources/PSP_010502_2090_RED5_0.img
-    - name: Download mini-ISISDATA
-      run: |
-          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/translations/pdsImage.trn ${{ env.isis-data }}
-          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/templates/labels/CubeFormatTemplate.pft ${{ env.isis-data }}
-          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseInstrument.trn ${{ env.isis-data }}
-          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseBandBin.trn ${{ env.isis-data }}
-          rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseArchive.trn ${{ env.isis-data }}
     - name: Tar file
       run: tar -cvf img.tar test-resources/
     - name: Upload img artifact
@@ -35,55 +23,21 @@ jobs:
         path: img.tar
         retention-days: 3
   build:
-    needs: resources
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -l {0}
     strategy:
       matrix:
-        # python-version: [3.6, 3.7, 3.8, 3.9]
-        # ISIS 3.6 and 3.8 are pinned to Python 3.6
-        # ISIS 3.9, 4.0.1, 4.1.1, 4.2.0, and 4.3.0
-        # give an UnsatisfiableError if not Python 3.6
-        # So just using the single env.python-version variable above.
-        isis-version: [4.0.0, 4.1.1]
-        # ISIS 4.0.1 has a libgsl version problem detailed
-        #   in the following issue for 4.2.0, but we get the same error:
-        # - https://github.com/USGS-Astrogeology/ISIS3/issues/3969
-        #   but 4.0.0 doesn't have that problem.
-        # ISIS 4.2.0 has a libarmadillo problem,
-        # - https://github.com/USGS-Astrogeology/ISIS3/issues/4165
-        conda-name: [isis]
-        var-init: [isis3VarInit.py]
-        include:
-          - isis-version: 3.6.1
-            conda-name: isis3
-            var-init: isis3VarInit.py
-          - isis-version: 3.8.1
-            conda-name: isis3
-            var-init: isis3VarInit.py
-          - isis-version: 3.9.0
-            conda-name: isis3
-            var-init: isis3VarInit.py
-          - isis-version: 4.3.0
-            conda-name: isis
-            var-init: isisVarInit.py
-          - isis-version: 5.0.0
-            conda-name: isis
-            var-init: isisVarInit.py
+        isis-version: [4.4.0, 5.0.2, 6.0.0, 7.2.0]
 
     steps:
     - name: Conda setup
       uses: conda-incubator/setup-miniconda@v2
       with:
-        python-version: ${{ env.python-version }}
         channels: usgs-astrogeology, conda-forge
     - name: Checkout
       uses: actions/checkout@v2
       with:
         ref: ${{ github.event.pull_request.head.sha }}
-    - name: Download IMG & ISISDATA artifact
+    - name: Download IMG artifact
       uses: actions/download-artifact@v2
       with:
         name: img-artifact
@@ -91,12 +45,12 @@ jobs:
       run: |
         tar -xvf img.tar
         ls -R
-    - name: Install ISIS
+    - name: Install ISI
       run: |
-        conda install -q -y -c usgs-astrogeology ${{ matrix.conda-name }}=${{ matrix.isis-version }}
-    - name: ISIS varinit
+        conda install -q -y -c usgs-astrogeology isis=${{ matrix.isis-version }}
+    - name: Set env vars
       run: |
-        python $CONDA_PREFIX/scripts/${{ matrix.var-init }} --data-dir="${{ env.isis-data }}"
+        conda env config vars set ISISROOT=$CONDA_PREFIX ISISDATA=$CONDA_PREFIX
     - name: Lint with flake8
       run: |
         conda install flake8
