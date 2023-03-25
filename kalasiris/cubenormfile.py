@@ -45,7 +45,6 @@ class Dialect(csv.Dialect):
     delimiter = " "
     skipinitialspace = True
     quoting = csv.QUOTE_NONE
-    escapechar = ""
     lineterminator = "\n"
 
 
