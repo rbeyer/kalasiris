@@ -3,7 +3,7 @@
 
 name: Python Testing
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   resources:
@@ -56,7 +56,8 @@ jobs:
         micromamba install -q -y -c usgs-astrogeology -c conda-forge isis=${{ matrix.isis-version }}
     - name: Set env vars
       run: |
-        micromamba env config vars set ISISROOT=$CONDA_PREFIX ISISDATA=$CONDA_PREFIX
+        micromamba env config vars set ISISROOT=$CONDA_PREFIX
+        micromamba env config vars set ISISDATA=$CONDA_PREFIX
     - name: Lint with flake8
       run: |
         micromamba install flake8
