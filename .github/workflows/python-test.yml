@@ -25,10 +25,13 @@ jobs:
   build:
     needs: resources
     runs-on: ubuntu-latest
+    defaults:
+        run:
+            shell: bash -l {0}
     strategy:
       matrix:
         # isis-version: [4.4.0, 5.0.2, 6.0.0, 7.2.0]
-        isis-version: [6.0.0, 7.2.0]
+        isis-version: [4.4.0, 5.0.2, 6.0.0, 7.2.0]
 
     steps:
     - name: Conda setup
@@ -36,6 +39,7 @@ jobs:
       with:
         environment-file: false
         channel-priority: flexible
+        channels: usgs-astrogeology, conda-forge
     - name: Checkout
       uses: actions/checkout@v3
       with:
@@ -49,16 +53,14 @@ jobs:
         tar -xvf img.tar
         ls -R
     - name: Install ISIS
-      shell: bash -l {0}
       run: |
         micromamba create --name isis
         micromamba activate isis
-        micromamba install -y -c usgs-astrogeology -c conda-forge isis=${{ matrix.isis-version }}
+        micromamba install -y isis=${{ matrix.isis-version }}
     - name: Lint with flake8
-      shell: bash -l {0}
       run: |
         micromamba activate isis
-        micromamba install -y -c conda-forge flake8
+        micromamba install -y flake8
         # stop the build if there are Python syntax errors or undefined names
         flake8 kalasiris tests --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
@@ -66,10 +68,9 @@ jobs:
     - name: Test Install
       run: python -m pip install -e .
     - name: Test with pytest
-      shell: bash -l {0}
       run: |
         micromamba activate isis
         export ISISROOT=$MAMBA_ROOT_PREFIX/envs/isis
         export ISISDATA=$MAMBA_ROOT_PREFIX/envs/isis
-        micromamba install -y -c conda-forge pytest
+        micromamba install -y pytest
         pytest
