@@ -5,7 +5,7 @@
 
 name: Code Coverage
 
-on: [push, pull_request]
+on: [push]
 
 env:
   isis-data: /test-resources/ISISDATA/
@@ -18,52 +18,39 @@ jobs:
         shell: bash -l {0}
     steps:
     - name: Conda setup
-      uses: conda-incubator/setup-miniconda@v2
+      uses: mamba-org/provision-with-micromamba@main
       with:
-        python-version: 3.6
-        activate-environment: isis
+        environment-file: false
+        channel-priority: flexible
         channels: usgs-astrogeology, conda-forge
     -   name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
             ref: ${{ github.event.pull_request.head.sha }}
     - name: Install ISIS
       run: |
-        conda install -q -y -c usgs-astrogeology isis=4.3.0
+        micromamba create --name isis
+        micromamba activate isis
+        micromamba install -y isis=7.2.0
     - name: Setup test-resources/
       run: |
         mkdir $GITHUB_WORKSPACE/test-resources/
-        mkdir $GITHUB_WORKSPACE/${{ env.isis-data }}
     - name: Download IMG
       run: curl "https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG" -o $GITHUB_WORKSPACE/test-resources/PSP_010502_2090_RED5_0.img
-    - name: Download mini-ISISDATA
-      run: |
-        rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/translations/pdsImage.trn $GITHUB_WORKSPACE/${{ env.isis-data }}
-        rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./base/templates/labels/CubeFormatTemplate.pft $GITHUB_WORKSPACE/${{ env.isis-data }}
-        rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseInstrument.trn $GITHUB_WORKSPACE/${{ env.isis-data }}
-        rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseBandBin.trn $GITHUB_WORKSPACE/${{ env.isis-data }}
-        rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseArchive.trn $GITHUB_WORKSPACE/${{ env.isis-data }}
-        ls -R
-    - name: ISIS varinit
-      run: |
-        python $CONDA_PREFIX/scripts/isisVarInit.py --data-dir="$GITHUB_WORKSPACE/${{ env.isis-data }}"
-    - name: Exit isis env
-      run: conda deactivate
     - name: Set up kalasiris testing env
-      run: conda create -n kal python=3.7 -y
-    - name: Enter kalasiris testing env
       run: |
-        conda activate kal
-        export ISISROOT="/usr/share/miniconda/envs/isis/"
-        export ISISDATA="$GITHUB_WORKSPACE/${{ env.isis-data }}"
-    - name: Test Install
-      run: python -m pip install -e .
+        micromamba create --name kal
+        micromamba activate kal
+        python -m pip install -e .
     - name: Test with pytest and generate coverage report
       run: |
-        conda install pytest
-        conda install pytest-cov
+        micromamba activate kal
+        micromamba install -y pytest
+        micromamba install -y pytest-cov
+        export ISISROOT=$MAMBA_ROOT_PREFIX/envs/isis
+        export ISISDATA=$MAMBA_ROOT_PREFIX/envs/isis
         pytest --cov=./kalasiris --cov-report=xml
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v3
       with:
         fail_ci_if_error: true
