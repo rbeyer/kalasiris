@@ -54,10 +54,6 @@ jobs:
         micromamba create --name isis
         micromamba activate isis
         micromamba install -y -c usgs-astrogeology -c conda-forge isis=${{ matrix.isis-version }}
-    - name: Set env vars
-      run: |
-        export ISISROOT=$MAMBA_ROOT_PREFIX/envs/isis
-        export ISISDATA=$MAMBA_ROOT_PREFIX/envs/isis
     - name: Lint with flake8
       shell: bash -l {0}
       run: |
@@ -73,5 +69,7 @@ jobs:
       shell: bash -l {0}
       run: |
         micromamba activate isis
+        export ISISROOT=$MAMBA_ROOT_PREFIX/envs/isis
+        export ISISDATA=$MAMBA_ROOT_PREFIX/envs/isis
         micromamba install -y -c conda-forge pytest
         pytest
