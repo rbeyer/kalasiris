@@ -73,5 +73,5 @@ jobs:
       shell: bash -l {0}
       run: |
         micromamba activate isis
-        micromamba install pytest
+        micromamba install -y -c conda-forge pytest
         pytest
