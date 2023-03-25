@@ -56,6 +56,7 @@ jobs:
         micromamba install -q -y -c usgs-astrogeology -c conda-forge isis=${{ matrix.isis-version }}
     - name: Set env vars
       run: |
+        printenv
         micromamba env config vars set ISISROOT=$CONDA_PREFIX
         micromamba env config vars set ISISDATA=$CONDA_PREFIX
     - name: Lint with flake8
