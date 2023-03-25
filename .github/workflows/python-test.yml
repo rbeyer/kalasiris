@@ -59,6 +59,7 @@ jobs:
         export ISISROOT=$MAMBA_ROOT_PREFIX/envs/isis
         export ISISDATA=$MAMBA_ROOT_PREFIX/envs/isis
     - name: Lint with flake8
+      shell: bash -l {0}
       run: |
         micromamba install -y -c conda-forge flake8
         # stop the build if there are Python syntax errors or undefined names
