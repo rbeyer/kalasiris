@@ -49,20 +49,31 @@ class TestParams(unittest.TestCase):
         self.assertEqual(truth, cmd)
 
     @unittest.skip("Fires up the gui, not sure how to test properly.")
-    def test_no_args(self):
+    def test_no_args_gui(self):
         print("\n  about to getkey()")
         isis.getkey()
         # isis.getkey('gui__') does the same thing.
         print("  just got back from getkey()")
 
+    @patch("kalasiris.kalasiris.subprocess.run")
+    def test_no_args(self, subp):
+        isis.getkey()
+        subp.assert_called_once()
+
     @unittest.skip("Fires up the gui, not sure how to test properly.")
-    def test_passthrough(self):
+    def test_passthrough_gui(self):
         to_cube = Path("test_passthrough.cub")
         isis.hi2isis(HiRISE_img, to=to_cube)
         print("\n  about to call qview()")
         isis.qview(to_cube)
         print("  just got back from qview()")
         to_cube.unlink()
+
+    @patch("kalasiris.kalasiris.subprocess.run")
+    def test_passthrough(self, subp):
+        isis.qview("dummy.cub")
+        subp.assert_called_once()
+        self.assertEqual(subp.call_args[0][0], ["qview", "dummy.cub"])
 
     def test_reserved_param(self):
         t = "isisprogram"
@@ -115,21 +126,22 @@ class Test_Mocks(unittest.TestCase):
     @patch("kalasiris.kalasiris.subprocess.run")
     def test_preference_set(self, subp):
         s = "foo"
-        p = Path(s)
-        isis.set_persistent_preferences(p)
-        isis.spiceinit("foo.cub", _check=False)
-        self.subp_defs["check"] = False
-        subp.assert_called_once_with(
-            ["spiceinit", "from=foo.cub", f"-pref={s}"], **self.subp_defs
-        )
-        subp.reset_mock()
+        for p in (s, Path(s)):
+            with self.subTest(p=p):
+                isis.set_persistent_preferences(p)
+                isis.spiceinit("foo.cub", _check=False)
+                self.subp_defs["check"] = False
+                subp.assert_called_once_with(
+                    ["spiceinit", "from=foo.cub", f"-pref={s}"], **self.subp_defs
+                )
+                subp.reset_mock()
 
-        isis.spiceinit("foo.cub", _check=False, pref__="override")
-        subp.assert_called_once_with(
-            ["spiceinit", "from=foo.cub", "-pref=override"], **self.subp_defs
-        )
-
-        isis.set_persistent_preferences(None)
+                isis.spiceinit("foo.cub", _check=False, pref__="override")
+                subp.assert_called_once_with(
+                    ["spiceinit", "from=foo.cub", "-pref=override"], **self.subp_defs
+                )
+                subp.reset_mock()
+                isis.set_persistent_preferences(None)
 
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)

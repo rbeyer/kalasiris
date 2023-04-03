@@ -14,6 +14,7 @@ import unittest
 from pathlib import Path
 
 import kalasiris as isis
+from kalasiris.version import version_info
 from .utils import (
     resource_check as rc,
     real_files as run_real_files,
@@ -182,6 +183,28 @@ DN,Pixels,CumulativePixels,Percent,CumulativePercent
     def test_len(self):
         self.assertEqual(107, len(self.h))
 
+    def test_to_str(self):
+        self.assertEqual(348, len(str(self.h)))
+
+    def test_repr(self):
+        self.assertEqual(4082, len(repr(self.h)))
+
+    def test_iter(self):
+        rows = 0
+        for x in self.h:
+            rows +=1
+
+        self.assertEqual(107, rows)
+
+    def test_contains(self):
+        self.assertFalse("Foo" in self.h)
+
+    def test_keys(self):
+        self.assertEqual(17, len(self.h.keys()))
+
+    def test_values(self):
+        self.assertEqual("0", list(self.h.values())[-1])
+
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)
 class TestHistogram_filesystem(unittest.TestCase):
@@ -216,7 +239,7 @@ class TestHistogram_filesystem(unittest.TestCase):
     def test_listlike(self):
         h = isis.Histogram(self.histfile)
         cols = 6
-        if tuple(isis.version.version_info()[:3]) < (4, 3, 0):
+        if tuple(version_info()[:3]) < (4, 3, 0):
             cols = 5
         self.assertEqual(cols, len(h[0]))
 

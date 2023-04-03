@@ -93,6 +93,8 @@ class TestTable(unittest.TestCase):
             {"Name": "DarkPixels", "Type": "Integer", "Size": "16"},
         ]
 
+        self.assertRaises(ValueError, isis.cube.parse_table, [0, 1], fields)
+
         table = isis.cube.parse_table(table_bytes, fields)
 
         self.assertEqual(255, table["GapFlag"][0])
@@ -180,6 +182,35 @@ class TestTable(unittest.TestCase):
         bad_fields = list(fields)
         bad_fields.append({"Name": "TooLong", "Type": "Text", "Size": "1"})
         self.assertRaises(KeyError, isis.cube.encode_table, table, bad_fields)
+
+        ee_tab = dict(table)
+        ee_tab["Long"] = ["a", "b", "c", "dd"]
+        ee_field = list(fields)
+        ee_field.append({"Name": "Long", "Type": "Text", "Size": "1"})
+        self.assertRaises(IndexError, isis.cube.encode_table, ee_tab, ee_field)
+
+        long_tab = dict(table)
+        long_tab["List"] = [1, 2, 3, [4, 5]]
+        long_field = list(fields)
+        long_field.append({"Name": "List", "Type": "Integer", "Size": "1"})
+        self.assertRaises(
+            IndexError, isis.cube.encode_table, long_tab, long_field
+        )
+
+        two_field = list(fields[1:])
+        two_field.append({"Name": "Foo", "Type": "Integer", "Size": "2"})
+        self.assertRaises(
+            ValueError, isis.cube.encode_table, table, two_field
+        )
+
+        seq_tab = dict(table)
+        seq_tab["List"] = [1, 2, 3, [4, ]]
+        seq_field = list(fields)
+        seq_field.append({"Name": "List", "Type": "Integer", "Size": "1"})
+        seq_data = isis.cube.encode_table(seq_tab, seq_field)
+        seq_parsed = isis.cube.parse_table(seq_data, seq_field)
+        # print(tab)
+        self.assertEqual(table["Foo"], seq_parsed["List"])
 
         data = isis.cube.encode_table(table, fields)
         # print(len(data))
