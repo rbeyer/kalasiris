@@ -43,6 +43,14 @@ stable       # release stage (alpha, beta, stable)""",
                     3, 5, 2, "stable", datetime.date(2018, 4, 6)
                 ),
             ),
+            (
+                """3.5.2.0
+v007         # 3rd party libraries version
+stable       # release stage (alpha, beta, stable)""",
+                version.ISISversion(
+                    3, 5, 2, "stable", None
+                ),
+            ),
         ]
 
         for v in s:
