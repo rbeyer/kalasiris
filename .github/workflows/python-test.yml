@@ -73,4 +73,5 @@ jobs:
         export ISISROOT=$MAMBA_ROOT_PREFIX/envs/isis
         export ISISDATA=$MAMBA_ROOT_PREFIX/envs/isis
         micromamba install -y pytest
+        python --version
         pytest
