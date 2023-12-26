@@ -18,7 +18,7 @@ from kalasiris.version import version_info
 from .utils import (
     resource_check as rc,
     real_files as run_real_files,
-    real_files_reason as run_real_files_reason
+    real_files_reason as run_real_files_reason,
 )
 
 # Hardcoding this, but I sure would like a better solution.
@@ -192,11 +192,11 @@ DN,Pixels,CumulativePixels,Percent,CumulativePercent
     def test_iter(self):
         rows = 0
         for x in self.h:
-            rows +=1
+            rows += 1
 
         self.assertEqual(107, rows)
 
-    def test_contains(self):
+    def test_contains_false(self):
         self.assertFalse("Foo" in self.h)
 
     def test_keys(self):

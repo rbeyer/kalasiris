@@ -53,7 +53,7 @@ def hi2isis_k(*args, **kwargs):
         if len(args) > 0 and not str(args[0]).endswith("__"):
             from_path = Path(args[0])
         else:
-            for (k, v) in kwargs.items():
+            for k, v in kwargs.items():
                 if k.startswith("f"):
                     from_path = Path(v)
                     break
@@ -70,7 +70,7 @@ def hist_k(*args, **kwargs) -> str:
     create the file, and return its contents as a string
     """
     to_pathlike = None
-    for (k, v) in kwargs.items():
+    for k, v in kwargs.items():
         if "to" == k or "to_" == k:
             to_pathlike = v
 

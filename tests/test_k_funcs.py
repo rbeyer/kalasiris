@@ -20,7 +20,7 @@ import kalasiris as isis
 from .utils import (
     resource_check as rc,
     real_files as run_real_files,
-    real_files_reason as run_real_files_reason
+    real_files_reason as run_real_files_reason,
 )
 
 # Hardcoding these, but I sure would like a better solution.
@@ -67,9 +67,7 @@ class Test_hi2isis_k(unittest.TestCase):
     @patch("kalasiris.k_funcs.isis.hi2isis")
     def test_with_to(self, m_hi2i):
         isis.hi2isis_k("dummy.img", to="dummy.cub")
-        self.assertEqual(
-            m_hi2i.call_args_list, [call("dummy.img", to="dummy.cub")]
-        )
+        self.assertEqual(m_hi2i.call_args_list, [call("dummy.img", to="dummy.cub")])
 
     @patch("kalasiris.k_funcs.isis.hi2isis")
     def test_without_to(self, m_hi2i):
@@ -190,9 +188,7 @@ class Test_cubeit_k(unittest.TestCase):
     @patch("kalasiris.k_funcs.isis.cubeit")
     def test_cubeit_k(self, m_cubeit):
         from_name = "temp_fromlist.txt"
-        m_context = Mock(
-            __enter__=Mock(return_value=from_name), __exit__=Mock()
-        )
+        m_context = Mock(__enter__=Mock(return_value=from_name), __exit__=Mock())
         m_temp = MagicMock(return_value=m_context)
         with patch("kalasiris.k_funcs.isis.fromlist.temp", m_temp):
             isis.cubeit_k(["a.cub", "b.cub", "c.cub"], to="stacked.cub")

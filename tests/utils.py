@@ -19,10 +19,10 @@ real_files_reason = "Tests on real files, and runs ISIS."
 def resource_check(*args):
     """Checks to see if the files exist. And returns a tuple.
 
-       Using the first element as the truth value and the second
-       as the test value in a ``self.assertEqual(truth, test)``
-       provides a much more useful failure message than a bunch
-       of ``self.assertTrue(os.path.isfile(filename))``
+    Using the first element as the truth value and the second
+    as the test value in a ``self.assertEqual(truth, test)``
+    provides a much more useful failure message than a bunch
+    of ``self.assertTrue(os.path.isfile(filename))``
     """
     CheckReturn = collections.namedtuple("CheckReturn", ["truth", "test"])
 

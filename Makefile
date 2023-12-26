@@ -65,8 +65,14 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr test-resources
 	rm -fr test-ISIS3DATA
 
-lint: ## check style with flake8
+lint/flake8: ## check style with flake8
 	flake8 kalasiris tests
+
+lint/black: ## check style with black
+	black --check kalasiris tests
+
+lint: lint/flake8 lint/black
+	twine check dist/*
 
 test: test-resources ## run tests quickly with the default Python
 	python -m pytest

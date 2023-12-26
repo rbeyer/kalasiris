@@ -63,9 +63,7 @@ def _get_start_size(d: dict) -> Tuple[int, int]:
     return start, size
 
 
-def get_startsize_from(
-    label=None, table_name=None, cube_path=None
-) -> Tuple[int, int]:
+def get_startsize_from(label=None, table_name=None, cube_path=None) -> Tuple[int, int]:
     """Returns a tuple of ints that represent the true start byte and size
     based on the provided *label* or combination of *table_name* and
     *cube_path*.
@@ -136,9 +134,7 @@ def get_startsize_from(
 
 # This function is derived from this commit dated Sep 24, 2019:
 # https://github.com/USGS-Astrogeology/ale/commit/add5368ba46b2c911de9515afeaccc4d1c981000
-def read_table_data(
-    cube_path: os.PathLike, label=None, table_name=None
-) -> bytes:
+def read_table_data(cube_path: os.PathLike, label=None, table_name=None) -> bytes:
     """Returns a bytes object with the contents read from the file at
     *cube_path* based on the elements provided in the *label* or
     *table_name*.

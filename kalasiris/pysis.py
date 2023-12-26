@@ -53,10 +53,7 @@ class ProcessError(IsisException):
         self.stdout = stdout
         self.stderr = stderr
 
-        msg = (
-            f"Command {self.cmd} returned non-zero exit "
-            f"status {self.returncode}."
-        )
+        msg = f"Command {self.cmd} returned non-zero exit " f"status {self.returncode}."
         super(ProcessError, self).__init__(msg)
 
 

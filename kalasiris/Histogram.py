@@ -30,9 +30,7 @@ class Histogram(collections.abc.Sequence):
         self.histinfo = histinfo
 
         try:
-            (self.dictionary, self.headers, self.hist_list) = self.parse(
-                histinfo
-            )
+            (self.dictionary, self.headers, self.hist_list) = self.parse(histinfo)
         except StopIteration:
             try:
                 (self.dictionary, self.headers, self.hist_list) = self.parse(
@@ -73,7 +71,7 @@ class Histogram(collections.abc.Sequence):
     def keys(self):
         """Gets the keys from the initial portion of the hist output file.
 
-           These will be items like 'Cube', 'Band', 'Average', etc.
+        These will be items like 'Cube', 'Band', 'Average', etc.
         """
         return self.dictionary.keys()
 
@@ -146,9 +144,7 @@ class Histogram(collections.abc.Sequence):
             # d[k.strip()] = v.strip()
             d.setdefault(k.strip(), v.strip())
 
-        reader = csv.reader(
-            filter(lambda x: "," in x, str(histinfo).splitlines())
-        )
+        reader = csv.reader(filter(lambda x: "," in x, str(histinfo).splitlines()))
         fieldnames = next(reader)
 
         HistRow = collections.namedtuple("HistRow", fieldnames)

@@ -17,7 +17,7 @@ import kalasiris as isis
 from .utils import (
     resource_check as rc,
     real_files as run_real_files,
-    real_files_reason as run_real_files_reason
+    real_files_reason as run_real_files_reason,
 )
 
 # Hardcoding this, but I sure would like a better solution.
@@ -106,9 +106,7 @@ class TestTable(unittest.TestCase):
         try:
             import pvl  # noqa F401
 
-            table = isis.cube.get_table(
-                self.cube, "HiRISE Calibration Ancillary"
-            )
+            table = isis.cube.get_table(self.cube, "HiRISE Calibration Ancillary")
             self.assertEqual(255, table["GapFlag"][0])
             self.assertEqual(9, table["LineNumber"][9])
             self.assertEqual(1359, table["BufferPixels"][0][0])
@@ -124,9 +122,7 @@ class TestTable(unittest.TestCase):
 
     def test_overwrite_table_data(self):
         data = bytes(10)
-        self.assertRaises(
-            ValueError, isis.cube.overwrite_table_data, self.cube, data
-        )
+        self.assertRaises(ValueError, isis.cube.overwrite_table_data, self.cube, data)
         self.assertRaises(
             KeyError,
             isis.cube.overwrite_table_data,
@@ -175,9 +171,7 @@ class TestTable(unittest.TestCase):
 
         bad_table = dict(table)
         bad_table["TooLong"] = ["a", "b", "c", "d", "e"]
-        self.assertRaises(
-            IndexError, isis.cube.encode_table, bad_table, fields
-        )
+        self.assertRaises(IndexError, isis.cube.encode_table, bad_table, fields)
 
         bad_fields = list(fields)
         bad_fields.append({"Name": "TooLong", "Type": "Text", "Size": "1"})
@@ -193,18 +187,21 @@ class TestTable(unittest.TestCase):
         long_tab["List"] = [1, 2, 3, [4, 5]]
         long_field = list(fields)
         long_field.append({"Name": "List", "Type": "Integer", "Size": "1"})
-        self.assertRaises(
-            IndexError, isis.cube.encode_table, long_tab, long_field
-        )
+        self.assertRaises(IndexError, isis.cube.encode_table, long_tab, long_field)
 
         two_field = list(fields[1:])
         two_field.append({"Name": "Foo", "Type": "Integer", "Size": "2"})
-        self.assertRaises(
-            ValueError, isis.cube.encode_table, table, two_field
-        )
+        self.assertRaises(ValueError, isis.cube.encode_table, table, two_field)
 
         seq_tab = dict(table)
-        seq_tab["List"] = [1, 2, 3, [4, ]]
+        seq_tab["List"] = [
+            1,
+            2,
+            3,
+            [
+                4,
+            ],
+        ]
         seq_field = list(fields)
         seq_field.append({"Name": "List", "Type": "Integer", "Size": "1"})
         seq_data = isis.cube.encode_table(seq_tab, seq_field)
@@ -240,13 +237,9 @@ class TestTable(unittest.TestCase):
         try:
             import pvl  # noqa F401
 
-            isis.cube.overwrite_table(
-                self.cube, "HiRISE Calibration Ancillary", table
-            )
+            isis.cube.overwrite_table(self.cube, "HiRISE Calibration Ancillary", table)
 
-            p_tab = isis.cube.get_table(
-                self.cube, "HiRISE Calibration Ancillary"
-            )
+            p_tab = isis.cube.get_table(self.cube, "HiRISE Calibration Ancillary")
 
             self.assertEqual(255, p_tab["GapFlag"][0])
             self.assertEqual(27, p_tab["LineNumber"][9])

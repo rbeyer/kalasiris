@@ -62,9 +62,7 @@ SpecialPixels = collections.namedtuple(
 )
 
 # 1-byte special pixel values from SpecialPixel.h
-UnsignedByte = SpecialPixels(
-    Min=1, Null=0, Lrs=0, Lis=0, His=255, Hrs=255, Max=254
-)
+UnsignedByte = SpecialPixels(Min=1, Null=0, Lrs=0, Lis=0, His=255, Hrs=255, Max=254)
 
 # 2-byte unsigned special pixel values from SpecialPixel.h
 UnsignedWord = SpecialPixels(

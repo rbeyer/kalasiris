@@ -22,34 +22,26 @@ class TestVersion(unittest.TestCase):
                 """3.7.0        # Public version number
 2019-04-30   # Release date
 stable       # release stage (alpha, beta, stable)""",
-                version.ISISversion(
-                    3, 7, 0, "stable", datetime.date(2019, 4, 30)
-                ),
+                version.ISISversion(3, 7, 0, "stable", datetime.date(2019, 4, 30)),
             ),
             (
                 """3.6.0        # Public version number
 10-26-2018   # Release date
 stable         # release stage (alpha, beta, stable)""",
-                version.ISISversion(
-                    3, 6, 0, "stable", datetime.date(2018, 10, 26)
-                ),
+                version.ISISversion(3, 6, 0, "stable", datetime.date(2018, 10, 26)),
             ),
             (
                 """3.5.2.0
 2018-04-06   # Version date
 v007         # 3rd party libraries version
 stable       # release stage (alpha, beta, stable)""",
-                version.ISISversion(
-                    3, 5, 2, "stable", datetime.date(2018, 4, 6)
-                ),
+                version.ISISversion(3, 5, 2, "stable", datetime.date(2018, 4, 6)),
             ),
             (
                 """3.5.2.0
 v007         # 3rd party libraries version
 stable       # release stage (alpha, beta, stable)""",
-                version.ISISversion(
-                    3, 5, 2, "stable", None
-                ),
+                version.ISISversion(3, 5, 2, "stable", None),
             ),
         ]
 

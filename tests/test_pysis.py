@@ -19,7 +19,7 @@ import kalasiris.pysis as pysis
 from .utils import (
     resource_check as rc,
     real_files as run_real_files,
-    real_files_reason as run_real_files_reason
+    real_files_reason as run_real_files_reason,
 )
 
 
@@ -72,9 +72,7 @@ class Test_getkey(unittest.TestCase):
 
     def test_getkey(self):
         truth = b"HIRISE\n"
-        key = pysis.getkey(
-            self.cub, grpname="Instrument", keyword="InstrumentId"
-        )
+        key = pysis.getkey(self.cub, grpname="Instrument", keyword="InstrumentId")
         self.assertEqual(truth, key)
 
     def test_getkey_fail(self):

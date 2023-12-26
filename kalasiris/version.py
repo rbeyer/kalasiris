@@ -40,9 +40,7 @@ class ISISversion(
 
 version_re = re.compile(r"(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)")
 date_re = re.compile(r"(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})")
-date_yearlast_re = re.compile(
-    r"(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})"
-)
+date_yearlast_re = re.compile(r"(?P<month>\d{1,2})-(?P<day>\d{1,2})-(?P<year>\d{4})")
 level_re = re.compile(r"^alpha|beta|stable")
 
 
@@ -57,10 +55,10 @@ def version_info() -> ISISversion:
 def get_from_string(s: str) -> ISISversion:
     """Read text and parse the contents for ISIS version information.
 
-       This should parse ISIS version text as far back as ISIS 3.5.2.0,
-       but possibly earlier.  It will return *None* values for releaselevel
-       and date if it cannot parse them.  It will raise a :exc:`ValueError`
-       if it cannot parse a version number.
+    This should parse ISIS version text as far back as ISIS 3.5.2.0,
+    but possibly earlier.  It will return *None* values for releaselevel
+    and date if it cannot parse them.  It will raise a :exc:`ValueError`
+    if it cannot parse a version number.
     """
 
     # Version Matching
@@ -68,9 +66,7 @@ def get_from_string(s: str) -> ISISversion:
     if match:
         v = match.groupdict()
     else:
-        raise ValueError(
-            f"{s} did not match version regex: " f"{version_re.pattern}"
-        )
+        raise ValueError(f"{s} did not match version regex: " f"{version_re.pattern}")
 
     # Date Matching
     d = None

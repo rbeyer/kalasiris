@@ -20,7 +20,7 @@ import kalasiris as isis
 from .utils import (
     resource_check as rc,
     real_files as run_real_files,
-    real_files_reason as run_real_files_reason
+    real_files_reason as run_real_files_reason,
 )
 
 
@@ -57,18 +57,14 @@ class TestCubenormFile(unittest.TestCase):
         )
 
     def test_Dialect(self):
-        reader = csv.reader(
-            self.stats.splitlines(), dialect=isis.cubenormfile.Dialect
-        )
+        reader = csv.reader(self.stats.splitlines(), dialect=isis.cubenormfile.Dialect)
         for row in reader:
             self.assertEqual(8, len(row))
             break
 
     def test_writer(self):
         columns = list()
-        reader = csv.reader(
-            self.stats.splitlines(), dialect=isis.cubenormfile.Dialect
-        )
+        reader = csv.reader(self.stats.splitlines(), dialect=isis.cubenormfile.Dialect)
         for row in reader:
             columns.append(row)
 

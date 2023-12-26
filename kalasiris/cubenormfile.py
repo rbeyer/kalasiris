@@ -78,13 +78,7 @@ class DictWriter(csv.DictWriter):
     """A DictWriter for ``cubenorm`` files."""
 
     def __init__(
-        self,
-        f,
-        restval="",
-        extrasaction="raise",
-        dialect=Dialect,
-        *args,
-        **kwds
+        self, f, restval="", extrasaction="raise", dialect=Dialect, *args, **kwds
     ):
         self.fieldnames = fieldnames
         self.restval = restval
