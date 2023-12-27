@@ -27,6 +27,10 @@ and the release date, in year-month-day format (see examples below).
 Unreleased
 ----------
 
+
+1.10.0 (2023-12-27)
+-------------------
+
 Added
 +++++
 * New kalasiris.set_persistent_preferences() functionality so that a library user can set

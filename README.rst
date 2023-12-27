@@ -45,8 +45,8 @@ Features
   module to allow easy calling of ISIS programs in the shell from
   within Python.
 * Calling compatibility with pysis_ (and emulation of return types)
-* Guaranteed to work with ISIS 3.6.0+, probably works with ISIS 3+
-* Only guaranteed to work with Python 3.6.0+
+* Works with ISIS 3.6.0 and higher.
+* Works with Python 3.6.0 and higher.
 
 
 ISIS
