@@ -27,6 +27,7 @@ jobs:
         channels: usgs-astrogeology, conda-forge
         environment-file: false
         environment-name: isis
+        generate-run-shell: false
     -   name: Checkout
         uses: actions/checkout@v3
         with:
