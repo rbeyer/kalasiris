@@ -18,22 +18,19 @@ jobs:
         shell: bash -l {0}
     steps:
     - name: Conda setup
-      uses: mamba-org/setup-micromamba@v1
+      uses: mamba-org/provision-with-micromamba@main
       with:
-        condarc: |
-          channels:
-            - usgs-astrogeology
-            - conda-forge
-        channels: usgs-astrogeology, conda-forge
         environment-file: false
-        environment-name: isis
-        generate-run-shell: false
+        channel-priority: flexible
+        channels: usgs-astrogeology, conda-forge
     -   name: Checkout
         uses: actions/checkout@v3
         with:
             ref: ${{ github.event.pull_request.head.sha }}
     - name: Install ISIS
       run: |
+        micromamba create --name isis
+        micromamba activate isis
         micromamba install -y isis=7.2.0
     - name: Setup test-resources/
       run: |
@@ -42,9 +39,12 @@ jobs:
       run: curl "https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG" -o $GITHUB_WORKSPACE/test-resources/PSP_010502_2090_RED5_0.img
     - name: Install kalasiris
       run: |
+        micromamba create --name kal
+        micromamba activate kal
         python -m pip install -e .
     - name: Test with pytest and generate coverage report
       run: |
+        micromamba activate cal
         micromamba install -y pytest
         micromamba install -y pytest-cov
         export ISISROOT=$MAMBA_ROOT_PREFIX/envs/isis

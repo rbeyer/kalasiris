@@ -35,15 +35,11 @@ jobs:
 
     steps:
     - name: Conda setup
-      uses: mamba-org/setup-micromamba@v1
+      uses: mamba-org/provision-with-micromamba@main
       with:
-        condarc: |
-          channels:
-            - usgs-astrogeology
-            - conda-forge
         environment-file: false
-        environment-name: isis
-        generate-run-shell: false
+        channel-priority: flexible
+        channels: usgs-astrogeology, conda-forge
     - name: Checkout
       uses: actions/checkout@v3
       with:
@@ -58,9 +54,12 @@ jobs:
         ls -R
     - name: Install ISIS
       run: |
+        micromamba create --name isis
+        micromamba activate isis
         micromamba install -y isis=${{ matrix.isis-version }}
     - name: Lint with flake8
       run: |
+        micromamba activate isis
         micromamba install -y flake8
         # stop the build if there are Python syntax errors or undefined names
         flake8 kalasiris tests --count --select=E9,F63,F7,F82 --show-source --statistics
@@ -70,6 +69,7 @@ jobs:
       run: python -m pip install -e .
     - name: Test with pytest
       run: |
+        micromamba activate isis
         export ISISROOT=$MAMBA_ROOT_PREFIX/envs/isis
         export ISISDATA=$MAMBA_ROOT_PREFIX/envs/isis
         micromamba install -y pytest
