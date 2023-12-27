@@ -44,7 +44,7 @@ jobs:
         python -m pip install -e .
     - name: Test with pytest and generate coverage report
       run: |
-        micromamba activate cal
+        micromamba activate kal
         micromamba install -y pytest
         micromamba install -y pytest-cov
         export ISISROOT=$MAMBA_ROOT_PREFIX/envs/isis
