@@ -204,9 +204,9 @@ Here is an example workflow for working on a bug that was discovered:
 | Checkout hotfix, may need to                   |        |       |           |
 | ``git rebase master`` if master has advanced.  |        |       |           |
 +------------------------------------------------+        |       +-----------+
-| Commit with bump2version::                     |        |       | a.b.d-dev |
+| Commit with bump-my-version::                  |        |       | a.b.d-dev |
 |                                                |        |       |           |
-|   bump2version patch                           |        |       |           |
+|   bump-my-version bump -v patch                |        |       |           |
 +------------------------------------------------+        +-------+           |
 | Is there a suitable first `failing-tests`      |        | fail  |           |
 | commit?  If not, decide how important it is.   |        | in    |           |
@@ -243,7 +243,7 @@ Here is an example workflow for working on a bug that was discovered:
 | This wraps up this branch and readies it for   |        |       | a.b.d     |
 | merging with master::                          |        |       |           |
 |                                                |        |       |           |
-|  bump2version release --tag                    |        |       |           |
+|  bump-my-version release --tag                 |        |       |           |
 |     --tag-message                              |        |       |           |
 |     'something descriptive'                    |        |       |           |
 +------------------------------------------------+--------+       |           |
@@ -277,7 +277,7 @@ Here is an example workflow for working on a bug that was discovered:
 
 The workflow for a minor feature is identical to the above, but we
 might name the branch *feature* or *minor-feature* instead of
-*hotfix*, and we would apply ``bump2version`` differently.
+*hotfix*, and we would apply ``bump-my-version`` differently.
 
 A **Minor Feature** is defined as new, backwards compatible functionality.
 
@@ -286,7 +286,7 @@ A **Minor Feature** is defined as new, backwards compatible functionality.
 +================================================+=========+=======+===========+
 | After release a.b.c, the state is:             | master  | pass  | a.b.c     |
 +------------------------------------------------+---------+       +-----------+
-| 1st bump2version: ``bump2version minor``       | feature |       | a.c.0-dev |
+| 1st bump: ``bump-my-version bump -v minor``    | feature |       | a.c.0-dev |
 +------------------------------------------------+         +-------+           +
 | In this case, commits might look like this:    |         | fail  |           |
 |                                                |         |       |           |
@@ -295,9 +295,9 @@ A **Minor Feature** is defined as new, backwards compatible functionality.
 | #. Wrote some tests                            |         |       |           |
 | #. Feature is now complete!                    |         |       |           |
 +------------------------------------------------+         +-------+-----------+
-| 2nd bump2version::                             |         | pass  | a.c.0     |
+| 2nd bump::                                     |         | pass  | a.c.0     |
 |                                                |         |       |           |
-|   bump2version release                         |         |       |           |
+|   bump-my-version bump release                 |         |       |           |
 |     --tag --tag-message '...'                  |         |       |           |
 +------------------------------------------------+---------+-------+-----------+
 
@@ -309,7 +309,7 @@ similar to the Minor Feature Workflow above, simply:
 +================================================+=========+=======+===========+
 | After release a.b.c, the state is:             | master  | pass  | a.b.c     |
 +------------------------------------------------+---------+       +-----------+
-| 1st bump2version: ``bump2version major``       | feature |       | b.0.0-dev |
+| 1st bump: ``bump-my-version bump -v major``    | feature |       | b.0.0-dev |
 +------------------------------------------------+         +-------+-----------+
 | 2nd bump2version                               |         | pass  | b.0.0     |
 +------------------------------------------------+---------+-------+-----------+
@@ -322,7 +322,7 @@ similar to the Minor Feature Workflow above, simply:
 .. Make sure all your changes are committed (including an entry in HISTORY.rst).
 .. Then run::
 ..
-.. $ bump2version release # possibly: major / minor / patch
+.. $ bump-my-version bump release # possibly: major / minor / patch
 .. $ git push
 .. $ git push --tags
 ..
