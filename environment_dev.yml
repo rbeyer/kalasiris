@@ -1,0 +1,24 @@
+# This is for creating the very minimal kaldev environment for testing kalasiris.
+# It *must* be stacked on top of an ISIS environment.
+# > conda create -n kaldev python=3.8
+# > conda activate kaladev
+# > conda env update -f environment_dev.yml
+#
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - black
+  - build
+  - bump-my-version
+  - flake8
+  - icecream
+  - pytest
+  - pytest-cov
+  - sphinx
+  - sphinxcontrib
+  - sphinxcontrib-apidoc
+  - twine
+  - pip
+  - pip:
+    - ufmt
