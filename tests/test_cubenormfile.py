@@ -3,7 +3,7 @@
 
 """Tests for the `cubenormDialect` class."""
 
-# Copyright 2019-2020, Ross A. Beyer (rbeyer@seti.org)
+# Copyright 2019-2024, Ross A. Beyer (rbeyer@seti.org)
 #
 # Reuse is permitted under the terms of the license.
 # The AUTHORS file and the LICENSE file are at the
@@ -79,6 +79,20 @@ class TestCubenormFile(unittest.TestCase):
 
         self.assertEqual(csvfile.method_calls, expected)
 
+        csvfile2 = Mock()
+        writer = isis.cubenormfile.writer(csvfile2)
+        writer.writerows(columns)
+        self.assertEqual(csvfile2.method_calls, expected)
+
+        csvfile3 = Mock()
+        writer = isis.cubenormfile.writer(csvfile3)
+        writer.writeheader()
+
+        expected3 = list()
+        line0 = self.stats.splitlines(True)[0]
+        expected3.append(call.write(line0))
+        self.assertEqual(csvfile3.method_calls, expected3)
+
     def test_DictWriter(self):
         columns = list()
         reader = csv.DictReader(
@@ -98,6 +112,10 @@ class TestCubenormFile(unittest.TestCase):
             expected.append(call.write(line))
 
         self.assertEqual(csvfile.method_calls, expected)
+
+        self.assertRaises(
+            ValueError, isis.cubenormfile.DictWriter, csvfile, extrasaction="ERROR"
+        )
 
 
 @unittest.skipUnless(run_real_files, run_real_files_reason)
