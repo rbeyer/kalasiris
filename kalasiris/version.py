@@ -6,7 +6,7 @@ Most of the time, the only thing you'll probably need is the
 version_info() function which returns an ISISversion tuple.
 """
 
-# Copyright 2019-2020, Ross A. Beyer (rbeyer@seti.org)
+# Copyright 2019-2024, Ross A. Beyer (rbeyer@seti.org)
 #
 # Reuse is permitted under the terms of the license.
 # The AUTHORS file and the LICENSE file are at the
@@ -49,7 +49,15 @@ def version_info() -> ISISversion:
     for the ISIS system underlying kalasiris.  If you want to answer,
     "What version of ISIS is being used?"  This is the function you're after.
     It is modeled after :func:`sys.version_info`."""
-    return get_from_file(Path(environ["ISISROOT"]) / "version")
+    for fn in ("isis_version.txt", "version"):
+        try:
+            return get_from_file(Path(environ["ISISROOT"]) / fn)
+        except FileNotFoundError:
+            continue
+    else:
+        raise FileNotFoundError(
+            f"No such file: {Path(environ['ISISROOT']) / 'isis_version.txt'}"
+        )
 
 
 def get_from_string(s: str) -> ISISversion:

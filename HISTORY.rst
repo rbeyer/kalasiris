@@ -27,6 +27,12 @@ and the release date, in year-month-day format (see examples below).
 Unreleased
 ----------
 
+Fixed
++++++
+* version.py - ISIS 8.0.3 renamed the file that the ISIS version information was recorded in,
+  and this fix also checks this new location, as well as the old.
+
+
 
 1.10.0 (2023-12-27)
 -------------------
