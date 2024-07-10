@@ -71,8 +71,12 @@ lint/flake8: ## check style with flake8
 lint/black: ## check style with black
 	black --check kalasiris tests
 
-lint: lint/flake8 lint/black
-	twine check dist/*
+lint/ufmt: ## check format with ufmt
+	ufmt kalasiris
+	ufmt tests
+
+lint: lint/flake8 lint/black lint/ufmt
+
 
 test: test-resources ## run tests quickly with the default Python
 	python -m pytest
@@ -93,7 +97,7 @@ test-resources: test-ISIS3DATA ## Download what we need for testing
 	$(DOWNLOAD) https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG test-resources/PSP_010502_2090_RED5_0.img
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source kalasiris setup.py test
+	coverage run --source kalasiris -m pytest
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
@@ -111,13 +115,18 @@ fakeISISROOT-docs: ## create a suite of fake ISIS program filenames
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
+release-check: dist ## check state of distribution
+	twine check dist/*
+
 release: dist ## package and upload a release
 	twine upload -r kalasiris dist/*
 
 dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
+	python -m build
 	ls -l dist
 
+develop: clean  ## install the package in an editable format for development
+	pip install --no-deps -e .
+
 install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+	pip install
