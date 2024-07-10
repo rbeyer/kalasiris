@@ -41,7 +41,7 @@ jobs:
       run: |
         micromamba create --name kal
         micromamba activate kal
-        python -m pip install -e .
+        pip install -e .
     - name: Test with pytest and generate coverage report
       run: |
         micromamba activate kal
