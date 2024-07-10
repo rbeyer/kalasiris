@@ -72,8 +72,8 @@ lint/black: ## check style with black
 	black --check kalasiris tests
 
 lint/ufmt: ## check format with ufmt
-	ufmt kalasiris
-	ufmt tests
+	ufmt check kalasiris
+	ufmt check tests
 
 lint: lint/flake8 lint/black lint/ufmt
 
@@ -92,7 +92,8 @@ test-ISIS3DATA: ## Download a minimal $ISIS3DATA for testing
 	rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseBandBin.trn test-ISIS3DATA/
 	rsync -rltzvR --delete isisdist.astrogeology.usgs.gov::isis3data/data/./mro/translations/hiriseArchive.trn test-ISIS3DATA/
 
-test-resources: test-ISIS3DATA ## Download what we need for testing
+# test-resources: test-ISIS3DATA ## Download what we need for testing
+test-resources: ## Download what we need for testing
 	mkdir test-resources
 	$(DOWNLOAD) https://hirise-pds.lpl.arizona.edu/PDS/EDR/PSP/ORB_010500_010599/PSP_010502_2090/PSP_010502_2090_RED5_0.IMG test-resources/PSP_010502_2090_RED5_0.img
 
