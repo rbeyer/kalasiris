@@ -27,6 +27,9 @@ and the release date, in year-month-day format (see examples below).
 Unreleased
 ----------
 
+1.11.0 (2024-07-10)
+-------------------
+
 Fixed
 +++++
 * version.py - ISIS 8.0.3 renamed the file that the ISIS version information was recorded in,
