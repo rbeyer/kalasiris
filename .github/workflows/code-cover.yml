@@ -18,20 +18,20 @@ jobs:
         shell: bash -l {0}
     steps:
     - name: Conda setup
-      uses: mamba-org/provision-with-micromamba@main
+      uses: mamba-org/setup-micromamba@v1
       with:
-        environment-file: false
-        channel-priority: flexible
-        channels: usgs-astrogeology, conda-forge
+        environment-name: isis
+        create-args: >-
+          isis=8.0.3
+        condarc: |
+          channels:
+            - usgs-astrogeology
+            - conda-forge
+          channel-priority: flexible
     -   name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
             ref: ${{ github.event.pull_request.head.sha }}
-    - name: Install ISIS
-      run: |
-        micromamba create --name isis
-        micromamba activate isis
-        micromamba install -y isis=7.2.0
     - name: Setup test-resources/
       run: |
         mkdir $GITHUB_WORKSPACE/test-resources/
@@ -51,6 +51,8 @@ jobs:
         export ISISDATA=$MAMBA_ROOT_PREFIX/envs/isis
         pytest --cov=./kalasiris --cov-report=xml
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
-        fail_ci_if_error: true
+        verbse: true
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
