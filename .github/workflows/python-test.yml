@@ -31,17 +31,22 @@ jobs:
     strategy:
       matrix:
         # isis 4.4.0 apparently needs jpeg 9b, which is missing
-        isis-version: [5.0.2, 6.0.0, 7.2.0]
+        isis-version: [5.0.2, 6.0.0, 7.2.0, 8.0.3]
 
     steps:
     - name: Conda setup
-      uses: mamba-org/provision-with-micromamba@main
+      uses: mamba-org/setup-micromamba@v1
       with:
-        environment-file: false
-        channel-priority: flexible
-        channels: usgs-astrogeology, conda-forge
+        environment-name: isis
+        create-args: >-
+          isis=${{ matrix.isis-version }}
+        condarc: |
+          channels:
+            - usgs-astrogeology
+            - conda-forge
+          channel-priority: flexible
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.head.sha }}
     - name: Download IMG artifact
@@ -52,11 +57,6 @@ jobs:
       run: |
         tar -xvf img.tar
         ls -R
-    - name: Install ISIS
-      run: |
-        micromamba create --name isis
-        micromamba activate isis
-        micromamba install -y isis=${{ matrix.isis-version }}
     - name: Lint with flake8
       run: |
         micromamba activate isis
