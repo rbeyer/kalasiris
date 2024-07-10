@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kalasiris"
+version = "1.10.0"
+description = "A Python library to wrap functions and functionality for the Integrated Software for Imagers and Spectrometers (ISIS)."
+maintainers = [
+    {name = "Ross Beyer", email = "rbeyer@seti.org"}
+]
+readme = "README.rst"
+requires-python = ">=3.8"
+
+classifiers=[
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Science/Research',
+    'License :: OSI Approved :: BSD License',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+]
+
+[project.urls]
+Repository = "https://github.com/rbeyer/kalasiris"
+
+[tool.bumpversion]
+current_version = "1.10.0"
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(?:-(?P<release>[a-z]+))?"
+serialize = ["{major}.{minor}.{patch}-{release}", "{major}.{minor}.{patch}"]
+search = "{current_version}"
+replace = "{new_version}"
+regex = false
+ignore_missing_version = false
+ignore_missing_files = false
+tag = false
+sign_tags = false
+tag_name = "v{new_version}"
+tag_message = "Bump version: {current_version} → {new_version}"
+allow_dirty = false
+commit = true
+message = "Bump version: {current_version} → {new_version}"
+commit_args = ""
+
+[tool.bumpversion.parts.release]
+values = ["dev", "released"]
+optional_value = "released"
+
+[[tool.bumpversion.files]]
+filename = "kalasiris/__init__.py"
+search = "__version__ = \"{current_version}\""
+replace = "__version__ = \"{new_version}\""
+
+[[tool.bumpversion.files]]
+filename = "kalasiris/kalasiris.py"
+search = "__version__ = \"{current_version}\""
+replace = "__version__ = \"{new_version}\""
