@@ -29,9 +29,9 @@ jobs:
             - conda-forge
           channel-priority: flexible
     - name: Checkout
-        uses: actions/checkout@v4
-        with:
-            ref: ${{ github.event.pull_request.head.sha }}
+      uses: actions/checkout@v4
+      with:
+          ref: ${{ github.event.pull_request.head.sha }}
     - name: Setup test-resources/
       run: |
         mkdir $GITHUB_WORKSPACE/test-resources/
