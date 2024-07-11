@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kalasiris"
-version = "1.11.0-dev"
+version = "1.11.0"
 description = "A Python library to wrap functions and functionality for the Integrated Software for Imagers and Spectrometers (ISIS)."
 maintainers = [
     {name = "Ross Beyer", email = "rbeyer@seti.org"}
@@ -26,7 +26,7 @@ classifiers=[
 Repository = "https://github.com/rbeyer/kalasiris"
 
 [tool.bumpversion]
-current_version = "1.11.0-dev"
+current_version = "1.11.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(?:-(?P<release>[a-z]+))?"
 serialize = ["{major}.{minor}.{patch}-{release}", "{major}.{minor}.{patch}"]
 search = "{current_version}"
