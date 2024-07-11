@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kalasiris"
-version = "1.10.0"
+version = "1.11.0-dev"
 description = "A Python library to wrap functions and functionality for the Integrated Software for Imagers and Spectrometers (ISIS)."
 maintainers = [
     {name = "Ross Beyer", email = "rbeyer@seti.org"}
@@ -46,6 +46,11 @@ commit_args = ""
 [tool.bumpversion.parts.release]
 values = ["dev", "released"]
 optional_value = "released"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = "version = \"{current_version}\""
+replace = "version = \"{new_version}\""
 
 [[tool.bumpversion.files]]
 filename = "kalasiris/__init__.py"
